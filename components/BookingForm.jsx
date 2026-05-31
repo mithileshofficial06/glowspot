@@ -28,7 +28,7 @@ export default function BookingForm({ salon }) {
         <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6">
           <PartyPopper className="w-10 h-10 text-emerald-500" />
         </div>
-        <h3 className="text-2xl font-bold font-display text-gray-800 mb-2">Booking Confirmed! 🎉</h3>
+        <h3 className="text-2xl font-bold font-display text-gray-800 mb-2">Booking Confirmed</h3>
         <p className="text-gray-500 mb-6">Your appointment has been booked successfully.</p>
 
         <div className="card-glass p-6 max-w-md mx-auto text-left space-y-3 mb-8">

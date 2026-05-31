@@ -22,7 +22,8 @@ import {
   CheckCircle, 
   RefreshCw, 
   Camera, 
-  Briefcase 
+  Briefcase,
+  Truck
 } from 'lucide-react';
 import Link from 'next/link';
 import salons from '@/data/salons.json';
@@ -384,7 +385,7 @@ export default function WeddingPlanner() {
 
       items.push({ 
         date: wDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), 
-        daysLeft: 'Wedding Day! 💍', 
+        daysLeft: 'Wedding Day', 
         title: 'Bridal Makeover & Traditional Styling', 
         desc: `Stunning wedding transformation, hair bun flower decoration, and custom draping.`, 
         salon: bridalSalon?.name || 'Recommended Salon', 
@@ -416,7 +417,7 @@ export default function WeddingPlanner() {
 
       items.push({ 
         date: wDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), 
-        daysLeft: 'Event Day! 🎉', 
+        daysLeft: 'Event Day', 
         title: 'Sleek Makeup & Hair Styling', 
         desc: 'Modern chic hair curls and matching styling.', 
         salon: bridalSalon?.name || 'Recommended Salon', 
@@ -569,7 +570,8 @@ export default function WeddingPlanner() {
           <div className={`card-glass p-6 space-y-6 transition-all duration-500 ${step >= 2 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
             <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
               <Camera className="w-5 h-5 text-rose-gold" />
-              ✨ Optional: Integrate AI Selfie Analysis
+              <Sparkles className="w-4 h-4 text-rose-gold" />
+              Optional: Integrate AI Selfie Analysis
             </h3>
             <p className="text-xs text-gray-500">Upload your picture to let the AI analyze skin-tones and face structures, fine-tuning your beauty calendar.</p>
             
@@ -1035,7 +1037,7 @@ export default function WeddingPlanner() {
                   <CheckCircle className="w-10 h-10" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold font-display text-gray-800">Congratulations! 💍</h3>
+                  <h3 className="text-xl font-bold font-display text-gray-800">Congratulations</h3>
                   <p className="text-xs text-gray-400 mt-1">Your entire wedding beauty itinerary is successfully locked and coordinated.</p>
                 </div>
 
@@ -1050,7 +1052,7 @@ export default function WeddingPlanner() {
                   </div>
                   <div className="flex justify-between text-xs">
                     <span className="text-gray-500 font-medium">Fulfillment Type</span>
-                    <span className="font-bold text-gray-800">{formData.homeService ? '🚚 Home Delivery / On-Venue' : '🏢 In-Salon Slots'}</span>
+                    <span className="font-bold text-gray-800 flex items-center gap-1">{formData.homeService ? <><Truck className="w-3 h-3" /> Home / On-Venue</> : <><Briefcase className="w-3 h-3" /> In-Salon</>}</span>
                   </div>
                   <div className="pt-2 border-t border-gray-200/80 flex items-center justify-between text-[10px] text-gray-400">
                     <span>Confirmation ID: GS-WED-2026</span>

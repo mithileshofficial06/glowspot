@@ -107,18 +107,20 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { title: 'AI Style Advisor', desc: 'Conversational AI that understands your occasion, style, and budget to recommend the perfect look and salon.', icon: '💬', href: '/advisor' },
-              { title: 'Face Style Preview', desc: 'Vision AI analyzes your face shape, skin tone, and features to recommend hairstyles, makeup, and colors.', icon: '👁️', href: '/preview' },
-              { title: 'Wedding Planner', desc: 'AI generates a complete day-by-day beauty schedule for your wedding with salon recommendations.', icon: '💍', href: '/planner' },
-              { title: 'Smart Booking', desc: 'Type in natural language — "Book hair spa Sunday morning in Madhapur" — and AI handles the rest.', icon: '⚡', href: '/advisor' },
-              { title: 'Review Summarizer', desc: 'AI reads all reviews and gives you a 2-line verdict — what customers love and what to know before booking.', icon: '✨', href: '/salons' },
+              { title: 'AI Style Advisor', desc: 'Conversational AI that understands your occasion, style, and budget to recommend the perfect look and salon.', Icon: MessageCircle, href: '/advisor', gradient: 'from-neon-gold to-neon-amber' },
+              { title: 'Face Style Preview', desc: 'Vision AI analyzes your face shape, skin tone, and features to recommend hairstyles, makeup, and colors.', Icon: Eye, href: '/preview', gradient: 'from-violet-500 to-purple-600' },
+              { title: 'Wedding Planner', desc: 'AI generates a complete day-by-day beauty schedule for your wedding with salon recommendations.', Icon: Calendar, href: '/planner', gradient: 'from-emerald-glow to-green-500' },
+              { title: 'Smart Booking', desc: 'Type in natural language — "Book hair spa Sunday morning in Madhapur" — and AI handles the rest.', Icon: Zap, href: '/advisor', gradient: 'from-cyan-400 to-blue-500' },
+              { title: 'Review Summarizer', desc: 'AI reads all reviews and gives you a 2-line verdict — what customers love and what to know before booking.', Icon: Sparkles, href: '/salons', gradient: 'from-neon-gold to-emerald-glow' },
             ].map((f, i) => (
               <Link
                 key={i}
                 href={f.href}
                 className="group p-6 rounded-2xl bg-white/[0.02] backdrop-blur-sm border border-white/[0.05] hover:border-neon-gold/20 hover:bg-white/[0.04] transition-all duration-500"
               >
-                <span className="text-3xl mb-4 block">{f.icon}</span>
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <f.Icon className="w-6 h-6 text-white" />
+                </div>
                 <h3 className="text-lg font-bold text-white mb-2 font-display">{f.title}</h3>
                 <p className="text-sm text-white/50 leading-relaxed">{f.desc}</p>
                 <span className="inline-flex items-center gap-1 mt-4 text-sm text-neon-gold font-medium group-hover:gap-2 transition-all">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Upload, Camera, Sparkles, Loader2, ChevronRight, RotateCcw, User, Palette, Scissors, Wand2, MessageCircle, Send, X, Bot } from 'lucide-react';
+import { Upload, Camera, Sparkles, Loader2, ChevronRight, RotateCcw, User, Palette, Scissors, Wand2, MessageCircle, Send, X, Bot, Star } from 'lucide-react';
 import Link from 'next/link';
 import salons from '@/data/salons.json';
 
@@ -464,7 +464,7 @@ Rules:
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-bold text-white text-sm truncate">{salon.name}</h4>
-                      <p className="text-xs text-white/40">{salon.area} • ⭐ {salon.rating}</p>
+                      <p className="text-xs text-white/40">{salon.area} • <Star className="w-3 h-3 text-neon-gold fill-neon-gold inline" /> {salon.rating}</p>
                       <p className="text-xs text-white/25">{salon.priceRange}</p>
                     </div>
                     <ChevronRight className="w-5 h-5 text-white/15" />
@@ -523,7 +523,7 @@ Rules:
                   <div className="space-y-3 animate-fade-in">
                     <div className="bg-noir-200 rounded-2xl rounded-tl-sm p-3.5 border border-white/[0.05] max-w-[85%]">
                       <p className="text-xs text-white/70 leading-relaxed">
-                        Hi! 👋 I'm your personal style consultant. I've reviewed your analysis — <strong className="text-neon-gold">{analysis.faceShape}</strong> face shape with <strong className="text-neon-gold">{analysis.skinTone?.split(' ')[0]?.toLowerCase()}</strong> tones. Ask me anything about your recommended styles!
+                        Hi! I'm your personal style consultant. I've reviewed your analysis — <strong className="text-neon-gold">{analysis.faceShape}</strong> face shape with <strong className="text-neon-gold">{analysis.skinTone?.split(' ')[0]?.toLowerCase()}</strong> tones. Ask me anything about your recommended styles!
                       </p>
                     </div>
 

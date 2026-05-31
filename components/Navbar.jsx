@@ -68,17 +68,6 @@ export default function Navbar() {
             })}
           </div>
 
-          {/* CTA Button (Desktop) */}
-          <div className="hidden md:block">
-            <Link
-              href="/advisor"
-              id="nav-cta-book"
-              className="btn-primary text-sm flex items-center gap-2"
-            >
-              <Sparkles className="w-4 h-4" />
-              Book with AI
-            </Link>
-          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -154,17 +143,6 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* Mobile CTA */}
-            <div className="mt-6">
-              <Link
-                href="/advisor"
-                onClick={() => setIsOpen(false)}
-                className="btn-primary w-full text-center text-sm flex items-center justify-center gap-2"
-              >
-                <Sparkles className="w-4 h-4" />
-                Book with AI
-              </Link>
-            </div>
 
             {/* Bottom Info */}
             <div className="absolute bottom-8 left-6 right-6">

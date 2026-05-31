@@ -47,8 +47,8 @@ class Particle {
     this.color = color;
     this.size = 1.8;
     // Scatter properties
-    this.scatterX = x + (Math.random() - 0.5) * 500;
-    this.scatterY = y + (Math.random() - 0.5) * 300;
+    this.scatterX = x + (Math.random() - 0.5) * 280;
+    this.scatterY = y + (Math.random() - 0.5) * 180;
     this.scatterAngle = Math.random() * Math.PI * 2;
     this.scatterSpeed = 1 + Math.random() * 3;
     this.opacity = 1;
@@ -144,15 +144,15 @@ export default function HeroSection() {
     stateRef.current.particles = getTextParticles(ctx, heroWords[0], canvas.width, canvas.height, fontSize);
 
     // Timing constants
-    const HOLD_TIME = 2000;        // How long text stays assembled (ms)
-    const DISPERSE_TIME = 1200;    // How long dispersion takes (ms)
-    const SCATTER_HOLD = 400;      // Brief pause while scattered
-    const ASSEMBLE_TIME = 1200;    // How long assembly takes (ms)
+    const HOLD_TIME = 3500;        // How long text stays assembled (ms)
+    const DISPERSE_TIME = 2000;    // How long dispersion takes (ms)
+    const SCATTER_HOLD = 600;      // Brief pause while scattered
+    const ASSEMBLE_TIME = 2000;    // How long assembly takes (ms)
 
     let lastTime = performance.now();
     let holdTimer = 0;
 
-    const easeInOutCubic = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const easeInOutQuart = (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
     const easeOutExpo = (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
 
     const animate = (timestamp) => {
@@ -180,7 +180,7 @@ export default function HeroSection() {
           // Assign new scatter targets
           state.particles.forEach((p) => {
             p.scatterAngle = Math.random() * Math.PI * 2;
-            p.scatterSpeed = 80 + Math.random() * 200;
+            p.scatterSpeed = 50 + Math.random() * 120;
             p.scatterX = p.originX + Math.cos(p.scatterAngle) * p.scatterSpeed;
             p.scatterY = p.originY + Math.sin(p.scatterAngle) * p.scatterSpeed;
           });
@@ -188,7 +188,7 @@ export default function HeroSection() {
       } else if (state.phase === 'dispersing') {
         state.progress += dt / DISPERSE_TIME;
         const t = Math.min(state.progress, 1);
-        const ease = easeInOutCubic(t);
+        const ease = easeInOutQuart(t);
 
         state.particles.forEach((p) => {
           p.x = p.originX + (p.scatterX - p.originX) * ease;
@@ -222,7 +222,7 @@ export default function HeroSection() {
           // Assign scattered start positions for new particles
           state.nextParticles.forEach((p) => {
             p.scatterAngle = Math.random() * Math.PI * 2;
-            p.scatterSpeed = 80 + Math.random() * 200;
+            p.scatterSpeed = 50 + Math.random() * 120;
             p.scatterX = p.originX + Math.cos(p.scatterAngle) * p.scatterSpeed;
             p.scatterY = p.originY + Math.sin(p.scatterAngle) * p.scatterSpeed;
             p.x = p.scatterX;
@@ -296,13 +296,6 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] mb-8">
-            <Sparkles className="w-4 h-4 text-neon-gold" />
-            <span className="text-sm text-white/70 font-medium">AI-Powered Beauty Platform</span>
-            <span className="text-xs text-white/35">• Hyderabad</span>
-          </div>
-
           {/* Headline with Particle Text */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-display text-white leading-tight mb-2">
             Discover Your
