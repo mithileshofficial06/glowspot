@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function Advisor() {
   return (
-    <div className="h-screen pt-20 bg-cream flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-30 pt-20 bg-cream flex flex-col overflow-hidden">
       {/* Compact Locked Header */}
       <div className="bg-gradient-to-r from-plum-deep via-plum to-rose-gold/30 py-3 px-4 shrink-0">
         <div className="max-w-4xl mx-auto text-center">
