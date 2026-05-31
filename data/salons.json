@@ -1,1 +1,1093 @@
-[]
+[
+  {
+    "id": "glamour-studio-banjara-hills",
+    "name": "Glamour Studio",
+    "area": "Banjara Hills",
+    "city": "Hyderabad",
+    "rating": 4.9,
+    "reviewCount": 412,
+    "priceRange": "₹800 - ₹18,000",
+    "minPrice": 800,
+    "maxPrice": 18000,
+    "phone": "+91 40 2335 4567",
+    "address": "Road No. 12, Banjara Hills, Hyderabad 500034",
+    "openHours": "10:00 AM - 9:00 PM",
+    "closedDay": "Monday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Bridal Makeup", "Hair Coloring", "Keratin Treatment"],
+    "tags": ["luxury", "bridal", "unisex"],
+    "homeService": false,
+    "services": [
+      { "name": "Bridal Makeup", "price": 15000, "duration": "3 hours", "category": "Makeup" },
+      { "name": "Party Makeup", "price": 5000, "duration": "1.5 hours", "category": "Makeup" },
+      { "name": "Hair Coloring (Global)", "price": 6000, "duration": "2.5 hours", "category": "Hair" },
+      { "name": "Keratin Treatment", "price": 8000, "duration": "3 hours", "category": "Hair" },
+      { "name": "Hair Spa", "price": 1500, "duration": "1 hour", "category": "Hair" },
+      { "name": "Facial - Gold", "price": 2500, "duration": "1 hour", "category": "Skin" },
+      { "name": "Manicure & Pedicure", "price": 1800, "duration": "1.5 hours", "category": "Nails" },
+      { "name": "Eyebrow Threading", "price": 100, "duration": "15 min", "category": "Grooming" }
+    ],
+    "stylists": [
+      { "name": "Priya Reddy", "specialization": "Bridal Specialist", "experience": "12 years", "image": null },
+      { "name": "Kavitha Rao", "specialization": "Hair Colorist", "experience": "8 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Ananya K.", "rating": 5, "text": "Priya did my bridal makeup and it was absolutely stunning! She understood the Telugu bridal look I wanted perfectly. The makeup lasted the entire day without any touch-ups.", "date": "2025-12-15" },
+      { "name": "Sneha R.", "rating": 5, "text": "Best keratin treatment I've ever had. My hair was silky smooth for months. The salon ambiance is so luxurious and calming.", "date": "2025-11-20" },
+      { "name": "Meera P.", "rating": 4, "text": "Great hair coloring work. Kavitha is very skilled. Only minor issue is parking can be tough on weekends in Banjara Hills.", "date": "2025-10-05" },
+      { "name": "Divya S.", "rating": 5, "text": "I've been coming here for 3 years now. Consistently excellent service. Their gold facial is divine!", "date": "2025-09-18" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "11:00", "14:00", "15:00", "16:00"],
+      "2026-06-03": ["10:00", "12:00", "14:00", "17:00"],
+      "2026-06-04": ["11:00", "13:00", "15:00", "16:00"],
+      "2026-06-05": ["10:00", "11:00", "14:00", "15:00"],
+      "2026-06-06": ["10:00", "12:00", "14:00", "16:00", "17:00"],
+      "2026-06-07": ["10:00", "11:00", "13:00", "15:00", "16:00"]
+    }
+  },
+  {
+    "id": "royal-bridal-banjara-hills",
+    "name": "Royal Bridal Lounge",
+    "area": "Banjara Hills",
+    "city": "Hyderabad",
+    "rating": 4.8,
+    "reviewCount": 287,
+    "priceRange": "₹1,000 - ₹25,000",
+    "minPrice": 1000,
+    "maxPrice": 25000,
+    "phone": "+91 40 2335 8901",
+    "address": "Road No. 2, Banjara Hills, Hyderabad 500034",
+    "openHours": "9:30 AM - 8:30 PM",
+    "closedDay": "Tuesday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Bridal Packages", "Mehndi", "Pre-Bridal Skincare"],
+    "tags": ["luxury", "bridal", "women-only"],
+    "homeService": true,
+    "services": [
+      { "name": "Complete Bridal Package", "price": 25000, "duration": "5 hours", "category": "Bridal" },
+      { "name": "Pre-Bridal Skincare (6 sessions)", "price": 12000, "duration": "1 hour each", "category": "Skin" },
+      { "name": "Bridal Mehndi", "price": 8000, "duration": "4 hours", "category": "Mehndi" },
+      { "name": "Party Mehndi", "price": 2000, "duration": "1.5 hours", "category": "Mehndi" },
+      { "name": "Bridal Hair Styling", "price": 6000, "duration": "2 hours", "category": "Hair" },
+      { "name": "Engagement Makeup", "price": 8000, "duration": "2 hours", "category": "Makeup" },
+      { "name": "Saree Draping", "price": 1500, "duration": "30 min", "category": "Styling" }
+    ],
+    "stylists": [
+      { "name": "Fatima Begum", "specialization": "Bridal Expert", "experience": "15 years", "image": null },
+      { "name": "Lakshmi Devi", "specialization": "Mehndi Artist", "experience": "10 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Radhika M.", "rating": 5, "text": "Fatima did my complete bridal look for my Telugu wedding and I was beyond happy! The mehndi artist Lakshmi created the most intricate designs. Worth every rupee.", "date": "2025-12-01" },
+      { "name": "Ayesha B.", "rating": 5, "text": "Their pre-bridal skincare package transformed my skin before my nikah. Six sessions of pure bliss. Highly recommend for brides!", "date": "2025-11-10" },
+      { "name": "Pooja T.", "rating": 4, "text": "Beautiful engagement makeup. Only giving 4 stars because the appointment started 20 minutes late, but the result was gorgeous.", "date": "2025-10-22" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:30", "11:00", "14:00", "16:00"],
+      "2026-06-03": ["09:30", "10:30", "14:00", "15:00"],
+      "2026-06-04": ["10:00", "13:00", "15:00"],
+      "2026-06-05": ["09:30", "11:00", "14:00", "16:00"],
+      "2026-06-06": ["10:00", "12:00", "15:00", "17:00"],
+      "2026-06-07": ["09:30", "11:00", "14:00"]
+    }
+  },
+  {
+    "id": "silk-and-scissors-banjara-hills",
+    "name": "Silk & Scissors",
+    "area": "Banjara Hills",
+    "city": "Hyderabad",
+    "rating": 4.7,
+    "reviewCount": 198,
+    "priceRange": "₹500 - ₹8,000",
+    "minPrice": 500,
+    "maxPrice": 8000,
+    "phone": "+91 40 2335 2233",
+    "address": "Road No. 10, Banjara Hills, Hyderabad 500034",
+    "openHours": "10:00 AM - 8:00 PM",
+    "closedDay": "Wednesday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Haircuts", "Hair Styling", "Smoothening"],
+    "tags": ["premium", "unisex", "hair-specialist"],
+    "homeService": false,
+    "services": [
+      { "name": "Women's Haircut & Styling", "price": 1200, "duration": "45 min", "category": "Hair" },
+      { "name": "Men's Haircut", "price": 500, "duration": "30 min", "category": "Hair" },
+      { "name": "Hair Smoothening", "price": 5000, "duration": "3 hours", "category": "Hair" },
+      { "name": "Blow Dry & Styling", "price": 800, "duration": "30 min", "category": "Hair" },
+      { "name": "Hair Highlights", "price": 4000, "duration": "2 hours", "category": "Hair" },
+      { "name": "Beard Grooming", "price": 400, "duration": "20 min", "category": "Grooming" }
+    ],
+    "stylists": [
+      { "name": "Arjun Khanna", "specialization": "Hair Stylist", "experience": "9 years", "image": null },
+      { "name": "Neha Sharma", "specialization": "Color Expert", "experience": "6 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Vikram R.", "rating": 5, "text": "Arjun is the best hair stylist in Hyderabad, hands down. He understands exactly what you want and delivers every time.", "date": "2025-11-28" },
+      { "name": "Roshni K.", "rating": 4, "text": "Great smoothening treatment. My hair has never felt this good. A bit pricey but the quality justifies it.", "date": "2025-10-15" },
+      { "name": "Aditya P.", "rating": 5, "text": "Finally found a salon that does men's cuts right! Clean, modern, and Arjun really knows his craft.", "date": "2025-09-30" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "11:30", "13:00", "15:00", "17:00"],
+      "2026-06-03": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-04": ["11:00", "13:00", "15:00", "17:00"],
+      "2026-06-05": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-06": ["10:00", "11:00", "13:00", "15:00"],
+      "2026-06-07": ["10:00", "12:00", "14:00", "16:00", "17:00"]
+    }
+  },
+  {
+    "id": "celebrity-looks-jubilee-hills",
+    "name": "Celebrity Looks Studio",
+    "area": "Jubilee Hills",
+    "city": "Hyderabad",
+    "rating": 4.9,
+    "reviewCount": 523,
+    "priceRange": "₹1,000 - ₹20,000",
+    "minPrice": 1000,
+    "maxPrice": 20000,
+    "phone": "+91 40 2354 6789",
+    "address": "Road No. 36, Jubilee Hills, Hyderabad 500033",
+    "openHours": "10:00 AM - 9:00 PM",
+    "closedDay": "Monday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Celebrity Styling", "Red Carpet Makeup", "Hair Extensions"],
+    "tags": ["luxury", "celebrity", "unisex"],
+    "homeService": false,
+    "services": [
+      { "name": "Red Carpet Makeup", "price": 12000, "duration": "2.5 hours", "category": "Makeup" },
+      { "name": "Hair Extensions", "price": 15000, "duration": "3 hours", "category": "Hair" },
+      { "name": "HD Makeup", "price": 8000, "duration": "2 hours", "category": "Makeup" },
+      { "name": "Airbrush Makeup", "price": 10000, "duration": "2 hours", "category": "Makeup" },
+      { "name": "Celebrity Hair Styling", "price": 5000, "duration": "1.5 hours", "category": "Hair" },
+      { "name": "Luxury Facial", "price": 4000, "duration": "1.5 hours", "category": "Skin" }
+    ],
+    "stylists": [
+      { "name": "Ravi Teja", "specialization": "Celebrity Makeup Artist", "experience": "14 years", "image": null },
+      { "name": "Swathi Naidu", "specialization": "Hair Extension Specialist", "experience": "7 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Priyanka D.", "rating": 5, "text": "Ravi Teja did my makeup for a film event and everyone thought I had a professional Bollywood MUA! He's worked with actual Tollywood stars.", "date": "2025-12-20" },
+      { "name": "Nithya S.", "rating": 5, "text": "The hair extensions look so natural, nobody can tell! Swathi is incredibly talented. This is THE salon for special occasions.", "date": "2025-11-15" },
+      { "name": "Karthik V.", "rating": 5, "text": "Best salon experience in Hyderabad. The attention to detail is unmatched. Worth the premium pricing.", "date": "2025-10-28" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "13:00", "15:00", "17:00"],
+      "2026-06-03": ["10:00", "11:00", "14:00", "16:00"],
+      "2026-06-04": ["10:00", "12:00", "15:00", "17:00"],
+      "2026-06-05": ["11:00", "13:00", "15:00"],
+      "2026-06-06": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-07": ["10:00", "11:00", "14:00", "16:00", "17:00"]
+    }
+  },
+  {
+    "id": "luxe-beauty-bar-jubilee-hills",
+    "name": "Luxe Beauty Bar",
+    "area": "Jubilee Hills",
+    "city": "Hyderabad",
+    "rating": 4.7,
+    "reviewCount": 315,
+    "priceRange": "₹600 - ₹12,000",
+    "minPrice": 600,
+    "maxPrice": 12000,
+    "phone": "+91 40 2354 1122",
+    "address": "Road No. 45, Jubilee Hills, Hyderabad 500033",
+    "openHours": "10:30 AM - 8:30 PM",
+    "closedDay": "Tuesday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Nail Art", "Skin Treatments", "Waxing"],
+    "tags": ["premium", "women-only", "skin-specialist"],
+    "homeService": false,
+    "services": [
+      { "name": "Nail Art (Gel)", "price": 2500, "duration": "1.5 hours", "category": "Nails" },
+      { "name": "Chemical Peel", "price": 4000, "duration": "1 hour", "category": "Skin" },
+      { "name": "Microdermabrasion", "price": 5000, "duration": "1 hour", "category": "Skin" },
+      { "name": "Full Body Waxing", "price": 3000, "duration": "1.5 hours", "category": "Waxing" },
+      { "name": "Diamond Facial", "price": 3500, "duration": "1 hour", "category": "Skin" },
+      { "name": "Manicure Deluxe", "price": 1200, "duration": "45 min", "category": "Nails" },
+      { "name": "Pedicure Spa", "price": 1500, "duration": "1 hour", "category": "Nails" }
+    ],
+    "stylists": [
+      { "name": "Sana Mirza", "specialization": "Skin Care Expert", "experience": "10 years", "image": null },
+      { "name": "Deepa Joshi", "specialization": "Nail Artist", "experience": "5 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Lavanya G.", "rating": 5, "text": "The diamond facial here is absolutely divine. Sana really knows skin care. My skin was glowing for a week after!", "date": "2025-12-08" },
+      { "name": "Tanvi M.", "rating": 4, "text": "Beautiful nail art by Deepa. Very creative designs. The only reason for 4 stars is the wait time on weekends.", "date": "2025-11-22" },
+      { "name": "Rekha P.", "rating": 5, "text": "Best waxing experience ever. They use high-quality products and the result is so smooth and long-lasting.", "date": "2025-10-10" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:30", "12:00", "14:00", "16:00"],
+      "2026-06-03": ["10:30", "11:30", "14:00", "15:30"],
+      "2026-06-04": ["11:00", "13:00", "15:00", "17:00"],
+      "2026-06-05": ["10:30", "12:00", "14:00", "16:00"],
+      "2026-06-06": ["10:30", "13:00", "15:00"],
+      "2026-06-07": ["10:30", "12:00", "14:00", "16:00", "17:00"]
+    }
+  },
+  {
+    "id": "mirror-mirror-jubilee-hills",
+    "name": "Mirror Mirror Salon",
+    "area": "Jubilee Hills",
+    "city": "Hyderabad",
+    "rating": 4.6,
+    "reviewCount": 189,
+    "priceRange": "₹400 - ₹10,000",
+    "minPrice": 400,
+    "maxPrice": 10000,
+    "phone": "+91 40 2354 7788",
+    "address": "Road No. 10, Jubilee Hills, Hyderabad 500033",
+    "openHours": "10:00 AM - 8:00 PM",
+    "closedDay": "Sunday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Trendy Haircuts", "Balayage", "Makeup"],
+    "tags": ["trendy", "unisex", "youth-friendly"],
+    "homeService": false,
+    "services": [
+      { "name": "Trendy Haircut", "price": 800, "duration": "45 min", "category": "Hair" },
+      { "name": "Balayage", "price": 7000, "duration": "3 hours", "category": "Hair" },
+      { "name": "Ombre Coloring", "price": 5500, "duration": "2.5 hours", "category": "Hair" },
+      { "name": "Party Makeup", "price": 3500, "duration": "1 hour", "category": "Makeup" },
+      { "name": "Hair Spa Premium", "price": 2000, "duration": "1.5 hours", "category": "Hair" },
+      { "name": "Cleanup Facial", "price": 1000, "duration": "45 min", "category": "Skin" }
+    ],
+    "stylists": [
+      { "name": "Rohit Verma", "specialization": "Creative Colorist", "experience": "6 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Ishita R.", "rating": 5, "text": "Rohit gave me the most gorgeous balayage! He really understands modern trends and what suits Indian hair textures.", "date": "2025-11-30" },
+      { "name": "Manish K.", "rating": 4, "text": "Good trendy cuts for men. The vibe of the salon is very modern and Instagram-worthy. Prices are reasonable for Jubilee Hills.", "date": "2025-10-20" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-03": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-04": ["10:00", "11:30", "14:00", "16:00"],
+      "2026-06-05": ["10:00", "13:00", "15:00", "17:00"],
+      "2026-06-06": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-07": ["10:00", "11:00", "13:00", "15:00"]
+    }
+  },
+  {
+    "id": "urban-groom-hitech-city",
+    "name": "Urban Groom",
+    "area": "Hitech City",
+    "city": "Hyderabad",
+    "rating": 4.5,
+    "reviewCount": 467,
+    "priceRange": "₹200 - ₹3,000",
+    "minPrice": 200,
+    "maxPrice": 3000,
+    "phone": "+91 40 2311 4455",
+    "address": "Cyber Towers Road, Hitech City, Hyderabad 500081",
+    "openHours": "9:00 AM - 9:00 PM",
+    "closedDay": "None",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Quick Grooming", "Men's Styling", "Express Services"],
+    "tags": ["quick-service", "men-specialist", "affordable"],
+    "homeService": false,
+    "services": [
+      { "name": "Men's Haircut", "price": 300, "duration": "20 min", "category": "Hair" },
+      { "name": "Beard Styling", "price": 200, "duration": "15 min", "category": "Grooming" },
+      { "name": "Head Massage", "price": 400, "duration": "30 min", "category": "Wellness" },
+      { "name": "Facial (Men's)", "price": 800, "duration": "45 min", "category": "Skin" },
+      { "name": "Hair Color (Men's)", "price": 1500, "duration": "1 hour", "category": "Hair" },
+      { "name": "Clean Shave + Facial", "price": 600, "duration": "30 min", "category": "Grooming" }
+    ],
+    "stylists": [
+      { "name": "Rajesh Kumar", "specialization": "Men's Grooming Expert", "experience": "11 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Suresh V.", "rating": 5, "text": "Quick, clean, and affordable. Perfect for a lunch break haircut when you're working in Hitech City. In and out in 25 minutes!", "date": "2025-12-18" },
+      { "name": "Pranav G.", "rating": 4, "text": "Good men's salon. Rajesh does excellent beard styling. Gets crowded after 6 PM though, so go during the day.", "date": "2025-11-05" },
+      { "name": "Kiran M.", "rating": 5, "text": "Best value for money in the IT corridor. The head massage after a stressful day is a lifesaver.", "date": "2025-10-30" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00", "18:00"],
+      "2026-06-03": ["09:00", "10:00", "11:00", "13:00", "14:00", "16:00", "17:00"],
+      "2026-06-04": ["09:00", "10:00", "12:00", "14:00", "15:00", "17:00", "18:00"],
+      "2026-06-05": ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"],
+      "2026-06-06": ["09:00", "11:00", "12:00", "14:00", "16:00", "17:00"],
+      "2026-06-07": ["09:00", "10:00", "11:00", "13:00", "15:00", "17:00"]
+    }
+  },
+  {
+    "id": "glow-up-studio-hitech-city",
+    "name": "Glow Up Studio",
+    "area": "Hitech City",
+    "city": "Hyderabad",
+    "rating": 4.6,
+    "reviewCount": 234,
+    "priceRange": "₹300 - ₹6,000",
+    "minPrice": 300,
+    "maxPrice": 6000,
+    "phone": "+91 40 2311 9900",
+    "address": "Kondapur Main Road, Hitech City, Hyderabad 500081",
+    "openHours": "10:00 AM - 8:30 PM",
+    "closedDay": "Monday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Unisex Services", "Facial Treatments", "Threading"],
+    "tags": ["unisex", "professional", "mid-range"],
+    "homeService": false,
+    "services": [
+      { "name": "Women's Haircut", "price": 600, "duration": "30 min", "category": "Hair" },
+      { "name": "Men's Haircut", "price": 300, "duration": "20 min", "category": "Hair" },
+      { "name": "Fruit Facial", "price": 1200, "duration": "1 hour", "category": "Skin" },
+      { "name": "Threading (Full Face)", "price": 250, "duration": "20 min", "category": "Grooming" },
+      { "name": "Hair Straightening", "price": 4500, "duration": "2.5 hours", "category": "Hair" },
+      { "name": "Bridal Makeup", "price": 6000, "duration": "2 hours", "category": "Makeup" },
+      { "name": "Waxing (Arms + Legs)", "price": 1000, "duration": "45 min", "category": "Waxing" }
+    ],
+    "stylists": [
+      { "name": "Anitha Reddy", "specialization": "All-Rounder Stylist", "experience": "7 years", "image": null },
+      { "name": "Mohammed Irfan", "specialization": "Men's Specialist", "experience": "5 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Padma L.", "rating": 5, "text": "Anitha is wonderful! She did my hair and facial before my anniversary and I looked amazing. Very reasonably priced for the quality.", "date": "2025-12-10" },
+      { "name": "Ravi K.", "rating": 4, "text": "Good unisex salon near my office. Clean place, friendly staff. Hair straightening result was great.", "date": "2025-11-18" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "11:00", "13:00", "14:00", "16:00", "17:00"],
+      "2026-06-03": ["10:00", "12:00", "14:00", "15:00", "17:00"],
+      "2026-06-04": ["10:00", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-05": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-06": ["10:00", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-07": ["10:00", "11:00", "14:00", "16:00"]
+    }
+  },
+  {
+    "id": "style-hub-hitech-city",
+    "name": "Style Hub Express",
+    "area": "Hitech City",
+    "city": "Hyderabad",
+    "rating": 4.3,
+    "reviewCount": 156,
+    "priceRange": "₹150 - ₹2,500",
+    "minPrice": 150,
+    "maxPrice": 2500,
+    "phone": "+91 40 2311 3344",
+    "address": "Raheja Mindspace Road, Hitech City, Hyderabad 500081",
+    "openHours": "8:30 AM - 9:30 PM",
+    "closedDay": "None",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Express Services", "Grooming", "Basic Salon"],
+    "tags": ["budget", "express", "unisex"],
+    "homeService": false,
+    "services": [
+      { "name": "Express Haircut (Men)", "price": 150, "duration": "15 min", "category": "Hair" },
+      { "name": "Women's Trim", "price": 350, "duration": "20 min", "category": "Hair" },
+      { "name": "Quick Facial", "price": 500, "duration": "30 min", "category": "Skin" },
+      { "name": "Threading", "price": 80, "duration": "10 min", "category": "Grooming" },
+      { "name": "Hair Wash & Style", "price": 300, "duration": "20 min", "category": "Hair" },
+      { "name": "Basic Pedicure", "price": 600, "duration": "30 min", "category": "Nails" }
+    ],
+    "stylists": [
+      { "name": "Venkat Rao", "specialization": "Quick Stylist", "experience": "4 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Ajay S.", "rating": 4, "text": "Super quick and affordable. Perfect when you need a trim before an important meeting. No frills but gets the job done well.", "date": "2025-12-05" },
+      { "name": "Sunita D.", "rating": 4, "text": "Good basic salon services. Threading is quick and precise. Great location near the IT parks.", "date": "2025-11-12" }
+    ],
+    "availability": {
+      "2026-06-02": ["08:30", "09:30", "10:30", "11:30", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"],
+      "2026-06-03": ["08:30", "09:30", "10:30", "12:00", "14:00", "15:00", "17:00"],
+      "2026-06-04": ["08:30", "10:00", "11:00", "13:00", "14:00", "16:00", "17:00"],
+      "2026-06-05": ["08:30", "09:30", "11:00", "13:00", "15:00", "16:00", "18:00"],
+      "2026-06-06": ["08:30", "10:00", "11:00", "14:00", "15:00", "17:00"],
+      "2026-06-07": ["08:30", "09:30", "10:30", "12:00", "14:00", "16:00"]
+    }
+  },
+  {
+    "id": "aura-salon-madhapur",
+    "name": "Aura Unisex Salon",
+    "area": "Madhapur",
+    "city": "Hyderabad",
+    "rating": 4.5,
+    "reviewCount": 289,
+    "priceRange": "₹250 - ₹5,000",
+    "minPrice": 250,
+    "maxPrice": 5000,
+    "phone": "+91 40 2312 5566",
+    "address": "Durgam Cheruvu Road, Madhapur, Hyderabad 500081",
+    "openHours": "10:00 AM - 8:00 PM",
+    "closedDay": "Tuesday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Unisex Services", "Hair Treatments", "Facials"],
+    "tags": ["affordable", "unisex", "professional"],
+    "homeService": false,
+    "services": [
+      { "name": "Women's Haircut & Blow Dry", "price": 700, "duration": "45 min", "category": "Hair" },
+      { "name": "Men's Haircut & Style", "price": 350, "duration": "30 min", "category": "Hair" },
+      { "name": "Hair Spa", "price": 1200, "duration": "1 hour", "category": "Hair" },
+      { "name": "Pearl Facial", "price": 1500, "duration": "1 hour", "category": "Skin" },
+      { "name": "Hair Color (Streaks)", "price": 2500, "duration": "1.5 hours", "category": "Hair" },
+      { "name": "Manicure & Pedicure Combo", "price": 1200, "duration": "1 hour", "category": "Nails" },
+      { "name": "Party Makeup", "price": 3500, "duration": "1.5 hours", "category": "Makeup" }
+    ],
+    "stylists": [
+      { "name": "Sravanthi P.", "specialization": "Hair Treatment Specialist", "experience": "6 years", "image": null },
+      { "name": "Naveen Kumar", "specialization": "Unisex Stylist", "experience": "8 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Bhavana R.", "rating": 5, "text": "Love this salon! Sravanthi's hair spa treatment is magical. My damaged hair felt completely rejuvenated. Great prices too!", "date": "2025-12-12" },
+      { "name": "Prasad M.", "rating": 4, "text": "Naveen gives a great haircut every time. Good ambiance, clean place. Parking can be an issue sometimes.", "date": "2025-11-25" },
+      { "name": "Shalini K.", "rating": 5, "text": "Best value-for-money salon in Madhapur. The pearl facial left my skin glowing for days!", "date": "2025-10-18" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "11:00", "13:00", "14:00", "16:00", "17:00"],
+      "2026-06-03": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-04": ["10:00", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-05": ["10:00", "12:00", "14:00", "15:00", "17:00"],
+      "2026-06-06": ["10:00", "11:00", "13:00", "15:00"],
+      "2026-06-07": ["10:00", "12:00", "14:00", "16:00", "17:00"]
+    }
+  },
+  {
+    "id": "bliss-beauty-madhapur",
+    "name": "Bliss Beauty Studio",
+    "area": "Madhapur",
+    "city": "Hyderabad",
+    "rating": 4.4,
+    "reviewCount": 176,
+    "priceRange": "₹300 - ₹7,000",
+    "minPrice": 300,
+    "maxPrice": 7000,
+    "phone": "+91 40 2312 8877",
+    "address": "Ayyappa Society, Madhapur, Hyderabad 500081",
+    "openHours": "10:00 AM - 8:30 PM",
+    "closedDay": "Wednesday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Makeup", "Skin Care", "Waxing"],
+    "tags": ["women-only", "makeup-specialist", "mid-range"],
+    "homeService": true,
+    "services": [
+      { "name": "Engagement Makeup", "price": 5000, "duration": "2 hours", "category": "Makeup" },
+      { "name": "Party Makeup", "price": 3000, "duration": "1.5 hours", "category": "Makeup" },
+      { "name": "De-tan Facial", "price": 1200, "duration": "1 hour", "category": "Skin" },
+      { "name": "Full Body Waxing", "price": 2000, "duration": "1.5 hours", "category": "Waxing" },
+      { "name": "Hair Spa", "price": 1000, "duration": "1 hour", "category": "Hair" },
+      { "name": "Bridal Package", "price": 7000, "duration": "3 hours", "category": "Bridal" }
+    ],
+    "stylists": [
+      { "name": "Manasa Reddy", "specialization": "Makeup Artist", "experience": "5 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Kavya S.", "rating": 5, "text": "Manasa did my engagement makeup and I received so many compliments! She also offers home service which was super convenient.", "date": "2025-11-30" },
+      { "name": "Aruna T.", "rating": 4, "text": "Good de-tan facial. Staff is friendly and the salon is very clean. Reasonable pricing for Madhapur.", "date": "2025-10-25" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-03": ["10:00", "11:00", "14:00", "16:00"],
+      "2026-06-04": ["10:00", "13:00", "15:00", "17:00"],
+      "2026-06-05": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-06": ["10:00", "11:00", "13:00", "15:00"],
+      "2026-06-07": ["10:00", "12:00", "14:00", "17:00"]
+    }
+  },
+  {
+    "id": "chic-cuts-madhapur",
+    "name": "Chic Cuts & Color",
+    "area": "Madhapur",
+    "city": "Hyderabad",
+    "rating": 4.3,
+    "reviewCount": 143,
+    "priceRange": "₹200 - ₹4,500",
+    "minPrice": 200,
+    "maxPrice": 4500,
+    "phone": "+91 40 2312 6655",
+    "address": "Kavuri Hills, Madhapur, Hyderabad 500081",
+    "openHours": "9:30 AM - 8:00 PM",
+    "closedDay": "Thursday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Haircuts", "Coloring", "Kids Haircuts"],
+    "tags": ["family-friendly", "affordable", "unisex"],
+    "homeService": false,
+    "services": [
+      { "name": "Women's Haircut", "price": 500, "duration": "30 min", "category": "Hair" },
+      { "name": "Men's Haircut", "price": 200, "duration": "20 min", "category": "Hair" },
+      { "name": "Kids Haircut", "price": 150, "duration": "15 min", "category": "Hair" },
+      { "name": "Global Hair Color", "price": 3500, "duration": "2 hours", "category": "Hair" },
+      { "name": "Root Touch-up", "price": 1500, "duration": "1 hour", "category": "Hair" },
+      { "name": "Hair Highlights", "price": 4000, "duration": "2 hours", "category": "Hair" }
+    ],
+    "stylists": [
+      { "name": "Sunil Babu", "specialization": "Color Specialist", "experience": "9 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Ramya V.", "rating": 4, "text": "Sunil does excellent hair coloring. Very precise with the tones. They also cut my kids' hair without any fuss!", "date": "2025-12-02" },
+      { "name": "Harish R.", "rating": 4, "text": "Affordable and reliable. Been going here for 2 years. No complaints. Root touch-ups are always on point.", "date": "2025-11-08" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:30", "10:30", "12:00", "14:00", "15:00", "17:00"],
+      "2026-06-03": ["09:30", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-04": ["09:30", "10:30", "12:00", "14:00", "16:00"],
+      "2026-06-05": ["09:30", "11:00", "13:00", "15:00"],
+      "2026-06-06": ["09:30", "10:30", "12:00", "14:00", "16:00", "17:00"],
+      "2026-06-07": ["09:30", "11:00", "13:00", "15:00", "17:00"]
+    }
+  },
+  {
+    "id": "finesse-salon-gachibowli",
+    "name": "Finesse Salon & Spa",
+    "area": "Gachibowli",
+    "city": "Hyderabad",
+    "rating": 4.6,
+    "reviewCount": 267,
+    "priceRange": "₹400 - ₹8,000",
+    "minPrice": 400,
+    "maxPrice": 8000,
+    "phone": "+91 40 2313 7766",
+    "address": "DLF Cyber City Road, Gachibowli, Hyderabad 500032",
+    "openHours": "10:00 AM - 9:00 PM",
+    "closedDay": "Monday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Modern Styles", "Hair Treatments", "Grooming"],
+    "tags": ["modern", "unisex", "tech-crowd"],
+    "homeService": false,
+    "services": [
+      { "name": "Modern Haircut & Style", "price": 800, "duration": "45 min", "category": "Hair" },
+      { "name": "Keratin Treatment", "price": 6000, "duration": "3 hours", "category": "Hair" },
+      { "name": "Beard Design", "price": 500, "duration": "30 min", "category": "Grooming" },
+      { "name": "O3+ Facial", "price": 2000, "duration": "1 hour", "category": "Skin" },
+      { "name": "Hair Rebonding", "price": 5500, "duration": "3 hours", "category": "Hair" },
+      { "name": "Head & Shoulder Massage", "price": 600, "duration": "30 min", "category": "Wellness" },
+      { "name": "Men's Cleanup", "price": 800, "duration": "30 min", "category": "Skin" }
+    ],
+    "stylists": [
+      { "name": "Akash Mehta", "specialization": "Modern Stylist", "experience": "7 years", "image": null },
+      { "name": "Pooja Sharma", "specialization": "Treatment Specialist", "experience": "5 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Siddharth N.", "rating": 5, "text": "Akash is incredible! He gave me a modern fade that looked like I stepped out of a magazine. Great salon for the tech crowd in Gachibowli.", "date": "2025-12-16" },
+      { "name": "Deepika M.", "rating": 4, "text": "Pooja's keratin treatment lasted 4 months! Very satisfied. The salon has a premium feel without premium pricing.", "date": "2025-11-20" },
+      { "name": "Varun T.", "rating": 5, "text": "Best grooming salon near DLF. Clean, modern, and the staff really knows their craft. The head massage is so relaxing after work.", "date": "2025-10-14" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "11:00", "13:00", "14:00", "16:00", "17:00", "18:00"],
+      "2026-06-03": ["10:00", "12:00", "14:00", "16:00", "18:00"],
+      "2026-06-04": ["10:00", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-05": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-06": ["10:00", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-07": ["10:00", "12:00", "14:00", "16:00", "18:00"]
+    }
+  },
+  {
+    "id": "zen-wellness-gachibowli",
+    "name": "Zen Wellness & Beauty",
+    "area": "Gachibowli",
+    "city": "Hyderabad",
+    "rating": 4.4,
+    "reviewCount": 198,
+    "priceRange": "₹500 - ₹6,000",
+    "minPrice": 500,
+    "maxPrice": 6000,
+    "phone": "+91 40 2313 2211",
+    "address": "Nanakramguda Road, Gachibowli, Hyderabad 500032",
+    "openHours": "9:30 AM - 8:00 PM",
+    "closedDay": "Sunday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Spa Treatments", "Wellness", "Organic Facials"],
+    "tags": ["wellness", "organic", "women-only"],
+    "homeService": true,
+    "services": [
+      { "name": "Organic Facial", "price": 2500, "duration": "1 hour", "category": "Skin" },
+      { "name": "Full Body Spa", "price": 4000, "duration": "2 hours", "category": "Wellness" },
+      { "name": "Aromatherapy Massage", "price": 3000, "duration": "1.5 hours", "category": "Wellness" },
+      { "name": "Hair Oil Treatment", "price": 1000, "duration": "45 min", "category": "Hair" },
+      { "name": "Anti-aging Facial", "price": 3500, "duration": "1.5 hours", "category": "Skin" },
+      { "name": "Body Scrub & Wrap", "price": 5000, "duration": "2 hours", "category": "Wellness" }
+    ],
+    "stylists": [
+      { "name": "Dr. Shruti Kapoor", "specialization": "Wellness Expert", "experience": "12 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Neelima S.", "rating": 5, "text": "The organic facial is pure bliss! Dr. Shruti really understands skin. The spa is so peaceful, it's my monthly escape from work stress.", "date": "2025-12-14" },
+      { "name": "Anjali R.", "rating": 4, "text": "Wonderful spa treatments. The aromatherapy massage melted away all my stress. They also do home service which is great.", "date": "2025-11-28" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:30", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-03": ["09:30", "11:00", "14:00", "16:00"],
+      "2026-06-04": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-05": ["09:30", "11:00", "13:00", "15:00"],
+      "2026-06-06": ["09:30", "11:00", "14:00", "16:00"],
+      "2026-06-07": ["10:00", "12:00", "14:00"]
+    }
+  },
+  {
+    "id": "affordable-beauty-kukatpally",
+    "name": "Affordable Beauty Zone",
+    "area": "Kukatpally",
+    "city": "Hyderabad",
+    "rating": 4.2,
+    "reviewCount": 345,
+    "priceRange": "₹100 - ₹2,500",
+    "minPrice": 100,
+    "maxPrice": 2500,
+    "phone": "+91 40 2305 1122",
+    "address": "KPHB Colony, Kukatpally, Hyderabad 500072",
+    "openHours": "9:00 AM - 8:00 PM",
+    "closedDay": "None",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Budget Services", "Basic Grooming", "Threading"],
+    "tags": ["budget", "family", "unisex"],
+    "homeService": false,
+    "services": [
+      { "name": "Women's Haircut", "price": 250, "duration": "30 min", "category": "Hair" },
+      { "name": "Men's Haircut", "price": 100, "duration": "15 min", "category": "Hair" },
+      { "name": "Eyebrow Threading", "price": 40, "duration": "10 min", "category": "Grooming" },
+      { "name": "Basic Facial", "price": 500, "duration": "45 min", "category": "Skin" },
+      { "name": "Arms Waxing", "price": 300, "duration": "20 min", "category": "Waxing" },
+      { "name": "Hair Straightening", "price": 2500, "duration": "2 hours", "category": "Hair" },
+      { "name": "Henna Application", "price": 200, "duration": "30 min", "category": "Hair" }
+    ],
+    "stylists": [
+      { "name": "Sarita Devi", "specialization": "General Stylist", "experience": "10 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Padmavathi K.", "rating": 4, "text": "Best budget salon in Kukatpally! Sarita has been doing my hair for years. Threading at ₹40 is unbeatable.", "date": "2025-12-06" },
+      { "name": "Ramesh G.", "rating": 4, "text": "No-nonsense salon. Quick haircuts at the lowest price in the area. Kids cuts too. The whole family goes here.", "date": "2025-11-22" },
+      { "name": "Jyothi P.", "rating": 5, "text": "Wonderful value for money. The basic facial is really good for the price. Clean and hygienic. What more do you need?", "date": "2025-10-30" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:00", "10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00"],
+      "2026-06-03": ["09:00", "10:00", "11:00", "13:00", "14:00", "16:00"],
+      "2026-06-04": ["09:00", "10:00", "12:00", "14:00", "15:00", "17:00"],
+      "2026-06-05": ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"],
+      "2026-06-06": ["09:00", "11:00", "12:00", "14:00", "16:00", "17:00"],
+      "2026-06-07": ["09:00", "10:00", "11:00", "13:00", "15:00", "17:00"]
+    }
+  },
+  {
+    "id": "home-glam-kukatpally",
+    "name": "Home Glam Services",
+    "area": "Kukatpally",
+    "city": "Hyderabad",
+    "rating": 4.5,
+    "reviewCount": 412,
+    "priceRange": "₹200 - ₹4,000",
+    "minPrice": 200,
+    "maxPrice": 4000,
+    "phone": "+91 98765 43210",
+    "address": "Kukatpally Housing Board, Hyderabad 500072",
+    "openHours": "8:00 AM - 8:00 PM",
+    "closedDay": "None",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Home Service", "Bridal at Home", "Spa at Home"],
+    "tags": ["home-service", "affordable", "women-only"],
+    "homeService": true,
+    "services": [
+      { "name": "Home Facial", "price": 800, "duration": "1 hour", "category": "Skin" },
+      { "name": "Home Waxing (Full Body)", "price": 1500, "duration": "1.5 hours", "category": "Waxing" },
+      { "name": "Home Hair Spa", "price": 1000, "duration": "1 hour", "category": "Hair" },
+      { "name": "Home Bridal Makeup", "price": 4000, "duration": "2.5 hours", "category": "Makeup" },
+      { "name": "Home Mehndi", "price": 1500, "duration": "2 hours", "category": "Mehndi" },
+      { "name": "Home Threading + Cleanup", "price": 400, "duration": "30 min", "category": "Grooming" },
+      { "name": "Home Pedicure", "price": 500, "duration": "30 min", "category": "Nails" }
+    ],
+    "stylists": [
+      { "name": "Vijaya Lakshmi", "specialization": "Home Service Expert", "experience": "8 years", "image": null },
+      { "name": "Rukmini Devi", "specialization": "Bridal Specialist", "experience": "6 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Sujatha M.", "rating": 5, "text": "Vijaya comes to my home every month for facial and waxing. So convenient! She's punctual, professional, and brings all her own supplies.", "date": "2025-12-19" },
+      { "name": "Noor Fatima", "rating": 5, "text": "Got my bridal makeup done at home. Rukmini did a beautiful job! The mehndi was intricate and lasted for weeks. Perfect for home functions.", "date": "2025-11-15" },
+      { "name": "Shobha R.", "rating": 4, "text": "Great home service. Saves me so much time. The hair spa treatment is relaxing. Only wish they had more appointment slots on weekends.", "date": "2025-10-20" }
+    ],
+    "availability": {
+      "2026-06-02": ["08:00", "10:00", "12:00", "14:00", "16:00"],
+      "2026-06-03": ["08:00", "09:00", "11:00", "14:00", "16:00"],
+      "2026-06-04": ["08:00", "10:00", "12:00", "15:00", "17:00"],
+      "2026-06-05": ["08:00", "10:00", "13:00", "15:00"],
+      "2026-06-06": ["08:00", "09:00", "11:00", "14:00", "16:00"],
+      "2026-06-07": ["08:00", "10:00", "12:00", "14:00"]
+    }
+  },
+  {
+    "id": "sree-lakshmi-kukatpally",
+    "name": "Sree Lakshmi Beauty Parlour",
+    "area": "Kukatpally",
+    "city": "Hyderabad",
+    "rating": 4.1,
+    "reviewCount": 234,
+    "priceRange": "₹80 - ₹3,000",
+    "minPrice": 80,
+    "maxPrice": 3000,
+    "phone": "+91 40 2305 4455",
+    "address": "Bachupally Road, Kukatpally, Hyderabad 500072",
+    "openHours": "9:00 AM - 7:30 PM",
+    "closedDay": "Monday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Traditional Services", "Mehendi", "Budget Bridal"],
+    "tags": ["budget", "traditional", "women-only"],
+    "homeService": true,
+    "services": [
+      { "name": "Simple Bridal Makeup", "price": 3000, "duration": "2 hours", "category": "Makeup" },
+      { "name": "Traditional Mehendi", "price": 800, "duration": "2 hours", "category": "Mehndi" },
+      { "name": "Haircut", "price": 200, "duration": "20 min", "category": "Hair" },
+      { "name": "Gold Facial", "price": 600, "duration": "45 min", "category": "Skin" },
+      { "name": "Threading (Eyebrow)", "price": 30, "duration": "10 min", "category": "Grooming" },
+      { "name": "Hair Oil Massage", "price": 300, "duration": "30 min", "category": "Hair" }
+    ],
+    "stylists": [
+      { "name": "Lakshmi Bai", "specialization": "Traditional Stylist", "experience": "20 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Saroja D.", "rating": 4, "text": "Lakshmi aunty has been doing my hair since I was a child! Traditional expertise at unbeatable prices. The gold facial is amazing for ₹600.", "date": "2025-12-01" },
+      { "name": "Uma K.", "rating": 4, "text": "Great for budget bridal makeup. My neighbor got her daughter's wedding makeup done here and it looked beautiful. Very affordable.", "date": "2025-11-10" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"],
+      "2026-06-03": ["09:00", "10:30", "12:00", "14:00", "16:00"],
+      "2026-06-04": ["09:00", "10:00", "12:00", "14:00", "15:00"],
+      "2026-06-05": ["09:00", "11:00", "13:00", "15:00", "16:00"],
+      "2026-06-06": ["09:00", "10:00", "12:00", "14:00", "16:00"],
+      "2026-06-07": ["09:00", "10:00", "11:00", "13:00", "15:00"]
+    }
+  },
+  {
+    "id": "heritage-salon-secunderabad",
+    "name": "Heritage Beauty Salon",
+    "area": "Secunderabad",
+    "city": "Hyderabad",
+    "rating": 4.4,
+    "reviewCount": 312,
+    "priceRange": "₹200 - ₹6,000",
+    "minPrice": 200,
+    "maxPrice": 6000,
+    "phone": "+91 40 2770 1234",
+    "address": "MG Road, Secunderabad, Hyderabad 500003",
+    "openHours": "9:30 AM - 8:30 PM",
+    "closedDay": "Tuesday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Traditional + Modern", "Hair Care", "Skin Care"],
+    "tags": ["heritage", "unisex", "trusted"],
+    "homeService": false,
+    "services": [
+      { "name": "Traditional Hair Oil Bath", "price": 500, "duration": "45 min", "category": "Hair" },
+      { "name": "Modern Haircut", "price": 400, "duration": "30 min", "category": "Hair" },
+      { "name": "Gold Facial", "price": 1200, "duration": "1 hour", "category": "Skin" },
+      { "name": "Hair Color", "price": 2500, "duration": "1.5 hours", "category": "Hair" },
+      { "name": "Bridal Makeup", "price": 6000, "duration": "2.5 hours", "category": "Makeup" },
+      { "name": "Cleanup", "price": 500, "duration": "30 min", "category": "Skin" },
+      { "name": "Head Massage", "price": 300, "duration": "20 min", "category": "Wellness" }
+    ],
+    "stylists": [
+      { "name": "Sudha Rani", "specialization": "Senior Stylist", "experience": "18 years", "image": null },
+      { "name": "Raju Naik", "specialization": "Hair Colorist", "experience": "10 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Kamala N.", "rating": 5, "text": "Been coming to Heritage for 10 years. Sudha Rani is a gem. The traditional oil bath followed by head massage is heavenly!", "date": "2025-12-13" },
+      { "name": "Vaishali T.", "rating": 4, "text": "Great mix of traditional and modern services. Raju does excellent hair coloring. The MG Road location is very accessible.", "date": "2025-11-24" },
+      { "name": "Nikhil P.", "rating": 4, "text": "One of the few salons in Secunderabad that does both traditional and modern well. Good pricing too.", "date": "2025-10-15" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:30", "10:30", "12:00", "14:00", "15:00", "17:00"],
+      "2026-06-03": ["09:30", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-04": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-05": ["09:30", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-06": ["09:30", "10:30", "12:00", "14:00", "16:00"],
+      "2026-06-07": ["09:30", "11:00", "14:00", "16:00"]
+    }
+  },
+  {
+    "id": "new-look-secunderabad",
+    "name": "New Look Unisex Salon",
+    "area": "Secunderabad",
+    "city": "Hyderabad",
+    "rating": 4.3,
+    "reviewCount": 178,
+    "priceRange": "₹150 - ₹4,000",
+    "minPrice": 150,
+    "maxPrice": 4000,
+    "phone": "+91 40 2770 5566",
+    "address": "Paradise Circle, Secunderabad, Hyderabad 500003",
+    "openHours": "10:00 AM - 8:00 PM",
+    "closedDay": "Wednesday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Quick Services", "Grooming", "Facial Treatments"],
+    "tags": ["quick-service", "unisex", "affordable"],
+    "homeService": false,
+    "services": [
+      { "name": "Quick Haircut (Men)", "price": 150, "duration": "15 min", "category": "Hair" },
+      { "name": "Women's Cut & Style", "price": 500, "duration": "30 min", "category": "Hair" },
+      { "name": "Beard Trim", "price": 100, "duration": "10 min", "category": "Grooming" },
+      { "name": "Vitamin C Facial", "price": 1500, "duration": "1 hour", "category": "Skin" },
+      { "name": "Hair Spa", "price": 800, "duration": "45 min", "category": "Hair" },
+      { "name": "Threading + Waxing Combo", "price": 600, "duration": "30 min", "category": "Grooming" }
+    ],
+    "stylists": [
+      { "name": "Krishna Murthy", "specialization": "Quick Stylist", "experience": "12 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Prakash R.", "rating": 4, "text": "Convenient location near Paradise. Quick and reliable haircuts. Krishna has been styling my hair for years.", "date": "2025-12-04" },
+      { "name": "Sindhu K.", "rating": 4, "text": "Good vitamin C facial at a reasonable price. The salon is small but clean and well-maintained.", "date": "2025-11-15" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "11:00", "12:00", "14:00", "15:00", "16:00", "17:00"],
+      "2026-06-03": ["10:00", "11:00", "13:00", "14:00", "16:00"],
+      "2026-06-04": ["10:00", "12:00", "14:00", "15:00", "17:00"],
+      "2026-06-05": ["10:00", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-06": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-07": ["10:00", "11:00", "13:00", "15:00", "17:00"]
+    }
+  },
+  {
+    "id": "diva-studio-begumpet",
+    "name": "Diva Bridal Studio",
+    "area": "Begumpet",
+    "city": "Hyderabad",
+    "rating": 4.7,
+    "reviewCount": 267,
+    "priceRange": "₹500 - ₹15,000",
+    "minPrice": 500,
+    "maxPrice": 15000,
+    "phone": "+91 40 2776 8899",
+    "address": "Begumpet Main Road, Hyderabad 500016",
+    "openHours": "10:00 AM - 8:30 PM",
+    "closedDay": "Monday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Bridal Makeup", "Party Styling", "Saree Draping"],
+    "tags": ["bridal", "party", "women-only"],
+    "homeService": true,
+    "services": [
+      { "name": "Bridal Makeup + Hairstyling", "price": 12000, "duration": "3.5 hours", "category": "Bridal" },
+      { "name": "Reception Makeup", "price": 8000, "duration": "2 hours", "category": "Makeup" },
+      { "name": "Party Makeup", "price": 4000, "duration": "1.5 hours", "category": "Makeup" },
+      { "name": "Saree Draping (Designer)", "price": 2000, "duration": "45 min", "category": "Styling" },
+      { "name": "Hair Styling (Event)", "price": 3000, "duration": "1 hour", "category": "Hair" },
+      { "name": "Pre-Bridal Package", "price": 15000, "duration": "Multiple sessions", "category": "Bridal" }
+    ],
+    "stylists": [
+      { "name": "Meenakshi Iyer", "specialization": "Bridal Makeup Expert", "experience": "13 years", "image": null },
+      { "name": "Chandni Ali", "specialization": "Saree Draping Specialist", "experience": "8 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Harini V.", "rating": 5, "text": "Meenakshi is an artist! My bridal look was exactly what I dreamed of — a perfect South Indian bride. She also does Muslim bridal looks beautifully.", "date": "2025-12-22" },
+      { "name": "Samreen B.", "rating": 5, "text": "Got my reception look done by Meenakshi and Chandni did the most beautiful saree draping. Everyone at the wedding asked for their contact!", "date": "2025-11-18" },
+      { "name": "Preethi M.", "rating": 4, "text": "Excellent party makeup. Lasts all night. They also offer home service for events which is very convenient in Begumpet.", "date": "2025-10-28" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "13:00", "15:00", "17:00"],
+      "2026-06-03": ["10:00", "11:00", "14:00", "16:00"],
+      "2026-06-04": ["10:00", "12:00", "15:00"],
+      "2026-06-05": ["10:00", "13:00", "15:00", "17:00"],
+      "2026-06-06": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-07": ["10:00", "11:00", "14:00", "16:00"]
+    }
+  },
+  {
+    "id": "sparkle-salon-begumpet",
+    "name": "Sparkle Salon & Academy",
+    "area": "Begumpet",
+    "city": "Hyderabad",
+    "rating": 4.3,
+    "reviewCount": 156,
+    "priceRange": "₹300 - ₹5,000",
+    "minPrice": 300,
+    "maxPrice": 5000,
+    "phone": "+91 40 2776 3344",
+    "address": "Ameerpet-Begumpet Road, Hyderabad 500016",
+    "openHours": "10:00 AM - 7:30 PM",
+    "closedDay": "Sunday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Makeup Training", "Party Looks", "Hair Styling"],
+    "tags": ["academy", "affordable", "women-only"],
+    "homeService": false,
+    "services": [
+      { "name": "Party Makeup (Student Rate)", "price": 1500, "duration": "1.5 hours", "category": "Makeup" },
+      { "name": "Professional Makeup", "price": 3500, "duration": "1.5 hours", "category": "Makeup" },
+      { "name": "Hair Styling (Event)", "price": 2000, "duration": "1 hour", "category": "Hair" },
+      { "name": "Facial + Cleanup", "price": 800, "duration": "45 min", "category": "Skin" },
+      { "name": "Makeup Course (5 days)", "price": 5000, "duration": "5 days", "category": "Training" }
+    ],
+    "stylists": [
+      { "name": "Reshma Begum", "specialization": "Makeup Trainer & Artist", "experience": "9 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Fathima A.", "rating": 4, "text": "Reshma is a great teacher and an even better makeup artist. Got my party makeup done at student rate — looked fantastic!", "date": "2025-12-09" },
+      { "name": "Swapna T.", "rating": 4, "text": "Did a 5-day makeup course here. Very practical training. Reshma teaches with real-world techniques. Highly recommend for aspiring MUAs.", "date": "2025-11-02" }
+    ],
+    "availability": {
+      "2026-06-02": ["10:00", "11:00", "13:00", "14:00", "16:00"],
+      "2026-06-03": ["10:00", "12:00", "14:00", "16:00"],
+      "2026-06-04": ["10:00", "11:00", "13:00", "15:00"],
+      "2026-06-05": ["10:00", "12:00", "14:00"],
+      "2026-06-06": ["10:00", "11:00", "13:00", "15:00", "16:00"],
+      "2026-06-07": ["10:00", "12:00", "14:00", "16:00"]
+    }
+  },
+  {
+    "id": "trend-factory-ameerpet",
+    "name": "Trend Factory",
+    "area": "Ameerpet",
+    "city": "Hyderabad",
+    "rating": 4.4,
+    "reviewCount": 289,
+    "priceRange": "₹150 - ₹3,500",
+    "minPrice": 150,
+    "maxPrice": 3500,
+    "phone": "+91 40 2373 5566",
+    "address": "Ameerpet Main Road, Hyderabad 500016",
+    "openHours": "9:30 AM - 8:30 PM",
+    "closedDay": "None",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Trendy Cuts", "Color Trends", "Student Discounts"],
+    "tags": ["trendy", "student-friendly", "unisex"],
+    "homeService": false,
+    "services": [
+      { "name": "Trendy Haircut", "price": 350, "duration": "30 min", "category": "Hair" },
+      { "name": "Korean-style Cut", "price": 500, "duration": "45 min", "category": "Hair" },
+      { "name": "Fashion Color (Streaks)", "price": 2000, "duration": "1.5 hours", "category": "Hair" },
+      { "name": "Student Special Combo", "price": 600, "duration": "1 hour", "category": "Combo" },
+      { "name": "Fade + Beard Design", "price": 400, "duration": "30 min", "category": "Grooming" },
+      { "name": "Straightening (Short Hair)", "price": 2500, "duration": "1.5 hours", "category": "Hair" },
+      { "name": "Basic Facial", "price": 500, "duration": "30 min", "category": "Skin" }
+    ],
+    "stylists": [
+      { "name": "Sunny Raj", "specialization": "Trend Specialist", "experience": "5 years", "image": null },
+      { "name": "Priya Kumari", "specialization": "Color Expert", "experience": "4 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Nitin K.", "rating": 5, "text": "Sunny is amazing! He gave me the exact K-drama inspired cut I showed him. Best salon for trendy looks in Ameerpet. Student prices too!", "date": "2025-12-17" },
+      { "name": "Shreya M.", "rating": 4, "text": "Got pink streaks done by Priya and they looked incredible! The whole salon has a young, fun vibe. Very Instagram-worthy.", "date": "2025-11-25" },
+      { "name": "Rahul S.", "rating": 4, "text": "Great fades and beard designs. Super affordable for students. The combo deal is a steal.", "date": "2025-10-12" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:30", "10:30", "11:30", "13:00", "14:00", "15:00", "16:00", "17:00"],
+      "2026-06-03": ["09:30", "10:30", "12:00", "14:00", "15:00", "17:00"],
+      "2026-06-04": ["09:30", "11:00", "13:00", "14:00", "16:00", "17:00"],
+      "2026-06-05": ["09:30", "10:30", "12:00", "14:00", "16:00"],
+      "2026-06-06": ["09:30", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-07": ["09:30", "10:30", "12:00", "14:00", "16:00", "17:00"]
+    }
+  },
+  {
+    "id": "campus-cuts-ameerpet",
+    "name": "Campus Cuts",
+    "area": "Ameerpet",
+    "city": "Hyderabad",
+    "rating": 4.2,
+    "reviewCount": 198,
+    "priceRange": "₹100 - ₹2,000",
+    "minPrice": 100,
+    "maxPrice": 2000,
+    "phone": "+91 40 2373 2233",
+    "address": "SR Nagar, Ameerpet, Hyderabad 500038",
+    "openHours": "9:00 AM - 8:00 PM",
+    "closedDay": "None",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Student Cuts", "Quick Grooming", "Budget Styling"],
+    "tags": ["budget", "student", "unisex"],
+    "homeService": false,
+    "services": [
+      { "name": "Men's Haircut", "price": 100, "duration": "15 min", "category": "Hair" },
+      { "name": "Women's Haircut", "price": 200, "duration": "25 min", "category": "Hair" },
+      { "name": "Shampoo + Cut", "price": 180, "duration": "25 min", "category": "Hair" },
+      { "name": "Basic Hair Color", "price": 1000, "duration": "1 hour", "category": "Hair" },
+      { "name": "Facial (Basic)", "price": 400, "duration": "30 min", "category": "Skin" },
+      { "name": "Head Massage", "price": 200, "duration": "20 min", "category": "Wellness" }
+    ],
+    "stylists": [
+      { "name": "Balaji", "specialization": "Quick Stylist", "experience": "6 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Vishnu A.", "rating": 4, "text": "₹100 haircuts that actually look good! Balaji is fast and skilled. Perfect for us students on a budget. Been coming here since first year.", "date": "2025-12-11" },
+      { "name": "Keerthi R.", "rating": 4, "text": "The most affordable salon near Ameerpet coaching centers. Clean and quick. The head massage is so relaxing after a long study session.", "date": "2025-10-20" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00"],
+      "2026-06-03": ["09:00", "10:00", "11:00", "13:00", "14:00", "16:00", "17:00"],
+      "2026-06-04": ["09:00", "10:00", "12:00", "14:00", "15:00", "16:00", "17:00"],
+      "2026-06-05": ["09:00", "10:00", "11:00", "13:00", "14:00", "16:00"],
+      "2026-06-06": ["09:00", "10:00", "12:00", "14:00", "15:00", "17:00"],
+      "2026-06-07": ["09:00", "10:00", "11:00", "13:00", "15:00", "16:00", "17:00"]
+    }
+  },
+  {
+    "id": "serenity-spa-kondapur",
+    "name": "Serenity Home Spa",
+    "area": "Kondapur",
+    "city": "Hyderabad",
+    "rating": 4.6,
+    "reviewCount": 234,
+    "priceRange": "₹300 - ₹5,000",
+    "minPrice": 300,
+    "maxPrice": 5000,
+    "phone": "+91 99876 54321",
+    "address": "Kondapur Main Road, Hyderabad 500084",
+    "openHours": "8:00 AM - 7:00 PM",
+    "closedDay": "None",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Home Spa", "Wellness", "Family Services"],
+    "tags": ["home-service", "wellness", "family"],
+    "homeService": true,
+    "services": [
+      { "name": "Home Full Body Massage", "price": 2500, "duration": "1.5 hours", "category": "Wellness" },
+      { "name": "Home Facial (Premium)", "price": 1500, "duration": "1 hour", "category": "Skin" },
+      { "name": "Home Hair Treatment", "price": 1200, "duration": "1 hour", "category": "Hair" },
+      { "name": "Home Waxing Package", "price": 1800, "duration": "1.5 hours", "category": "Waxing" },
+      { "name": "Home Manicure + Pedicure", "price": 1000, "duration": "1 hour", "category": "Nails" },
+      { "name": "Home Party Makeup", "price": 3000, "duration": "1.5 hours", "category": "Makeup" },
+      { "name": "Kids Haircut (Home)", "price": 300, "duration": "20 min", "category": "Hair" }
+    ],
+    "stylists": [
+      { "name": "Padma Priya", "specialization": "Home Spa Specialist", "experience": "7 years", "image": null },
+      { "name": "Kalyani Reddy", "specialization": "Family Stylist", "experience": "5 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Swathi L.", "rating": 5, "text": "Padma Priya gives the most amazing home massages! I book every two weeks. She's professional, punctual, and incredibly skilled.", "date": "2025-12-21" },
+      { "name": "Madhavi G.", "rating": 5, "text": "Perfect for families! Kalyani came home and did haircuts for all three of my kids plus my facial. So convenient in Kondapur traffic!", "date": "2025-11-16" },
+      { "name": "Archana S.", "rating": 4, "text": "Great home spa service. The party makeup was beautiful for my friend's sangeet. Will definitely book again.", "date": "2025-10-25" }
+    ],
+    "availability": {
+      "2026-06-02": ["08:00", "10:00", "12:00", "14:00", "16:00"],
+      "2026-06-03": ["08:00", "09:00", "11:00", "13:00", "15:00"],
+      "2026-06-04": ["08:00", "10:00", "12:00", "14:00"],
+      "2026-06-05": ["08:00", "09:00", "11:00", "14:00", "16:00"],
+      "2026-06-06": ["08:00", "10:00", "12:00", "14:00", "16:00"],
+      "2026-06-07": ["08:00", "10:00", "13:00", "15:00"]
+    }
+  },
+  {
+    "id": "family-style-kondapur",
+    "name": "Family Style Salon",
+    "area": "Kondapur",
+    "city": "Hyderabad",
+    "rating": 4.3,
+    "reviewCount": 187,
+    "priceRange": "₹150 - ₹3,500",
+    "minPrice": 150,
+    "maxPrice": 3500,
+    "phone": "+91 40 2381 4455",
+    "address": "Kondapur Cross Roads, Hyderabad 500084",
+    "openHours": "9:30 AM - 8:00 PM",
+    "closedDay": "Thursday",
+    "image": "/images/salon-placeholder.svg",
+    "specializations": ["Family Salon", "Kids Cuts", "Basic Services"],
+    "tags": ["family", "kids-friendly", "unisex"],
+    "homeService": false,
+    "services": [
+      { "name": "Men's Haircut", "price": 200, "duration": "20 min", "category": "Hair" },
+      { "name": "Women's Haircut", "price": 400, "duration": "30 min", "category": "Hair" },
+      { "name": "Kids Haircut", "price": 150, "duration": "15 min", "category": "Hair" },
+      { "name": "Family Combo (4 cuts)", "price": 700, "duration": "1.5 hours", "category": "Combo" },
+      { "name": "Hair Spa", "price": 800, "duration": "45 min", "category": "Hair" },
+      { "name": "Facial", "price": 600, "duration": "45 min", "category": "Skin" },
+      { "name": "Hair Coloring", "price": 2000, "duration": "1.5 hours", "category": "Hair" }
+    ],
+    "stylists": [
+      { "name": "Ganesh Rao", "specialization": "Family Stylist", "experience": "11 years", "image": null },
+      { "name": "Shanti Devi", "specialization": "Women's Specialist", "experience": "8 years", "image": null }
+    ],
+    "reviews": [
+      { "name": "Raghav P.", "rating": 4, "text": "Great family salon! Ganesh is wonderful with kids — my son actually enjoys getting his hair cut here. The family combo deal is excellent value.", "date": "2025-12-07" },
+      { "name": "Kavitha D.", "rating": 4, "text": "Shanti does wonderful women's haircuts. Clean salon, friendly staff. Been our family's go-to salon in Kondapur for 4 years.", "date": "2025-11-19" }
+    ],
+    "availability": {
+      "2026-06-02": ["09:30", "10:30", "11:30", "13:00", "14:00", "15:00", "16:00", "17:00"],
+      "2026-06-03": ["09:30", "10:30", "12:00", "14:00", "16:00"],
+      "2026-06-04": ["09:30", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-05": ["09:30", "10:30", "12:00", "14:00", "16:00"],
+      "2026-06-06": ["09:30", "11:00", "13:00", "15:00", "17:00"],
+      "2026-06-07": ["09:30", "10:30", "12:00", "14:00", "16:00"]
+    }
+  }
+]

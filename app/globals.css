@@ -1,0 +1,351 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   GlowSpot Hyderabad — Design System
+   ======================================== */
+
+:root {
+  --color-rose-gold: #B76E79;
+  --color-rose-light: #F4C2C2;
+  --color-rose-blush: #FFF0F0;
+  --color-plum: #4A1942;
+  --color-plum-deep: #2D1035;
+  --color-plum-light: #6B3A6B;
+  --color-champagne: #F7E7CE;
+  --color-champagne-light: #FDF5E6;
+  --color-cream: #FFFDF7;
+  --color-gold: #D4AF37;
+  --color-gold-light: #F5D063;
+  --gradient-primary: linear-gradient(135deg, #B76E79 0%, #D4AF37 100%);
+  --gradient-hero: linear-gradient(135deg, #2D1035 0%, #4A1942 30%, #B76E79 70%, #F7E7CE 100%);
+  --gradient-card: linear-gradient(135deg, rgba(74,25,66,0.03) 0%, rgba(183,110,121,0.08) 100%);
+  --shadow-glow: 0 0 30px rgba(183,110,121,0.3);
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--color-cream);
+  color: #1a1a2e;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-champagne-light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-rose-gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-plum-light);
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+
+@layer components {
+  /* Glassmorphism */
+  .glass {
+    background: rgba(255, 253, 247, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(183, 110, 121, 0.15);
+  }
+
+  .glass-dark {
+    background: rgba(45, 16, 53, 0.75);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(183, 110, 121, 0.25);
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    background: linear-gradient(135deg, var(--color-rose-gold) 0%, var(--color-gold) 50%, var(--color-rose-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-plum {
+    background: linear-gradient(135deg, var(--color-plum) 0%, var(--color-rose-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Premium Buttons */
+  .btn-primary {
+    @apply px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300;
+    background: linear-gradient(135deg, var(--color-rose-gold) 0%, var(--color-plum-light) 100%);
+    box-shadow: 0 4px 15px rgba(183, 110, 121, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(183, 110, 121, 0.45);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300;
+    background: transparent;
+    border: 2px solid var(--color-rose-gold);
+    color: var(--color-rose-gold);
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-rose-gold);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(183, 110, 121, 0.3);
+  }
+
+  .btn-gold {
+    @apply px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300;
+    background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 50%, var(--color-gold) 100%);
+    background-size: 200% 200%;
+    animation: shimmerGold 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmerGold {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-2xl overflow-hidden transition-all duration-300;
+    background: white;
+    box-shadow: var(--shadow-card);
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(183, 110, 121, 0.18);
+  }
+
+  .card-glass {
+    @apply rounded-2xl overflow-hidden transition-all duration-300;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(183, 110, 121, 0.12);
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Tags / Badges */
+  .tag {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+    background: rgba(183, 110, 121, 0.1);
+    color: var(--color-rose-gold);
+  }
+
+  .tag-gold {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--color-gold-dark, #B8960C);
+  }
+
+  /* Section Styling */
+  .section-heading {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-4;
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .section-subheading {
+    @apply text-lg md:text-xl text-gray-600 max-w-2xl mx-auto;
+  }
+
+  /* Input Styling */
+  .input-styled {
+    @apply w-full px-4 py-3 rounded-xl border transition-all duration-300 outline-none;
+    border-color: rgba(183, 110, 121, 0.2);
+    background: white;
+  }
+
+  .input-styled:focus {
+    border-color: var(--color-rose-gold);
+    box-shadow: 0 0 0 3px rgba(183, 110, 121, 0.1);
+  }
+
+  /* Shimmer Loading */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(183, 110, 121, 0.06) 0%,
+      rgba(183, 110, 121, 0.15) 50%,
+      rgba(183, 110, 121, 0.06) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* Floating Particles Background */
+  .particles-bg {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .particles-bg::before,
+  .particles-bg::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.12;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .particles-bg::before {
+    width: 300px;
+    height: 300px;
+    background: var(--color-rose-gold);
+    top: -100px;
+    right: -100px;
+    animation-delay: 0s;
+  }
+
+  .particles-bg::after {
+    width: 200px;
+    height: 200px;
+    background: var(--color-gold);
+    bottom: -60px;
+    left: -60px;
+    animation-delay: 3s;
+  }
+}
+
+/* ========================================
+   Animation Keyframes
+   ======================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-15px) rotate(1deg); }
+  66% { transform: translateY(-8px) rotate(-1deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 0.3; }
+  100% { transform: scale(0.95); opacity: 0.7; }
+}
+
+/* ========================================
+   Chat Interface Styles
+   ======================================== */
+
+.chat-bubble-user {
+  @apply px-4 py-3 rounded-2xl rounded-br-md max-w-[85%] ml-auto;
+  background: linear-gradient(135deg, var(--color-rose-gold) 0%, var(--color-plum-light) 100%);
+  color: white;
+}
+
+.chat-bubble-ai {
+  @apply px-4 py-3 rounded-2xl rounded-bl-md max-w-[85%];
+  background: white;
+  border: 1px solid rgba(183, 110, 121, 0.12);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* Typing Indicator */
+.typing-indicator {
+  display: inline-flex;
+  gap: 4px;
+  padding: 12px 16px;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-rose-gold);
+  opacity: 0.4;
+  animation: typingBounce 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-8px); opacity: 1; }
+}
+
+/* ========================================
+   Page Transitions
+   ======================================== */
+
+.page-enter {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* ========================================
+   Responsive Adjustments
+   ======================================== */
+
+@media (max-width: 768px) {
+  .section-heading {
+    @apply text-2xl;
+  }
+
+  .section-subheading {
+    @apply text-base;
+  }
+}
+
+/* Star Rating */
+.star-rating {
+  color: var(--color-gold);
+}
