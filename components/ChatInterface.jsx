@@ -24,11 +24,16 @@ export default function ChatInterface() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [recommendedSalons, setRecommendedSalons] = useState([]);
-  const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
   };
 
   useEffect(() => {
@@ -137,7 +142,7 @@ Guidelines:
   return (
     <div className="flex flex-col h-full">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
         {messages.map((msg, i) => (
           <div
             key={i}
@@ -193,8 +198,6 @@ Guidelines:
             </div>
           </div>
         )}
-
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Suggestion Chips */}
