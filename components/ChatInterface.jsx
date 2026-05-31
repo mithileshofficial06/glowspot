@@ -6,12 +6,15 @@ import SalonCard from './SalonCard';
 import salons from '@/data/salons.json';
 
 const suggestions = [
-  "Bridal makeup for a Telugu wedding in Banjara Hills",
-  "Hair spa and coloring near Hitech City under ₹3000",
-  "Home service for facial and waxing in Kukatpally",
-  "Trendy haircut for men near Ameerpet",
-  "Pre-bridal skincare package in Jubilee Hills",
-  "Party makeup for Saturday evening in Madhapur",
+  "Bridal Makeup", 
+  "Hair Spa", 
+  "Near Hitech City", 
+  "Under ₹1000", 
+  "Home Service", 
+  "Men's Grooming",
+  "Party Makeup", 
+  "Keratin Treatment", 
+  "Mehndi"
 ];
 
 export default function ChatInterface() {
@@ -23,7 +26,6 @@ export default function ChatInterface() {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [recommendedSalons, setRecommendedSalons] = useState([]);
   const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -38,7 +40,7 @@ export default function ChatInterface() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, loading]);
 
   const findMatchingSalons = (text) => {
     const lower = text.toLowerCase();
@@ -65,6 +67,15 @@ export default function ChatInterface() {
     );
   };
 
+  const handleClearChat = () => {
+    setMessages([
+      {
+        role: 'assistant',
+        content: "✨ Welcome to GlowSpot AI! I'm your personal beauty advisor for Hyderabad.\n\nTell me about your occasion, style preference, budget, and preferred area — I'll recommend the perfect salon and look for you.",
+      },
+    ]);
+  };
+
   const handleSend = async (messageText) => {
     const text = messageText || input.trim();
     if (!text) return;
@@ -74,7 +85,6 @@ export default function ChatInterface() {
     setMessages(newMessages);
     setInput('');
     setLoading(true);
-    setRecommendedSalons([]);
 
     try {
       const salonContext = salons.map(s =>
@@ -90,14 +100,15 @@ Here are the salons in our Hyderabad database:
 ${salonContext}
 
 Guidelines:
-- CRITICAL: If the user mentions an upcoming event, occasion (e.g. "I'm having a marriage tomorrow", "I have a wedding", "I have a party"), or service requests, DO NOT directly suggest specific salons or make final service recommendations on the first turn.
-- Instead, congratulate them warmly and ask 2-3 warm, targeted questions to understand their needs (e.g. preferred look like traditional vs modern, skin type, hair texture, budget range, or favorite neighborhood in Hyderabad).
-- Act as a true consultative beauty advisor: gather insights first and only suggest specific salons once you have their answers, or if they explicitly request: "just list the options now".
-- Recommend specific salons ONLY when the user asks for suggestions, lists, or to find options.
+- CRITICAL: If the user mentions an upcoming event, wedding, marriage, function, or service request, DO NOT directly suggest specific salons or make final service recommendations on the first turn.
+- Instead, congratulate them warmly and ask 2-3 warm, targeted questions to understand their needs (e.g. style feel like traditional vs modern, skin type, hair texture, budget range, or favorite neighborhood in Hyderabad).
+- Act as a true consultative beauty advisor: gather insights first and only suggest specific salons once you have their answers, or if they explicitly request: "recommend a salon" or "list the options".
+- Recommend specific salons ONLY when the user asks for suggestions, lists, or to find/book options.
 - If they ask general questions (e.g. "who are you?", "how many shops are there?"), answer the question directly and warmly, and do NOT list salons unless they ask.
 - Include salon name, area, relevant services, and price range when recommending.
 - Be warm, professional, and knowledgeable about Hyderabad neighborhoods.
 - Keep responses concise but helpful (max 3 paragraphs).
+- Always end your response with one engaging follow-up question (e.g., "Would you like to see home service options too?", "Want me to check Sunday availability for these?", "Should I include men's grooming salons as well?").
 - Use emojis sparingly for warmth.`
         },
         ...newMessages.map(m => ({ role: m.role, content: m.content }))
@@ -113,53 +124,24 @@ Guidelines:
 
       if (data.choices && data.choices[0]) {
         const aiContent = data.choices[0].message.content;
-        setMessages((prev) => [...prev, { role: 'assistant', content: aiContent }]);
-
-        // Only recommend cards if the user has requested recommendations/finding
-        if (hasRecommendationIntent(text)) {
-          const matched = findMatchingSalons(aiContent + ' ' + text);
-          setRecommendedSalons(matched);
-        } else {
-          setRecommendedSalons([]);
-        }
+        
+        // Find matching salons inline only if user asked for recommendations
+        const matched = hasRecommendationIntent(text) ? findMatchingSalons(aiContent + ' ' + text) : [];
+        setMessages((prev) => [...prev, { role: 'assistant', content: aiContent, salons: matched }]);
       } else {
         // Fallback if API fails
-        if (hasRecommendationIntent(text)) {
-          const matched = findMatchingSalons(text);
-          setRecommendedSalons(matched);
-          const fallback = matched.length > 0
-            ? `Based on your request, I'd recommend checking out **${matched.map(s => s.name).join(', ')}**. ${matched[0] ? `${matched[0].name} in ${matched[0].area} specializes in ${matched[0].specializations.join(', ')}.` : ''}\n\nI've shown the salon cards below — tap any to see details and book!`
-            : "I'd love to help! Could you tell me more about what you're looking for?";
-          setMessages((prev) => [...prev, { role: 'assistant', content: fallback }]);
-        } else {
-          setRecommendedSalons([]);
-          const fallback = "I'd love to help! How can I assist you with your beauty styling journey today?";
-          setMessages((prev) => [...prev, { role: 'assistant', content: fallback }]);
-        }
+        const matched = hasRecommendationIntent(text) ? findMatchingSalons(text) : [];
+        const fallback = matched.length > 0
+          ? `Perfect! Here are 3 top-rated salons in Hyderabad that fit your style: `
+          : "I'd love to help! Tell me a little more: What kind of function? Are you the bride, guest, or bridesmaid? Any specific services in mind — makeup, hair, mehndi, or a full package?";
+        
+        setMessages((prev) => [...prev, { role: 'assistant', content: fallback, salons: matched }]);
       }
     } catch (error) {
-      if (hasRecommendationIntent(text)) {
-        const matched = findMatchingSalons(text);
-        setRecommendedSalons(matched);
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: matched.length > 0
-              ? `I found some great options for you! Check out **${matched.map(s => s.name).join(', ')}** below.`
-              : "I'd love to help you find the perfect salon! Could you tell me the area you prefer in Hyderabad and what service you're looking for?",
-          },
-        ]);
-      } else {
-        setRecommendedSalons([]);
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: 'assistant',
-            content: "I'd love to assist you! Feel free to ask me questions, seek style advice, or ask me to recommend the best local salons.",
-          },
-        ]);
-      }
+      // Fallback on catch
+      const matched = hasRecommendationIntent(text) ? findMatchingSalons(text) : [];
+      const fallback = "I'm having a little trouble right now. Here are our top-rated salons in Hyderabad while I get back on track:";
+      setMessages((prev) => [...prev, { role: 'assistant', content: fallback, salons: matched }]);
     } finally {
       setLoading(false);
     }
@@ -173,27 +155,65 @@ Guidelines:
   };
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Messages */}
-      <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
-        {messages.map((msg, i) => (
-          <div
-            key={i}
-            className={`flex gap-3 animate-fade-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+    <div className="flex flex-col h-full bg-white select-none">
+      {/* Top Action Bar */}
+      <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-5 h-5 text-rose-gold fill-rose-gold/25" />
+          <span className="font-bold font-display text-gray-800 text-sm md:text-base">GlowSpot AI</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleClearChat}
+            className="text-xs px-3 py-1.5 rounded-xl bg-gray-50 hover:bg-rose-gold/10 text-gray-500 hover:text-rose-gold transition-colors font-medium border border-gray-100"
           >
-            {msg.role === 'assistant' && (
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center shrink-0">
-                <Bot className="w-4 h-4 text-white" />
-              </div>
-            )}
+            Clear Chat
+          </button>
+          <a
+            href="/salons"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs px-3 py-1.5 rounded-xl bg-rose-gold/5 hover:bg-rose-gold text-rose-gold hover:text-white transition-all font-medium border border-rose-gold/10 flex items-center gap-1"
+          >
+            Salons ↗
+          </a>
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+        {messages.map((msg, i) => (
+          <div key={i} className="space-y-4">
             <div
-              className={msg.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}
+              className={`flex gap-3 animate-fade-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+              {msg.role === 'assistant' && (
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center shrink-0 shadow-sm">
+                  <Bot className="w-4 h-4 text-white" />
+                </div>
+              )}
+              <div
+                className={msg.role === 'user' ? 'chat-bubble-user shadow-md' : 'chat-bubble-ai'}
+              >
+                <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+              </div>
+              {msg.role === 'user' && (
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-plum to-plum-light flex items-center justify-center shrink-0 shadow-sm">
+                  <User className="w-4 h-4 text-white" />
+                </div>
+              )}
             </div>
-            {msg.role === 'user' && (
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-plum to-plum-light flex items-center justify-center shrink-0">
-                <User className="w-4 h-4 text-white" />
+
+            {/* Inline Salon Cards bound to this specific message */}
+            {msg.salons && msg.salons.length > 0 && (
+              <div className="pl-11 animate-fade-in-up w-full">
+                <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:overflow-x-visible md:pb-0">
+                  {msg.salons.map((salon) => (
+                    <div key={salon.id} className="w-[285px] md:w-auto shrink-0 md:shrink snap-start">
+                      <SalonCard salon={salon} />
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
@@ -201,33 +221,13 @@ Guidelines:
 
         {/* Typing Indicator */}
         {loading && (
-          <div className="flex gap-3 animate-fade-in">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center shrink-0">
-              <Bot className="w-4 h-4 text-white" />
-            </div>
-            <div className="chat-bubble-ai">
-              <div className="typing-indicator">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Recommended Salon Cards */}
-        {recommendedSalons.length > 0 && (
-          <div className="mt-4 animate-fade-in-up">
-            <div className="flex items-center gap-2 mb-3 px-1">
-              <Sparkles className="w-4 h-4 text-rose-gold" />
-              <span className="text-sm font-semibold text-gray-700">Recommended Salons</span>
-            </div>
-            <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:overflow-x-visible md:pb-0">
-              {recommendedSalons.map((salon) => (
-                <div key={salon.id} className="w-[285px] md:w-auto shrink-0 md:shrink snap-start">
-                  <SalonCard salon={salon} />
-                </div>
-              ))}
+          <div className="flex items-center gap-2 pl-11 animate-fade-in text-xs text-rose-gold font-medium">
+            <Sparkles className="w-4 h-4 text-gold animate-spin" />
+            <span>GlowSpot AI is thinking</span>
+            <div className="typing-indicator !p-0 !py-1 flex gap-1">
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
           </div>
         )}
@@ -252,7 +252,7 @@ Guidelines:
       )}
 
       {/* Input Bar */}
-      <div className="border-t border-gray-100 p-4 bg-white/50 backdrop-blur-sm">
+      <div className="border-t border-gray-100 p-4 bg-white/50 backdrop-blur-sm shrink-0">
         <div className="flex gap-3 items-end max-w-4xl mx-auto">
           <div className="flex-1 relative">
             <textarea
