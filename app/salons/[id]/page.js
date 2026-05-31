@@ -8,30 +8,22 @@ import salons from '@/data/salons.json';
 import BookingForm from '@/components/BookingForm';
 import ReviewSummary from '@/components/ReviewSummary';
 
-// Curated stock salon/beauty images from Unsplash
-const SALON_IMAGES = [
-  'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1521590832167-7228f29e9aab?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1559599101-f09722fb4948?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1633681122611-d87d2a2b4e5d?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1470259078422-826894b933aa?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=1000&h=700&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1000&h=700&fit=crop&q=80',
+const SALON_PHOTO_IDS = [
+  'photo-1560066984-138dadb4c035',
+  'photo-1522337360788-8b13dee7a37e',
+  'photo-1521590832167-7bcbfaa6381f',
+  'photo-1487412947147-5cebf100ffc2',
+  'photo-1570172619644-dfd03ed5d881'
 ];
 
-// Simple hash from salon id to get a consistent image index
-function getSalonImageIndex(salonId) {
+function getSalonImageUrl(salonId) {
   let hash = 0;
-  if (!salonId) return 0;
+  if (!salonId) return `https://images.unsplash.com/${SALON_PHOTO_IDS[0]}?w=1000&auto=format&fit=crop&q=80`;
   for (let i = 0; i < salonId.length; i++) {
     hash = ((hash << 5) - hash + salonId.charCodeAt(i)) | 0;
   }
-  return Math.abs(hash) % SALON_IMAGES.length;
+  const index = Math.abs(hash) % SALON_PHOTO_IDS.length;
+  return `https://images.unsplash.com/${SALON_PHOTO_IDS[index]}?w=1000&auto=format&fit=crop&q=80`;
 }
 
 const tabs = [
@@ -45,6 +37,7 @@ export default function SalonDetail() {
   const params = useParams();
   const salon = salons.find((s) => s.id === params.id);
   const [activeTab, setActiveTab] = useState('services');
+  const [imgError, setImgError] = useState(false);
 
   if (!salon) {
     return (
@@ -57,18 +50,30 @@ export default function SalonDetail() {
     );
   }
 
-  const imageUrl = SALON_IMAGES[getSalonImageIndex(salon.id)];
+  const imageUrl = getSalonImageUrl(salon.id);
   const serviceCategories = [...new Set(salon.services?.map((s) => s.category))];
 
   return (
     <div className="min-h-screen pt-20 bg-noir text-white/90">
       {/* Hero */}
-      <div className="relative h-64 md:h-96 overflow-hidden">
-        <img
-          src={imageUrl}
-          alt={salon.name}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+      <div className="relative h-64 md:h-96 overflow-hidden bg-noir-100">
+        {imgError ? (
+          <div className="absolute inset-0 bg-gradient-to-br from-noir-50 via-noir-100 to-noir-200 flex flex-col items-center justify-center p-8 border border-white/[0.04] transition-all duration-300">
+            <span className="text-3xl md:text-4xl font-bold text-neon-gold font-display text-center drop-shadow-md">
+              {salon.name}
+            </span>
+            <span className="text-xs md:text-sm text-white/40 tracking-wider uppercase font-semibold mt-3">
+              {salon.area}, Hyderabad
+            </span>
+          </div>
+        ) : (
+          <img
+            src={imageUrl}
+            alt={salon.name}
+            onError={() => setImgError(true)}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-noir via-black/45 to-black/75" />
 
         {/* Back Button */}

@@ -1,35 +1,29 @@
 'use client';
 
-import Link from 'next/link';
+import { useState } from 'react';
 import { Star, MapPin, Clock, Home, Sparkles, ChevronRight } from 'lucide-react';
 
-// Same curated stock images used in the carousel
-const SALON_IMAGES = [
-  'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1521590832167-7228f29e9aab?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1559599101-f09722fb4948?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1633681122611-d87d2a2b4e5d?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1470259078422-826894b933aa?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=500&h=350&fit=crop&q=80',
-  'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=500&h=350&fit=crop&q=80',
+const SALON_PHOTO_IDS = [
+  'photo-1560066984-138dadb4c035',
+  'photo-1522337360788-8b13dee7a37e',
+  'photo-1521590832167-7bcbfaa6381f',
+  'photo-1487412947147-5cebf100ffc2',
+  'photo-1570172619644-dfd03ed5d881'
 ];
 
-// Simple hash from salon id to get a consistent image index
-function getSalonImageIndex(salonId) {
+function getSalonImageUrl(salonId) {
   let hash = 0;
+  if (!salonId) return `https://images.unsplash.com/${SALON_PHOTO_IDS[0]}?w=600&auto=format&fit=crop&q=80`;
   for (let i = 0; i < salonId.length; i++) {
     hash = ((hash << 5) - hash + salonId.charCodeAt(i)) | 0;
   }
-  return Math.abs(hash) % SALON_IMAGES.length;
+  const index = Math.abs(hash) % SALON_PHOTO_IDS.length;
+  return `https://images.unsplash.com/${SALON_PHOTO_IDS[index]}?w=600&auto=format&fit=crop&q=80`;
 }
 
 export default function SalonCard({ salon }) {
-  const imageUrl = SALON_IMAGES[getSalonImageIndex(salon.id)];
+  const [imgError, setImgError] = useState(false);
+  const imageUrl = getSalonImageUrl(salon.id);
 
   const renderStars = (rating) => {
     return [...Array(5)].map((_, i) => (
@@ -53,28 +47,31 @@ export default function SalonCard({ salon }) {
       className="card group cursor-pointer block"
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
-        <img
-          src={imageUrl}
-          alt={salon.name}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-        {/* Salon Initial */}
-        <div className="absolute bottom-3 left-3">
-          <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/15 group-hover:scale-110 transition-transform duration-500">
-            <span className="text-lg font-bold text-white font-display">
-              {salon.name.charAt(0)}
+      <div className="relative h-48 overflow-hidden bg-noir-100">
+        {imgError ? (
+          <div className="absolute inset-0 bg-gradient-to-br from-noir-50 via-noir-100 to-noir-200 flex flex-col items-center justify-center p-4 border border-white/[0.04] transition-all duration-300">
+            <span className="text-lg font-bold text-neon-gold font-display text-center drop-shadow-md">
+              {salon.name}
+            </span>
+            <span className="text-[10px] text-white/35 tracking-wider uppercase font-semibold mt-1.5">
+              {salon.area}
             </span>
           </div>
-        </div>
+        ) : (
+          <img
+            src={imageUrl}
+            alt={salon.name}
+            onError={() => setImgError(true)}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
         {/* Badges */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-2">
           {salon.homeService && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-glow/90 text-black text-xs font-semibold backdrop-blur-sm">
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-glow/90 text-black text-xs font-semibold backdrop-blur-sm shadow-md">
               <Home className="w-3 h-3" />
               Home Service
             </span>
@@ -82,7 +79,7 @@ export default function SalonCard({ salon }) {
         </div>
 
         <div className="absolute top-3 right-3">
-          <span className="px-2 py-1 rounded-lg bg-black/50 backdrop-blur-sm text-white/80 text-xs font-medium">
+          <span className="px-2 py-1 rounded-lg bg-black/60 border border-white/5 backdrop-blur-sm text-white/80 text-xs font-medium">
             {salon.priceRange}
           </span>
         </div>

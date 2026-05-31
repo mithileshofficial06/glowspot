@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect } from 'react';
 import HeroSection from '@/components/HeroSection';
 import SalonCarousel from '@/components/SalonCarousel';
 import salons from '@/data/salons.json';
@@ -25,7 +28,31 @@ const neighborhoods = [
 ];
 
 export default function Home() {
-  const topSalons = [...salons].sort((a, b) => b.rating - a.rating).slice(0, 25);
+  const topSalons = [...salons].sort((a, b) => b.rating - a.rating).slice(0, 8);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -80px 0px', // Trigger slightly before screen entry
+      threshold: 0.05,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target); // Reveal only once for performance
+        }
+      });
+    }, observerOptions);
+
+    const animatedElements = document.querySelectorAll('.scroll-reveal');
+    animatedElements.forEach((el) => observer.observe(el));
+
+    return () => {
+      animatedElements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
 
   return (
     <div>
@@ -34,7 +61,7 @@ export default function Home() {
 
       {/* How It Works */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="how-it-works">
-        <div className="text-center mb-14">
+        <div className="text-center mb-14 scroll-reveal">
           <span className="tag-gold mb-4 inline-block">How It Works</span>
           <h2 className="section-heading gradient-text">Your Beauty Journey in 4 Steps</h2>
           <p className="section-subheading">From first thought to booked appointment — AI handles everything.</p>
@@ -44,7 +71,11 @@ export default function Home() {
           {howItWorks.map((item, i) => {
             const Icon = item.icon;
             return (
-              <div key={i} className="relative card p-6 text-center group">
+              <div
+                key={i}
+                className="relative card p-6 text-center group scroll-reveal"
+                style={{ transitionDelay: `${i * 150}ms` }}
+              >
                 {i < 3 && (
                   <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
                     <ArrowRight className="w-6 h-6 text-white/10" />
@@ -63,7 +94,7 @@ export default function Home() {
       </section>
 
       {/* Featured Salons */}
-      <section className="py-20" id="featured-salons">
+      <section className="py-20 scroll-reveal" id="featured-salons">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="flex items-end justify-between">
             <div>
@@ -87,7 +118,7 @@ export default function Home() {
       </section>
 
       {/* AI Features Showcase */}
-      <section className="py-20 relative overflow-hidden" id="ai-features">
+      <section className="py-20 relative overflow-hidden scroll-reveal" id="ai-features">
         <div className="absolute inset-0 bg-gradient-to-br from-noir-50 via-noir-100 to-noir-200 border-y border-white/[0.04]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
@@ -132,7 +163,7 @@ export default function Home() {
 
       {/* Neighborhood Explorer */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="neighborhoods">
-        <div className="text-center mb-14">
+        <div className="text-center mb-14 scroll-reveal">
           <span className="tag mb-3 inline-block">
             <MapPin className="w-3 h-3 inline mr-1" />
             Explore
@@ -146,7 +177,8 @@ export default function Home() {
             <Link
               key={i}
               href={`/salons?area=${encodeURIComponent(n.name)}`}
-              className="card p-4 text-center group hover:bg-gradient-to-br hover:from-neon-gold/[0.03] hover:to-emerald-glow/[0.03]"
+              className="card p-4 text-center group hover:bg-gradient-to-br hover:from-neon-gold/[0.03] hover:to-emerald-glow/[0.03] scroll-reveal"
+              style={{ transitionDelay: `${i * 80}ms` }}
             >
               <div className="w-10 h-10 rounded-xl bg-neon-gold/5 border border-white/[0.05] flex items-center justify-center mx-auto mb-3 group-hover:bg-neon-gold/10 transition-colors">
                 <MapPin className="w-5 h-5 text-neon-gold" />
@@ -179,7 +211,7 @@ export default function Home() {
       </section>
 
       {/* CTA Banner */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-reveal">
         <div className="relative rounded-3xl overflow-hidden p-12 md:p-16 text-center bg-gradient-to-br from-noir-100 via-noir-200 to-noir-300 border border-white/[0.05]">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute w-64 h-64 rounded-full bg-neon-gold/5 blur-3xl -top-10 -right-10 animate-float" />

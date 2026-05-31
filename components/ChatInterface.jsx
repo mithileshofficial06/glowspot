@@ -13,7 +13,12 @@ const suggestions = [
 ];
 
 export default function ChatInterface() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      role: 'assistant',
+      content: "Hi! I am your GlowSpot beauty advisor. Tell me your occasion, budget, or the look you want — I will find the perfect Hyderabad salon for you. What are you looking for today?"
+    }
+  ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const chatContainerRef = useRef(null);
@@ -58,7 +63,12 @@ export default function ChatInterface() {
   };
 
   const handleClearChat = () => {
-    setMessages([]);
+    setMessages([
+      {
+        role: 'assistant',
+        content: "Hi! I am your GlowSpot beauty advisor. Tell me your occasion, budget, or the look you want — I will find the perfect Hyderabad salon for you. What are you looking for today?"
+      }
+    ]);
   };
 
   const handleSend = async (messageText) => {
@@ -170,82 +180,72 @@ Guidelines:
       {/* Messages */}
       <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-6">
         <div className="max-w-3xl mx-auto w-full space-y-6">
-          {messages.length === 0 ? (
-            /* Gemini-like Centered Greetings Dashboard */
-            <div className="py-12 text-center animate-fade-in">
-              <div className="w-16 h-16 rounded-full bg-neon-gold/10 border border-neon-gold/20 flex items-center justify-center mx-auto mb-6 shadow-glow">
-                <Sparkles className="w-8 h-8 text-neon-gold animate-pulse" />
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold font-display gradient-text text-center mb-3">
-                How can I help you style today?
-              </h2>
-              <p className="text-sm text-white/40 text-center max-w-md mx-auto mb-10 leading-relaxed font-body">
-                I'm your AI beauty consultant. Tell me about your occasion, ask for bridal advice, or search matching Hyderabad salons.
-              </p>
-
-              {/* Gemini Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto text-left">
-                {suggestions.map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <button
-                      key={i}
-                      onClick={() => handleSend(item.text)}
-                      className="p-5 rounded-2xl border border-white/[0.05] bg-white/[0.01] hover:border-neon-gold/20 hover:bg-white/[0.03] transition-all duration-300 shadow-sm text-left group"
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <span className="text-[10px] font-bold text-neon-gold uppercase tracking-wider bg-neon-gold/10 border border-neon-gold/20 px-2 py-0.5 rounded-md">
-                          {item.category}
-                        </span>
-                        <Icon className="w-4 h-4 text-white/20 group-hover:text-neon-gold transition-colors" />
-                      </div>
-                      <span className="text-sm text-white font-semibold leading-snug block">
-                        {item.text}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            /* Message Log */
-            messages.map((msg, i) => (
-              <div key={i} className="space-y-4">
-                <div
-                  className={`flex gap-3 animate-fade-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  {msg.role === 'assistant' && (
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-neon-gold to-neon-amber flex items-center justify-center shrink-0 shadow-sm">
-                      <Bot className="w-4 h-4 text-black" />
-                    </div>
-                  )}
-                  <div
-                    className={msg.role === 'user' ? 'chat-bubble-user shadow-md' : 'chat-bubble-ai'}
-                  >
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+          {/* Message Log */}
+          {messages.map((msg, i) => (
+            <div key={i} className="space-y-4">
+              <div
+                className={`flex gap-3 animate-fade-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                {msg.role === 'assistant' && (
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-neon-gold to-neon-amber flex items-center justify-center shrink-0 shadow-sm">
+                    <Bot className="w-4 h-4 text-black" />
                   </div>
-                  {msg.role === 'user' && (
-                    <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/25 flex items-center justify-center shrink-0 shadow-sm">
-                      <User className="w-4 h-4 text-white" />
-                    </div>
-                  )}
+                )}
+                <div
+                  className={msg.role === 'user' ? 'chat-bubble-user shadow-md' : 'chat-bubble-ai'}
+                >
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
                 </div>
-
-                {/* Recommended Salon Cards Inline inside the specific message */}
-                {msg.salons && msg.salons.length > 0 && (
-                  <div className="pl-11 animate-fade-in-up w-full">
-                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:overflow-x-visible md:pb-0">
-                      {msg.salons.map((salon) => (
-                        <div key={salon.id} className="w-[285px] md:w-auto shrink-0 md:shrink snap-start">
-                          <SalonCard salon={salon} />
-                        </div>
-                      ))}
-                    </div>
+                {msg.role === 'user' && (
+                  <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/25 flex items-center justify-center shrink-0 shadow-sm">
+                    <User className="w-4 h-4 text-white" />
                   </div>
                 )}
               </div>
-            ))
-          )}
+
+              {/* Suggestions Cards inline right below the greeting message */}
+              {i === 0 && msg.role === 'assistant' && messages.length === 1 && (
+                <div className="pl-11 pr-4 animate-fade-in-up">
+                  <p className="text-[10px] text-white/30 uppercase tracking-wider font-bold mb-3">Quick Suggestions:</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl">
+                    {suggestions.map((item, index) => {
+                      const Icon = item.icon;
+                      return (
+                        <button
+                          key={index}
+                          onClick={() => handleSend(item.text)}
+                          className="p-4 rounded-xl border border-white/[0.05] bg-white/[0.01] hover:border-neon-gold/20 hover:bg-white/[0.03] transition-all duration-300 text-left flex items-start justify-between group shadow-sm"
+                        >
+                          <div>
+                            <span className="text-[9px] font-bold text-neon-gold uppercase tracking-wider bg-neon-gold/10 border border-neon-gold/20 px-2 py-0.5 rounded-md mb-2 inline-block">
+                              {item.category}
+                            </span>
+                            <span className="text-xs text-white font-semibold leading-snug block">
+                              {item.text}
+                            </span>
+                          </div>
+                          <Icon className="w-4 h-4 text-white/20 group-hover:text-neon-gold transition-colors shrink-0 ml-3" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Recommended Salon Cards Inline inside the specific message */}
+              {msg.salons && msg.salons.length > 0 && (
+                <div className="pl-11 animate-fade-in-up w-full">
+                  <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:overflow-x-visible md:pb-0">
+                    {msg.salons.map((salon) => (
+                      <div key={salon.id} className="w-[285px] md:w-auto shrink-0 md:shrink snap-start">
+                        <SalonCard salon={salon} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
 
           {/* Typing Indicator */}
           {loading && (

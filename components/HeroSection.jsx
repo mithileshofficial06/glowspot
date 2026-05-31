@@ -35,239 +35,15 @@ const features = [
   },
 ];
 
-const heroWords = ['Bridal Look', 'Hair Color', 'Perfect Style', 'Wedding Glow'];
-
-// ═══ Particle Text Engine ═══
-class Particle {
-  constructor(x, y, color) {
-    this.originX = x;
-    this.originY = y;
-    this.x = x;
-    this.y = y;
-    this.color = color;
-    this.size = 1.8;
-    // Scatter properties
-    this.scatterX = x + (Math.random() - 0.5) * 280;
-    this.scatterY = y + (Math.random() - 0.5) * 180;
-    this.scatterAngle = Math.random() * Math.PI * 2;
-    this.scatterSpeed = 1 + Math.random() * 3;
-    this.opacity = 1;
-    this.life = 1;
-  }
-
-  drawAssembled(ctx) {
-    ctx.fillStyle = this.color;
-    ctx.globalAlpha = this.opacity;
-    ctx.fillRect(this.x, this.y, this.size, this.size);
-  }
-}
-
-function getTextParticles(ctx, text, canvasWidth, canvasHeight, fontSize) {
-  const particles = [];
-
-  ctx.save();
-  ctx.font = `800 ${fontSize}px "Outfit", "Inter", system-ui, sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#FFD700';
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  ctx.fillText(text, canvasWidth / 2, canvasHeight / 2);
-  ctx.restore();
-
-  const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-  const data = imageData.data;
-  const gap = 3; // pixel sampling gap
-
-  for (let y = 0; y < canvasHeight; y += gap) {
-    for (let x = 0; x < canvasWidth; x += gap) {
-      const index = (y * canvasWidth + x) * 4;
-      const alpha = data[index + 3];
-      if (alpha > 128) {
-        const r = data[index];
-        const g = data[index + 1];
-        const b = data[index + 2];
-        particles.push(new Particle(x, y, `rgb(${r},${g},${b})`));
-      }
-    }
-  }
-
-  return particles;
-}
+const heroWords = [];
 
 // ═══ React Component ═══
 export default function HeroSection() {
-  const canvasRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
-  const animationRef = useRef(null);
-  const stateRef = useRef({
-    phase: 'assembled',    // 'assembled' | 'dispersing' | 'scattered' | 'assembling'
-    progress: 0,
-    currentIndex: 0,
-    particles: [],
-    nextParticles: [],
-  });
-
-  const getFontSize = useCallback(() => {
-    if (typeof window === 'undefined') return 60;
-    if (window.innerWidth >= 1024) return 72;
-    if (window.innerWidth >= 768) return 56;
-    if (window.innerWidth >= 640) return 44;
-    return 34;
-  }, []);
 
   useEffect(() => {
     setIsVisible(true);
-
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-
-    const resize = () => {
-      const container = canvas.parentElement;
-      if (!container) return;
-      const rect = container.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
-      // Re-generate particles on resize
-      const state = stateRef.current;
-      const fontSize = getFontSize();
-      state.particles = getTextParticles(ctx, heroWords[state.currentIndex], canvas.width, canvas.height, fontSize);
-      state.phase = 'assembled';
-      state.progress = 0;
-    };
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    // Initial particle generation
-    const fontSize = getFontSize();
-    stateRef.current.particles = getTextParticles(ctx, heroWords[0], canvas.width, canvas.height, fontSize);
-
-    // Timing constants
-    const HOLD_TIME = 3500;        // How long text stays assembled (ms)
-    const DISPERSE_TIME = 2000;    // How long dispersion takes (ms)
-    const SCATTER_HOLD = 600;      // Brief pause while scattered
-    const ASSEMBLE_TIME = 2000;    // How long assembly takes (ms)
-
-    let lastTime = performance.now();
-    let holdTimer = 0;
-
-    const easeInOutQuart = (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
-    const easeOutExpo = (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-
-    const animate = (timestamp) => {
-      const dt = timestamp - lastTime;
-      lastTime = timestamp;
-      const state = stateRef.current;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      if (state.phase === 'assembled') {
-        // Draw particles in their original positions
-        state.particles.forEach((p) => {
-          p.opacity = 1;
-          p.x = p.originX;
-          p.y = p.originY;
-          p.drawAssembled(ctx);
-        });
-        ctx.globalAlpha = 1;
-
-        holdTimer += dt;
-        if (holdTimer >= HOLD_TIME) {
-          holdTimer = 0;
-          state.phase = 'dispersing';
-          state.progress = 0;
-          // Assign new scatter targets
-          state.particles.forEach((p) => {
-            p.scatterAngle = Math.random() * Math.PI * 2;
-            p.scatterSpeed = 50 + Math.random() * 120;
-            p.scatterX = p.originX + Math.cos(p.scatterAngle) * p.scatterSpeed;
-            p.scatterY = p.originY + Math.sin(p.scatterAngle) * p.scatterSpeed;
-          });
-        }
-      } else if (state.phase === 'dispersing') {
-        state.progress += dt / DISPERSE_TIME;
-        const t = Math.min(state.progress, 1);
-        const ease = easeInOutQuart(t);
-
-        state.particles.forEach((p) => {
-          p.x = p.originX + (p.scatterX - p.originX) * ease;
-          p.y = p.originY + (p.scatterY - p.originY) * ease;
-          p.opacity = 1 - ease * 0.85;
-          p.drawAssembled(ctx);
-        });
-        ctx.globalAlpha = 1;
-
-        if (t >= 1) {
-          state.phase = 'scattered';
-          state.progress = 0;
-          holdTimer = 0;
-        }
-      } else if (state.phase === 'scattered') {
-        // Brief pause — particles barely visible
-        holdTimer += dt;
-        state.particles.forEach((p) => {
-          p.opacity = 0.08;
-          p.drawAssembled(ctx);
-        });
-        ctx.globalAlpha = 1;
-
-        if (holdTimer >= SCATTER_HOLD) {
-          holdTimer = 0;
-          // Move to next word
-          state.currentIndex = (state.currentIndex + 1) % heroWords.length;
-          const fontSize = getFontSize();
-          state.nextParticles = getTextParticles(ctx, heroWords[state.currentIndex], canvas.width, canvas.height, fontSize);
-          
-          // Assign scattered start positions for new particles
-          state.nextParticles.forEach((p) => {
-            p.scatterAngle = Math.random() * Math.PI * 2;
-            p.scatterSpeed = 50 + Math.random() * 120;
-            p.scatterX = p.originX + Math.cos(p.scatterAngle) * p.scatterSpeed;
-            p.scatterY = p.originY + Math.sin(p.scatterAngle) * p.scatterSpeed;
-            p.x = p.scatterX;
-            p.y = p.scatterY;
-            p.opacity = 0;
-          });
-
-          state.particles = state.nextParticles;
-          state.phase = 'assembling';
-          state.progress = 0;
-        }
-      } else if (state.phase === 'assembling') {
-        state.progress += dt / ASSEMBLE_TIME;
-        const t = Math.min(state.progress, 1);
-        const ease = easeOutExpo(t);
-
-        state.particles.forEach((p) => {
-          p.x = p.scatterX + (p.originX - p.scatterX) * ease;
-          p.y = p.scatterY + (p.originY - p.scatterY) * ease;
-          p.opacity = ease;
-          p.drawAssembled(ctx);
-        });
-        ctx.globalAlpha = 1;
-
-        if (t >= 1) {
-          state.phase = 'assembled';
-          state.progress = 0;
-          holdTimer = 0;
-        }
-      }
-
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    // Small delay to ensure fonts are loaded
-    setTimeout(() => {
-      resize();
-      animationRef.current = requestAnimationFrame(animate);
-    }, 300);
-
-    return () => {
-      cancelAnimationFrame(animationRef.current);
-      window.removeEventListener('resize', resize);
-    };
-  }, [getFontSize]);
+  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -296,22 +72,13 @@ export default function HeroSection() {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          {/* Headline with Particle Text */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-display text-white leading-tight mb-2">
-            Discover Your
+          {/* Headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-display text-white leading-tight mb-6 max-w-4xl mx-auto">
+            Discover Your <span className="bg-gradient-to-r from-neon-gold via-neon-amber to-emerald-glow bg-clip-text text-transparent">Perfect Look</span> in Hyderabad
           </h1>
 
-          {/* Particle Canvas for rotating words */}
-          <div className="relative w-full max-w-3xl mx-auto" style={{ height: '100px' }}>
-            <canvas
-              ref={canvasRef}
-              className="w-full h-full"
-              style={{ width: '100%', height: '100%' }}
-            />
-          </div>
-
           {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-white/40 max-w-2xl mx-auto mb-10 font-body leading-relaxed mt-4">
+          <p className="text-lg sm:text-xl text-white/40 max-w-2xl mx-auto mb-10 font-body leading-relaxed">
             Describe your look. Preview it on your face. Book the perfect Hyderabad salon.
             <br className="hidden sm:block" />
             Powered by AI that understands your style.
