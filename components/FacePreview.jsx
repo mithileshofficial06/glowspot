@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
-import { Upload, Camera, Sparkles, Loader2, ChevronRight, RotateCcw, User, Palette, Scissors, Wand2 } from 'lucide-react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { Upload, Camera, Sparkles, Loader2, ChevronRight, RotateCcw, User, Palette, Scissors, Wand2, MessageCircle, Send, X, Bot } from 'lucide-react';
 import Link from 'next/link';
 import salons from '@/data/salons.json';
 
@@ -16,6 +16,82 @@ export default function FacePreview() {
   const fileInputRef = useRef(null);
   const canvasRef = useRef(null);
 
+  // Contextual Chat Widget State
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const chatScrollRef = useRef(null);
+  const chatInputRef = useRef(null);
+
+  // Auto-scroll chat to bottom when messages change
+  useEffect(() => {
+    if (chatScrollRef.current) {
+      chatScrollRef.current.scrollTo({ top: chatScrollRef.current.scrollHeight, behavior: 'smooth' });
+    }
+  }, [chatMessages, chatLoading]);
+
+  // Build the system prompt with analysis context
+  const buildSystemPrompt = () => {
+    const hairstyles = analysis?.hairstyleRecommendations?.map(r => r.style).join(', ') || 'N/A';
+    const grooming = analysis?.makeupRecommendations?.map(r => r.look).join(', ') || 'N/A';
+    const colors = analysis?.hairColorRecommendations?.map(r => r.color).join(', ') || 'N/A';
+
+    return `You are a friendly, expert beauty and grooming consultant at GlowSpot, a premium salon platform in Hyderabad, India. You are chatting with a client who just completed an AI style analysis.
+
+Here is their analysis profile:
+- Gender: ${analysis?.gender || 'Unknown'}
+- Face Shape: ${analysis?.faceShape || 'Unknown'}
+- Skin Tone: ${analysis?.skinTone || 'Unknown'}
+- Key Features: ${analysis?.features || 'Not available'}
+- Recommended Hairstyles: ${hairstyles}
+- Recommended ${analysis?.gender?.toLowerCase() === 'male' ? 'Grooming' : 'Makeup'}: ${grooming}
+- Recommended Hair Colors: ${colors}
+
+Rules:
+1. Answer questions about their specific recommendations in a warm, professional tone.
+2. Give actionable advice — product names, maintenance tips, salon preparation steps.
+3. If they ask about a style not in their recommendations, explain honestly whether it would suit their profile and why.
+4. Keep responses concise (2-4 sentences) unless they ask for detail.
+5. If they ask about pricing or booking, suggest they check the Salons page on GlowSpot.
+6. Be encouraging and confidence-boosting — this is a premium luxury experience.`;
+  };
+
+  const sendChatMessage = async (directMessage) => {
+    const userMessage = (directMessage || chatInput).trim();
+    if (!userMessage || chatLoading) return;
+
+    setChatInput('');
+    setChatMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    setChatLoading(true);
+
+    try {
+      const systemMsg = { role: 'system', content: buildSystemPrompt() };
+      const historyMsgs = [...chatMessages, { role: 'user', content: userMessage }].map(m => ({
+        role: m.role,
+        content: m.content
+      }));
+
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [systemMsg, ...historyMsgs] }),
+      });
+
+      const data = await res.json();
+      if (data.choices && data.choices[0]) {
+        setChatMessages(prev => [...prev, { role: 'assistant', content: data.choices[0].message.content }]);
+      } else {
+        setChatMessages(prev => [...prev, { role: 'assistant', content: 'I apologize — I\'m having a brief moment. Could you ask that again?' }]);
+      }
+    } catch (err) {
+      setChatMessages(prev => [...prev, { role: 'assistant', content: 'Connection hiccup! Please try again in a moment.' }]);
+    } finally {
+      setChatLoading(false);
+      setTimeout(() => chatInputRef.current?.focus(), 100);
+    }
+  };
+
   // Dynamic category tabs based on detected gender
   const isMale = analysis?.gender?.toLowerCase() === 'male';
   const styleCategories = [
@@ -24,6 +100,10 @@ export default function FacePreview() {
     { id: 'makeup', label: isMale ? 'Grooming' : 'Makeup', icon: Wand2 },
     { id: 'haircolor', label: 'Hair Colors', icon: Palette },
   ];
+
+  const quickChatSuggestions = isMale
+    ? ['How do I maintain a Side Part?', 'Best beard oil brands?', 'Is charcoal cleanse safe for sensitive skin?', 'Which salon for men\'s grooming?']
+    : ['How to prep for bridal makeup?', 'What\'s Caramel Balayage upkeep?', 'Best salon for hair coloring?', 'Products for dewy skin?'];
 
   const handleFile = useCallback((file) => {
     if (file && file.type.startsWith('image/')) {
@@ -394,6 +474,126 @@ export default function FacePreview() {
             </div>
           )}
         </div>
+      )}
+
+      {/* Contextual AI Chat Widget — only visible after analysis */}
+      {analysis && (
+        <>
+          {/* Floating Chat Toggle Button */}
+          {!chatOpen && (
+            <button
+              onClick={() => { setChatOpen(true); setTimeout(() => chatInputRef.current?.focus(), 200); }}
+              className="fixed bottom-6 right-6 z-40 bg-gradient-to-br from-rose-gold to-plum text-white w-14 h-14 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center group"
+              id="style-chat-toggle"
+            >
+              <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-gold rounded-full border-2 border-white flex items-center justify-center">
+                <Sparkles className="w-2.5 h-2.5 text-white" />
+              </span>
+            </button>
+          )}
+
+          {/* Chat Panel */}
+          {chatOpen && (
+            <div className="fixed bottom-4 right-4 z-50 w-[360px] max-w-[calc(100vw-32px)] bg-white rounded-3xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden animate-scale-up" style={{ height: '520px' }}>
+              
+              {/* Chat Header */}
+              <div className="bg-gradient-to-r from-plum-deep to-plum p-4 flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                    <Bot className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="text-white text-sm font-bold font-display">Style Consultant</h4>
+                    <p className="text-white/50 text-[10px]">Ask about your results</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setChatOpen(false)}
+                  className="text-white/50 hover:text-white transition-colors p-1"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Chat Messages Area */}
+              <div ref={chatScrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50/50">
+                {/* Welcome Message */}
+                {chatMessages.length === 0 && (
+                  <div className="space-y-3 animate-fade-in">
+                    <div className="bg-white rounded-2xl rounded-tl-sm p-3.5 shadow-sm border border-gray-100 max-w-[85%]">
+                      <p className="text-xs text-gray-700 leading-relaxed">
+                        Hi! 👋 I'm your personal style consultant. I've reviewed your analysis — <strong>{analysis.faceShape}</strong> face shape with <strong>{analysis.skinTone?.split(' ')[0]?.toLowerCase()}</strong> tones. Ask me anything about your recommended styles!
+                      </p>
+                    </div>
+
+                    {/* Quick Suggestions */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {quickChatSuggestions.map((q, i) => (
+                        <button
+                          key={i}
+                          onClick={() => sendChatMessage(q)}
+                          className="text-[10px] font-semibold text-plum bg-plum/5 hover:bg-plum/10 border border-plum/10 px-2.5 py-1.5 rounded-full transition-all"
+                        >
+                          {q}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Message History */}
+                {chatMessages.map((msg, i) => (
+                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
+                    <div className={`max-w-[85%] rounded-2xl p-3 text-xs leading-relaxed ${
+                      msg.role === 'user'
+                        ? 'bg-gradient-to-br from-rose-gold to-plum text-white rounded-br-sm shadow-sm'
+                        : 'bg-white text-gray-700 rounded-tl-sm shadow-sm border border-gray-100'
+                    }`}>
+                      {msg.content}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Typing Indicator */}
+                {chatLoading && (
+                  <div className="flex justify-start animate-fade-in">
+                    <div className="bg-white rounded-2xl rounded-tl-sm p-3.5 shadow-sm border border-gray-100">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-1.5 h-1.5 rounded-full bg-rose-gold animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <div className="w-1.5 h-1.5 rounded-full bg-rose-gold animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <div className="w-1.5 h-1.5 rounded-full bg-rose-gold animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Chat Input Bar */}
+              <div className="p-3 border-t border-gray-100 bg-white shrink-0">
+                <div className="flex items-center gap-2">
+                  <input
+                    ref={chatInputRef}
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }}
+                    placeholder="Ask about your style results..."
+                    className="flex-1 text-xs bg-gray-50 border border-gray-100 rounded-xl px-3.5 py-2.5 outline-none focus:border-rose-gold/50 focus:ring-1 focus:ring-rose-gold/20 transition-all placeholder:text-gray-400"
+                  />
+                  <button
+                    onClick={sendChatMessage}
+                    disabled={!chatInput.trim() || chatLoading}
+                    className="bg-gradient-to-br from-rose-gold to-plum text-white w-9 h-9 rounded-xl flex items-center justify-center hover:opacity-90 disabled:opacity-40 transition-all shrink-0"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          )}
+        </>
       )}
     </div>
   );
