@@ -8,14 +8,14 @@ export const metadata = {
 
 export default function Planner() {
   return (
-    <div className="min-h-screen pt-20 bg-cream">
+    <div className="min-h-screen pt-20 bg-noir text-white/90">
       {/* Header */}
-      <div className="bg-gradient-to-r from-gold/20 via-rose-gold/30 to-plum/30 py-12 px-4 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-noir-50 via-noir-100 to-noir-200 border-b border-white/[0.04] py-12 px-4 relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           {[...Array(8)].map((_, i) => (
             <Heart
               key={i}
-              className="absolute text-rose-gold/10 animate-float"
+              className="absolute text-neon-gold/5 animate-float"
               style={{
                 width: `${16 + Math.random() * 20}px`,
                 height: `${16 + Math.random() * 20}px`,
@@ -28,14 +28,14 @@ export default function Planner() {
           ))}
         </div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-plum/10 text-plum text-sm font-medium mb-4">
-            <Sparkles className="w-4 h-4 text-gold" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neon-gold/10 border border-neon-gold/20 text-neon-gold text-sm font-semibold mb-4">
+            <Sparkles className="w-4 h-4 text-neon-gold" />
             AI-Powered Wedding Beauty Planning
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold font-display text-plum-deep mb-3">
+          <h1 className="text-3xl md:text-4xl font-bold font-display text-white mb-3">
             Wedding Beauty Planner
           </h1>
-          <p className="text-gray-600 max-w-xl mx-auto">
+          <p className="text-white/40 max-w-xl mx-auto">
             Tell us about your wedding and AI will create a complete day-by-day beauty schedule with Hyderabad salon recommendations — from skincare prep to the big day.
           </p>
         </div>

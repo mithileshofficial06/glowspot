@@ -8,6 +8,32 @@ import salons from '@/data/salons.json';
 import BookingForm from '@/components/BookingForm';
 import ReviewSummary from '@/components/ReviewSummary';
 
+// Curated stock salon/beauty images from Unsplash
+const SALON_IMAGES = [
+  'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1521590832167-7228f29e9aab?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1559599101-f09722fb4948?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1633681122611-d87d2a2b4e5d?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1470259078422-826894b933aa?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=1000&h=700&fit=crop&q=80',
+  'https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=1000&h=700&fit=crop&q=80',
+];
+
+// Simple hash from salon id to get a consistent image index
+function getSalonImageIndex(salonId) {
+  let hash = 0;
+  if (!salonId) return 0;
+  for (let i = 0; i < salonId.length; i++) {
+    hash = ((hash << 5) - hash + salonId.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash) % SALON_IMAGES.length;
+}
+
 const tabs = [
   { id: 'services', label: 'Services', icon: Scissors },
   { id: 'stylists', label: 'Stylists', icon: Users },
@@ -22,34 +48,33 @@ export default function SalonDetail() {
 
   if (!salon) {
     return (
-      <div className="min-h-screen pt-20 flex items-center justify-center bg-cream">
+      <div className="min-h-screen pt-20 flex items-center justify-center bg-noir">
         <div className="text-center">
-          <h1 className="text-2xl font-bold font-display text-gray-800 mb-4">Salon Not Found</h1>
+          <h1 className="text-2xl font-bold font-display text-white mb-4">Salon Not Found</h1>
           <Link href="/salons" className="btn-primary">Browse All Salons</Link>
         </div>
       </div>
     );
   }
 
+  const imageUrl = SALON_IMAGES[getSalonImageIndex(salon.id)];
   const serviceCategories = [...new Set(salon.services?.map((s) => s.category))];
 
   return (
-    <div className="min-h-screen pt-20 bg-cream">
+    <div className="min-h-screen pt-20 bg-noir text-white/90">
       {/* Hero */}
-      <div className="relative h-48 md:h-80">
-        <div className="absolute inset-0 bg-gradient-to-br from-plum/90 via-rose-gold/70 to-champagne/80 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-white/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl md:text-4xl font-bold text-white font-display">{salon.name.charAt(0)}</span>
-            </div>
-          </div>
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-cream via-transparent to-transparent" />
+      <div className="relative h-64 md:h-96 overflow-hidden">
+        <img
+          src={imageUrl}
+          alt={salon.name}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-noir via-black/45 to-black/75" />
 
         {/* Back Button */}
         <Link
           href="/salons"
-          className="absolute top-4 left-4 flex items-center gap-2 px-3 py-2 rounded-xl bg-white/20 backdrop-blur-sm text-white text-sm hover:bg-white/30 transition-all"
+          className="absolute top-6 left-6 flex items-center gap-2 px-4 py-2 rounded-xl bg-black/40 backdrop-blur-md text-white text-sm hover:bg-black/60 border border-white/10 transition-all z-10 shadow-lg"
         >
           <ChevronLeft className="w-4 h-4" />
           All Salons
@@ -57,48 +82,51 @@ export default function SalonDetail() {
       </div>
 
       {/* Salon Info Header */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10">
-        <div className="card p-5 md:p-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
+        <div className="p-6 md:p-8 bg-white/[0.02] backdrop-blur-md border border-white/[0.06] rounded-3xl shadow-2xl">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold font-display text-gray-900 mb-2">{salon.name}</h1>
-              <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-3">
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4 text-rose-gold shrink-0" />
+              <h1 className="text-3xl font-bold font-display text-white mb-2">{salon.name}</h1>
+              <div className="flex flex-wrap items-center gap-3 text-sm text-white/50 mb-4">
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4 text-neon-gold shrink-0" />
                   {salon.address}
                 </span>
               </div>
-              <div className="flex flex-wrap items-center gap-3 text-sm">
-                <span className="flex items-center gap-1 font-bold text-gray-800">
-                  <Star className="w-4 h-4 text-gold fill-gold shrink-0" />
+              <div className="flex flex-wrap items-center gap-4 text-sm">
+                <span className="flex items-center gap-1 font-bold text-white">
+                  <Star className="w-4 h-4 text-neon-gold fill-neon-gold shrink-0" />
                   {salon.rating}
                 </span>
-                <span className="text-gray-400">({salon.reviewCount} reviews)</span>
-                <span className="text-gray-400">•</span>
-                <span className="flex items-center gap-1 text-gray-500">
-                  <Clock className="w-4 h-4 shrink-0" />
+                <span className="text-white/40">({salon.reviewCount} reviews)</span>
+                <span className="text-white/20">•</span>
+                <span className="flex items-center gap-1.5 text-white/60">
+                  <Clock className="w-4 h-4 shrink-0 text-white/40" />
                   {salon.openHours}
                 </span>
                 {salon.closedDay !== 'None' && (
-                  <span className="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-lg">
+                  <span className="text-xs text-neon-amber bg-neon-amber/10 border border-neon-amber/20 px-2.5 py-0.5 rounded-lg font-medium">
                     Closed on {salon.closedDay}
                   </span>
                 )}
               </div>
             </div>
             <div className="flex flex-col items-start md:items-end gap-2 md:text-right shrink-0">
-              <span className="text-lg font-bold gradient-text">{salon.priceRange}</span>
+              <span className="text-xl font-bold text-neon-gold">{salon.priceRange}</span>
               <div className="flex flex-wrap gap-2">
                 {salon.homeService && (
-                  <span className="tag text-xs flex items-center gap-1">
-                    <Home className="w-3 h-3" />
+                  <span className="px-2.5 py-1 rounded-lg bg-emerald-glow/10 border border-emerald-glow/20 text-emerald-glow text-xs font-semibold flex items-center gap-1">
+                    <Home className="w-3.5 h-3.5" />
                     Home Service
                   </span>
                 )}
                 {salon.phone && (
-                  <a href={`tel:${salon.phone}`} className="tag text-xs flex items-center gap-1 hover:bg-rose-gold/20 transition-colors">
-                    <Phone className="w-3 h-3" />
-                    Call
+                  <a
+                    href={`tel:${salon.phone}`}
+                    className="px-2.5 py-1 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white/80 hover:bg-white/[0.08] hover:text-white text-xs font-semibold flex items-center gap-1 transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    Call Salon
                   </a>
                 )}
               </div>
@@ -106,12 +134,16 @@ export default function SalonDetail() {
           </div>
 
           {/* Specialization Tags */}
-          <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100">
+          <div className="flex flex-wrap gap-2 mt-6 pt-5 border-t border-white/[0.06]">
             {salon.specializations?.map((spec, i) => (
-              <span key={i} className="tag">{spec}</span>
+              <span key={i} className="px-3 py-1 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white/50 text-xs font-medium">
+                {spec}
+              </span>
             ))}
             {salon.tags?.map((tag, i) => (
-              <span key={i} className="tag-gold capitalize">{tag.replace('-', ' ')}</span>
+              <span key={i} className="px-3 py-1 rounded-lg bg-neon-gold/10 border border-neon-gold/20 text-neon-gold text-xs font-semibold capitalize">
+                {tag.replace('-', ' ')}
+              </span>
             ))}
           </div>
         </div>
@@ -130,10 +162,10 @@ export default function SalonDetail() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 id={`tab-${tab.id}`}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 snap-start ${
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-300 snap-start ${
                   activeTab === tab.id
-                    ? 'bg-rose-gold text-white shadow-glow'
-                    : 'bg-white text-gray-600 hover:bg-rose-gold/5 border border-gray-100'
+                    ? 'bg-neon-gold text-black shadow-glow font-bold'
+                    : 'bg-white/[0.02] text-white/55 hover:bg-white/[0.05] border border-white/[0.05]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -150,19 +182,19 @@ export default function SalonDetail() {
             <div className="space-y-6">
               {serviceCategories.map((cat) => (
                 <div key={cat}>
-                  <h3 className="text-lg font-bold font-display text-gray-800 mb-3">{cat}</h3>
+                  <h3 className="text-lg font-bold font-display text-white mb-3 tracking-wide">{cat}</h3>
                   <div className="space-y-2">
                     {salon.services?.filter((s) => s.category === cat).map((service, i) => (
-                      <div key={i} className="card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div key={i} className="p-4 bg-white/[0.02] backdrop-blur-sm border border-white/[0.04] rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-white/[0.08] hover:bg-white/[0.03] transition-all duration-300">
                         <div className="min-w-0 flex-1">
-                          <p className="font-semibold text-gray-800 truncate">{service.name}</p>
-                          <p className="text-sm text-gray-400">{service.duration}</p>
+                          <p className="font-semibold text-white truncate">{service.name}</p>
+                          <p className="text-sm text-white/40">{service.duration}</p>
                         </div>
-                        <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 mt-2 sm:mt-0 pt-2 sm:pt-0 border-t border-gray-50 sm:border-t-0">
-                          <span className="font-bold text-rose-gold">₹{service.price?.toLocaleString()}</span>
+                        <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 mt-2 sm:mt-0 pt-2 sm:pt-0 border-t border-white/[0.04] sm:border-t-0">
+                          <span className="font-bold text-neon-gold">₹{service.price?.toLocaleString()}</span>
                           <button
                             onClick={() => setActiveTab('booking')}
-                            className="text-xs btn-primary py-2 px-4"
+                            className="text-xs px-4 py-2 rounded-xl bg-neon-gold text-black hover:brightness-110 font-bold transition-all"
                           >
                             Book
                           </button>
@@ -179,13 +211,13 @@ export default function SalonDetail() {
           {activeTab === 'stylists' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {salon.stylists?.map((stylist, i) => (
-                <div key={i} className="card p-6 text-center">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-plum/60 to-rose-gold/60 flex items-center justify-center mx-auto mb-4">
+                <div key={i} className="p-6 bg-white/[0.02] border border-white/[0.05] rounded-2xl text-center hover:border-white/[0.08] transition-colors">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-neon-gold/20 to-neon-amber/20 border border-neon-gold/10 flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl font-bold text-white font-display">{stylist.name.charAt(0)}</span>
                   </div>
-                  <h4 className="font-bold text-gray-800 text-lg">{stylist.name}</h4>
-                  <p className="text-sm text-rose-gold font-medium">{stylist.specialization}</p>
-                  <p className="text-xs text-gray-400 mt-1">{stylist.experience} experience</p>
+                  <h4 className="font-bold text-white text-lg">{stylist.name}</h4>
+                  <p className="text-sm text-neon-gold font-medium mt-0.5">{stylist.specialization}</p>
+                  <p className="text-xs text-white/40 mt-1">{stylist.experience} experience</p>
                 </div>
               ))}
             </div>
@@ -195,24 +227,24 @@ export default function SalonDetail() {
           {activeTab === 'reviews' && (
             <div className="space-y-4">
               {salon.reviews?.map((review, i) => (
-                <div key={i} className="card p-5">
+                <div key={i} className="p-5 bg-white/[0.02] border border-white/[0.05] rounded-2xl hover:border-white/[0.08] transition-colors">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-rose-gold/40 to-plum/40 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full bg-white/10 border border-white/15 flex items-center justify-center">
                         <span className="text-sm font-bold text-white">{review.name.charAt(0)}</span>
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-800 text-sm">{review.name}</p>
-                        <p className="text-xs text-gray-400">{new Date(review.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
+                        <p className="font-semibold text-white text-sm">{review.name}</p>
+                        <p className="text-xs text-white/40">{new Date(review.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, j) => (
-                        <Star key={j} className={`w-3.5 h-3.5 ${j < review.rating ? 'text-gold fill-gold' : 'text-gray-200'}`} />
+                        <Star key={j} className={`w-3.5 h-3.5 ${j < review.rating ? 'text-neon-gold fill-neon-gold' : 'text-white/10'}`} />
                       ))}
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 leading-relaxed">{review.text}</p>
+                  <p className="text-sm text-white/60 leading-relaxed">{review.text}</p>
                 </div>
               ))}
             </div>
@@ -220,7 +252,7 @@ export default function SalonDetail() {
 
           {/* Booking Tab */}
           {activeTab === 'booking' && (
-            <div className="card p-6">
+            <div className="p-6 bg-white/[0.02] border border-white/[0.05] rounded-2xl">
               <BookingForm salon={salon} />
             </div>
           )}

@@ -140,18 +140,18 @@ Guidelines:
   };
 
   return (
-    <div className="flex flex-col h-full bg-white select-none">
+    <div className="flex flex-col h-full bg-noir select-none">
       {/* Top Action Bar */}
-      <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
+      <div className="px-6 py-4 border-b border-white/[0.04] flex items-center justify-between bg-noir shrink-0">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-rose-gold fill-rose-gold/25" />
-          <span className="font-bold font-display text-gray-800 text-sm md:text-base">GlowSpot AI</span>
+          <Sparkles className="w-5 h-5 text-neon-gold fill-neon-gold/25" />
+          <span className="font-bold font-display text-white text-sm md:text-base">GlowSpot AI</span>
         </div>
         <div className="flex items-center gap-2">
           {messages.length > 0 && (
             <button
               onClick={handleClearChat}
-              className="text-xs px-3 py-1.5 rounded-xl bg-gray-50 hover:bg-rose-gold/10 text-gray-500 hover:text-rose-gold transition-colors font-medium border border-gray-100"
+              className="text-xs px-3 py-1.5 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.05] text-white/50 hover:text-white transition-colors font-semibold"
             >
               Clear Chat
             </button>
@@ -160,7 +160,7 @@ Guidelines:
             href="/salons"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs px-3 py-1.5 rounded-xl bg-rose-gold/5 hover:bg-rose-gold text-rose-gold hover:text-white transition-all font-medium border border-rose-gold/10 flex items-center gap-1"
+            className="text-xs px-3 py-1.5 rounded-xl bg-neon-gold/10 border border-neon-gold/20 hover:bg-neon-gold text-neon-gold hover:text-black transition-all font-semibold flex items-center gap-1 shadow-sm"
           >
             Salons ↗
           </a>
@@ -173,13 +173,13 @@ Guidelines:
           {messages.length === 0 ? (
             /* Gemini-like Centered Greetings Dashboard */
             <div className="py-12 text-center animate-fade-in">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-gold/20 to-gold/25 flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <Sparkles className="w-8 h-8 text-rose-gold animate-pulse" />
+              <div className="w-16 h-16 rounded-full bg-neon-gold/10 border border-neon-gold/20 flex items-center justify-center mx-auto mb-6 shadow-glow">
+                <Sparkles className="w-8 h-8 text-neon-gold animate-pulse" />
               </div>
-              <h2 className="text-3xl md:text-4xl font-bold font-display gradient-text-plum text-center mb-3">
+              <h2 className="text-3xl md:text-4xl font-bold font-display gradient-text text-center mb-3">
                 How can I help you style today?
               </h2>
-              <p className="text-sm text-gray-500 text-center max-w-md mx-auto mb-10 leading-relaxed font-body">
+              <p className="text-sm text-white/40 text-center max-w-md mx-auto mb-10 leading-relaxed font-body">
                 I'm your AI beauty consultant. Tell me about your occasion, ask for bridal advice, or search matching Hyderabad salons.
               </p>
 
@@ -191,15 +191,15 @@ Guidelines:
                     <button
                       key={i}
                       onClick={() => handleSend(item.text)}
-                      className="p-5 rounded-2xl border border-gray-100 hover:border-rose-gold/30 hover:bg-rose-gold/5 transition-all duration-300 shadow-sm text-left group"
+                      className="p-5 rounded-2xl border border-white/[0.05] bg-white/[0.01] hover:border-neon-gold/20 hover:bg-white/[0.03] transition-all duration-300 shadow-sm text-left group"
                     >
                       <div className="flex justify-between items-start mb-2">
-                        <span className="text-[10px] font-bold text-rose-gold uppercase tracking-wider bg-rose-gold/5 px-2 py-0.5 rounded-md">
+                        <span className="text-[10px] font-bold text-neon-gold uppercase tracking-wider bg-neon-gold/10 border border-neon-gold/20 px-2 py-0.5 rounded-md">
                           {item.category}
                         </span>
-                        <Icon className="w-4 h-4 text-gray-300 group-hover:text-rose-gold transition-colors" />
+                        <Icon className="w-4 h-4 text-white/20 group-hover:text-neon-gold transition-colors" />
                       </div>
-                      <span className="text-sm text-gray-700 font-semibold leading-snug block">
+                      <span className="text-sm text-white font-semibold leading-snug block">
                         {item.text}
                       </span>
                     </button>
@@ -215,8 +215,8 @@ Guidelines:
                   className={`flex gap-3 animate-fade-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   {msg.role === 'assistant' && (
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center shrink-0 shadow-sm">
-                      <Bot className="w-4 h-4 text-white" />
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-neon-gold to-neon-amber flex items-center justify-center shrink-0 shadow-sm">
+                      <Bot className="w-4 h-4 text-black" />
                     </div>
                   )}
                   <div
@@ -225,7 +225,7 @@ Guidelines:
                     <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
                   </div>
                   {msg.role === 'user' && (
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-plum to-plum-light flex items-center justify-center shrink-0 shadow-sm">
+                    <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/25 flex items-center justify-center shrink-0 shadow-sm">
                       <User className="w-4 h-4 text-white" />
                     </div>
                   )}
@@ -249,8 +249,8 @@ Guidelines:
 
           {/* Typing Indicator */}
           {loading && (
-            <div className="flex items-center gap-2 pl-11 animate-fade-in text-xs text-rose-gold font-medium">
-              <Sparkles className="w-4 h-4 text-gold animate-spin" />
+            <div className="flex items-center gap-2 pl-11 animate-fade-in text-xs text-neon-gold font-semibold">
+              <Sparkles className="w-4 h-4 text-neon-gold animate-spin" />
               <span>GlowSpot AI is thinking</span>
               <div className="typing-indicator !p-0 !py-1 flex gap-1">
                 <span></span>
@@ -263,9 +263,9 @@ Guidelines:
       </div>
 
       {/* Centered Floating Input Bar (ChatGPT/Gemini Style) */}
-      <div className="p-4 bg-white shrink-0">
+      <div className="p-4 bg-noir shrink-0">
         <div className="max-w-3xl mx-auto w-full">
-          <div className="flex gap-3 items-end relative border border-gray-200 rounded-3xl bg-white p-2 shadow-sm focus-within:border-rose-gold/60 focus-within:ring-2 focus-within:ring-rose-gold/10 transition-all">
+          <div className="flex gap-3 items-end relative border border-white/[0.06] rounded-3xl bg-white/[0.02] backdrop-blur-md p-2 shadow-lg focus-within:border-neon-gold/40 focus-within:ring-2 focus-within:ring-neon-gold/10 transition-all">
             <textarea
               ref={inputRef}
               value={input}
@@ -274,7 +274,7 @@ Guidelines:
               placeholder="Message GlowSpot AI..."
               rows={1}
               id="chat-input"
-              className="w-full pl-4 pr-12 py-3 bg-transparent resize-none outline-none text-sm text-gray-800"
+              className="w-full pl-4 pr-12 py-3 bg-transparent resize-none outline-none text-sm text-white placeholder-white/30"
               style={{ minHeight: '44px', maxHeight: '120px' }}
             />
             <button
@@ -283,8 +283,8 @@ Guidelines:
               id="chat-send-btn"
               className={`absolute right-3 bottom-3 p-2.5 rounded-full transition-all duration-300 ${
                 input.trim() && !loading
-                  ? 'bg-rose-gold hover:bg-plum text-white shadow-sm'
-                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  ? 'bg-neon-gold text-black shadow-md hover:brightness-110'
+                  : 'bg-white/[0.03] text-white/20 cursor-not-allowed'
               }`}
             >
               {loading ? (
@@ -294,7 +294,7 @@ Guidelines:
               )}
             </button>
           </div>
-          <p className="text-[10px] text-gray-400 text-center mt-2 font-body">
+          <p className="text-[10px] text-white/30 text-center mt-2 font-body">
             GlowSpot AI can make mistakes. Consider checking important salon info.
           </p>
         </div>

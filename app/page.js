@@ -25,7 +25,7 @@ const neighborhoods = [
 ];
 
 export default function Home() {
-  const topSalons = [...salons].sort((a, b) => b.rating - a.rating).slice(0, 12);
+  const topSalons = [...salons].sort((a, b) => b.rating - a.rating).slice(0, 25);
 
   return (
     <div>
