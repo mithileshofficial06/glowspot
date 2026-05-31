@@ -36,11 +36,11 @@ export default function SalonDetail() {
   return (
     <div className="min-h-screen pt-20 bg-cream">
       {/* Hero */}
-      <div className="relative h-64 md:h-80">
+      <div className="relative h-48 md:h-80">
         <div className="absolute inset-0 bg-gradient-to-br from-plum/90 via-rose-gold/70 to-champagne/80 flex items-center justify-center">
           <div className="text-center">
-            <div className="w-24 h-24 rounded-3xl bg-white/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-4">
-              <span className="text-4xl font-bold text-white font-display">{salon.name.charAt(0)}</span>
+            <div className="w-20 h-20 md:w-24 md:h-24 rounded-3xl bg-white/20 backdrop-blur-sm flex items-center justify-center mx-auto mb-4">
+              <span className="text-3xl md:text-4xl font-bold text-white font-display">{salon.name.charAt(0)}</span>
             </div>
           </div>
         </div>
@@ -58,25 +58,25 @@ export default function SalonDetail() {
 
       {/* Salon Info Header */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10">
-        <div className="card p-6 md:p-8">
+        <div className="card p-5 md:p-8">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold font-display text-gray-900 mb-2">{salon.name}</h1>
               <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mb-3">
                 <span className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4 text-rose-gold" />
+                  <MapPin className="w-4 h-4 text-rose-gold shrink-0" />
                   {salon.address}
                 </span>
               </div>
               <div className="flex flex-wrap items-center gap-3 text-sm">
                 <span className="flex items-center gap-1 font-bold text-gray-800">
-                  <Star className="w-4 h-4 text-gold fill-gold" />
+                  <Star className="w-4 h-4 text-gold fill-gold shrink-0" />
                   {salon.rating}
                 </span>
                 <span className="text-gray-400">({salon.reviewCount} reviews)</span>
                 <span className="text-gray-400">•</span>
                 <span className="flex items-center gap-1 text-gray-500">
-                  <Clock className="w-4 h-4" />
+                  <Clock className="w-4 h-4 shrink-0" />
                   {salon.openHours}
                 </span>
                 {salon.closedDay !== 'None' && (
@@ -86,9 +86,9 @@ export default function SalonDetail() {
                 )}
               </div>
             </div>
-            <div className="flex flex-col items-end gap-2">
+            <div className="flex flex-col items-start md:items-end gap-2 md:text-right shrink-0">
               <span className="text-lg font-bold gradient-text">{salon.priceRange}</span>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {salon.homeService && (
                   <span className="tag text-xs flex items-center gap-1">
                     <Home className="w-3 h-3" />
@@ -121,8 +121,8 @@ export default function SalonDetail() {
           <ReviewSummary reviews={salon.reviews} salonName={salon.name} />
         </div>
 
-        {/* Tab Navigation */}
-        <div className="flex gap-2 mt-8 overflow-x-auto pb-2">
+        {/* Tab Navigation (Horizontal Swipe Tray) */}
+        <div className="flex gap-2 mt-8 overflow-x-auto pb-2 no-scrollbar snap-x snap-mandatory scroll-smooth">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -130,7 +130,7 @@ export default function SalonDetail() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 id={`tab-${tab.id}`}
-                className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 snap-start ${
                   activeTab === tab.id
                     ? 'bg-rose-gold text-white shadow-glow'
                     : 'bg-white text-gray-600 hover:bg-rose-gold/5 border border-gray-100'
@@ -153,16 +153,16 @@ export default function SalonDetail() {
                   <h3 className="text-lg font-bold font-display text-gray-800 mb-3">{cat}</h3>
                   <div className="space-y-2">
                     {salon.services?.filter((s) => s.category === cat).map((service, i) => (
-                      <div key={i} className="card p-4 flex items-center justify-between">
-                        <div>
-                          <p className="font-semibold text-gray-800">{service.name}</p>
+                      <div key={i} className="card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <p className="font-semibold text-gray-800 truncate">{service.name}</p>
                           <p className="text-sm text-gray-400">{service.duration}</p>
                         </div>
-                        <div className="text-right flex items-center gap-4">
+                        <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 mt-2 sm:mt-0 pt-2 sm:pt-0 border-t border-gray-50 sm:border-t-0">
                           <span className="font-bold text-rose-gold">₹{service.price?.toLocaleString()}</span>
                           <button
                             onClick={() => setActiveTab('booking')}
-                            className="text-xs btn-primary py-2 px-3"
+                            className="text-xs btn-primary py-2 px-4"
                           >
                             Book
                           </button>

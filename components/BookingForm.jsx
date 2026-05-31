@@ -114,22 +114,22 @@ export default function BookingForm({ salon }) {
       {/* Step 2: Select Date */}
       <div className={`transition-all duration-500 ${step >= 2 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
         <h4 className="text-sm font-semibold text-gray-700 mb-3">2. Pick a Date</h4>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex gap-2 overflow-x-auto pb-3 snap-x snap-mandatory no-scrollbar">
           {availableDates.map((date) => {
             const d = new Date(date);
             return (
               <button
                 key={date}
                 onClick={() => { setSelectedDate(date); setSelectedTime(''); setStep(Math.max(step, 3)); }}
-                className={`px-4 py-3 rounded-xl text-center transition-all duration-300 border min-w-[80px] ${
+                className={`px-4 py-3 rounded-xl text-center transition-all duration-300 border min-w-[85px] snap-start shrink-0 ${
                   selectedDate === date
-                    ? 'border-rose-gold bg-rose-gold text-white'
+                    ? 'border-rose-gold bg-rose-gold text-white shadow-glow'
                     : 'border-gray-100 hover:border-rose-gold/30 bg-white text-gray-700'
                 }`}
               >
-                <p className="text-xs font-medium">{d.toLocaleDateString('en-IN', { weekday: 'short' })}</p>
-                <p className="text-lg font-bold">{d.getDate()}</p>
-                <p className="text-xs">{d.toLocaleDateString('en-IN', { month: 'short' })}</p>
+                <p className="text-xs font-medium opacity-85">{d.toLocaleDateString('en-IN', { weekday: 'short' })}</p>
+                <p className="text-lg font-bold my-0.5">{d.getDate()}</p>
+                <p className="text-xs opacity-85">{d.toLocaleDateString('en-IN', { month: 'short' })}</p>
               </button>
             );
           })}

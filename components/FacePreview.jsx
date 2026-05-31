@@ -157,7 +157,7 @@ export default function FacePreview() {
           onDragLeave={handleDragLeave}
           onClick={() => fileInputRef.current?.click()}
           id="face-upload-zone"
-          className={`relative cursor-pointer rounded-3xl border-2 border-dashed transition-all duration-500 p-12 text-center ${
+          className={`relative cursor-pointer rounded-3xl border-2 border-dashed transition-all duration-500 p-6 sm:p-12 text-center ${
             dragOver
               ? 'border-rose-gold bg-rose-gold/5 scale-[1.02]'
               : 'border-gray-200 hover:border-rose-gold/50 hover:bg-rose-blush/30'
@@ -239,7 +239,7 @@ export default function FacePreview() {
             {analysis && (
               <div className="space-y-4 animate-fade-in">
                 {/* Category Tabs */}
-                <div className="flex gap-2 overflow-x-auto pb-2">
+                <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar snap-x snap-mandatory scroll-smooth">
                   {styleCategories.map((cat) => {
                     const Icon = cat.icon;
                     return (
@@ -247,7 +247,7 @@ export default function FacePreview() {
                         key={cat.id}
                         onClick={() => setActiveCategory(cat.id)}
                         id={`tab-${cat.id}`}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 snap-start ${
                           activeCategory === cat.id
                             ? 'bg-rose-gold text-white shadow-glow'
                             : 'bg-white text-gray-600 hover:bg-rose-gold/5 border border-gray-100'

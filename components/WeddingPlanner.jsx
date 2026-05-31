@@ -275,35 +275,35 @@ export default function WeddingPlanner() {
               {/* Structured Timeline */}
               <div className="relative">
                 {/* Timeline Line */}
-                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-rose-gold via-gold to-plum" />
+                <div className="absolute left-5 sm:left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-rose-gold via-gold to-plum" />
 
                 <div className="space-y-6">
                   {plan.items.map((item, i) => (
-                    <div key={i} className="relative flex gap-6 animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
+                    <div key={i} className="relative flex gap-3 sm:gap-6 animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
                       {/* Timeline Dot */}
-                      <div className="relative z-10 w-12 h-12 rounded-full bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center shrink-0 shadow-glow">
+                      <div className="relative z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center shrink-0 shadow-glow">
                         <span className="text-xs font-bold text-white">{item.date?.split(' ')[0]}</span>
                       </div>
 
                       {/* Card */}
-                      <div className="flex-1 card p-5 mb-2">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-medium text-rose-gold bg-rose-gold/10 px-3 py-1 rounded-full">
+                      <div className="flex-1 card p-4 sm:p-5 mb-2">
+                        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                          <span className="text-[10px] sm:text-xs font-medium text-rose-gold bg-rose-gold/10 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
                             {item.daysLeft}
                           </span>
                           <span className="text-sm font-bold text-gold">₹{item.cost?.toLocaleString()}</span>
                         </div>
-                        <h4 className="font-bold text-gray-800 text-lg font-display mb-1">{item.title}</h4>
-                        <p className="text-sm text-gray-600 mb-3">{item.desc}</p>
-                        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                        <h4 className="font-bold text-gray-800 text-base sm:text-lg font-display mb-1">{item.title}</h4>
+                        <p className="text-xs sm:text-sm text-gray-600 mb-3 leading-relaxed">{item.desc}</p>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-gray-100">
                           <div>
-                            <p className="text-xs text-gray-400">Recommended Salon</p>
-                            <p className="text-sm font-semibold text-gray-800">{item.salon}</p>
-                            {item.area && <p className="text-xs text-gray-400">{item.area}</p>}
+                            <p className="text-[10px] text-gray-400">Recommended Salon</p>
+                            <p className="text-xs sm:text-sm font-semibold text-gray-800">{item.salon}</p>
+                            {item.area && <p className="text-[10px] text-gray-400">{item.area}</p>}
                           </div>
                           <Link
                             href="/salons"
-                            className="text-xs text-rose-gold font-medium flex items-center gap-1 hover:underline"
+                            className="text-xs text-rose-gold font-medium flex items-center gap-1 hover:underline self-end sm:self-auto"
                           >
                             Book Now <ChevronRight className="w-3 h-3" />
                           </Link>

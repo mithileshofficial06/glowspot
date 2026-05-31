@@ -110,103 +110,130 @@ function SalonsContent() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {showFilters && (
-          <div className="card-glass p-6 mb-8 animate-fade-in">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-bold text-gray-800">Filters</h3>
-              <button
-                onClick={clearFilters}
-                className="text-xs text-rose-gold hover:underline flex items-center gap-1"
-              >
-                <X className="w-3 h-3" />
-                Clear All
-              </button>
-            </div>
+          <div className="fixed inset-0 z-50 md:relative md:inset-auto md:z-auto flex items-end md:items-stretch justify-center md:justify-start">
+            {/* Backdrop (mobile only) */}
+            <div 
+              className="md:hidden absolute inset-0 bg-plum-deep/40 backdrop-blur-xs transition-opacity duration-300"
+              onClick={() => setShowFilters(false)}
+            />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div>
-                <label className="text-xs font-medium text-gray-500 block mb-2">
-                  <MapPin className="w-3 h-3 inline mr-1" />
-                  Area
-                </label>
-                <select
-                  value={selectedArea}
-                  onChange={(e) => setSelectedArea(e.target.value)}
-                  id="filter-area"
-                  className="input-styled text-sm"
-                >
-                  <option value="">All Areas</option>
-                  {allAreas.map((a) => (
-                    <option key={a} value={a}>{a}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs font-medium text-gray-500 block mb-2">
-                  <Star className="w-3 h-3 inline mr-1" />
-                  Min Rating: {minRating > 0 ? `${minRating}+` : 'Any'}
-                </label>
-                <input
-                  type="range"
-                  min="0"
-                  max="5"
-                  step="0.5"
-                  value={minRating}
-                  onChange={(e) => setMinRating(parseFloat(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-gold"
-                />
-              </div>
-
-              <div>
-                <label className="text-xs font-medium text-gray-500 block mb-2">Sort By</label>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  id="filter-sort"
-                  className="input-styled text-sm"
-                >
-                  <option value="rating">Highest Rated</option>
-                  <option value="reviews">Most Reviews</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs font-medium text-gray-500 block mb-2">
-                  <Home className="w-3 h-3 inline mr-1" />
-                  Home Service
-                </label>
-                <button
-                  onClick={() => setHomeOnly(!homeOnly)}
-                  id="filter-home"
-                  className={`px-4 py-2.5 rounded-xl text-sm font-medium w-full transition-all ${
-                    homeOnly
-                      ? 'bg-emerald-500 text-white'
-                      : 'bg-white border border-gray-200 text-gray-600'
-                  }`}
-                >
-                  {homeOnly ? '✓ Home Service Only' : 'Show All'}
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <label className="text-xs font-medium text-gray-500 block mb-2">Specializations</label>
-              <div className="flex flex-wrap gap-2">
-                {allSpecializations.slice(0, 12).map((spec) => (
+            {/* Filter Card Content */}
+            <div className="relative w-full max-h-[85vh] md:max-h-none overflow-y-auto md:overflow-visible bg-cream md:bg-transparent rounded-t-3xl md:rounded-t-none md:rounded-2xl p-6 md:p-6 md:mb-8 shadow-2xl md:shadow-none card-glass border-t border-rose-gold/10 md:border-t-0 animate-slide-up md:animate-fade-in select-none">
+              <div className="flex items-center justify-between mb-6 pb-3 border-b border-gray-100 md:border-b-0 md:pb-0 md:mb-4">
+                <h3 className="text-base md:text-sm font-bold text-gray-800">Filters</h3>
+                <div className="flex items-center gap-3">
                   <button
-                    key={spec}
-                    onClick={() => toggleSpec(spec)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                      selectedSpecs.includes(spec)
-                        ? 'bg-plum text-white'
-                        : 'bg-white border border-gray-200 text-gray-600 hover:border-plum/30'
+                    onClick={clearFilters}
+                    className="text-xs text-rose-gold hover:underline flex items-center gap-1"
+                  >
+                    <X className="w-3 h-3" />
+                    Clear All
+                  </button>
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="md:hidden p-1 rounded-lg hover:bg-rose-gold/5 text-gray-400 hover:text-rose-gold"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div>
+                  <label className="text-xs font-medium text-gray-500 block mb-2">
+                    <MapPin className="w-3 h-3 inline mr-1" />
+                    Area
+                  </label>
+                  <select
+                    value={selectedArea}
+                    onChange={(e) => setSelectedArea(e.target.value)}
+                    id="filter-area"
+                    className="input-styled text-sm"
+                  >
+                    <option value="">All Areas</option>
+                    {allAreas.map((a) => (
+                      <option key={a} value={a}>{a}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium text-gray-500 block mb-2">
+                    <Star className="w-3 h-3 inline mr-1" />
+                    Min Rating: {minRating > 0 ? `${minRating}+` : 'Any'}
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max="5"
+                    step="0.5"
+                    value={minRating}
+                    onChange={(e) => setMinRating(parseFloat(e.target.value))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-gold"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium text-gray-500 block mb-2">Sort By</label>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    id="filter-sort"
+                    className="input-styled text-sm"
+                  >
+                    <option value="rating">Highest Rated</option>
+                    <option value="reviews">Most Reviews</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-medium text-gray-500 block mb-2">
+                    <Home className="w-3 h-3 inline mr-1" />
+                    Home Service
+                  </label>
+                  <button
+                    onClick={() => setHomeOnly(!homeOnly)}
+                    id="filter-home"
+                    className={`px-4 py-2.5 rounded-xl text-sm font-medium w-full transition-all ${
+                      homeOnly
+                        ? 'bg-emerald-500 text-white'
+                        : 'bg-white border border-gray-200 text-gray-600'
                     }`}
                   >
-                    {spec}
+                    {homeOnly ? '✓ Home Service Only' : 'Show All'}
                   </button>
-                ))}
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <label className="text-xs font-medium text-gray-500 block mb-2">Specializations</label>
+                <div className="flex flex-wrap gap-2">
+                  {allSpecializations.slice(0, 12).map((spec) => (
+                    <button
+                      key={spec}
+                      onClick={() => toggleSpec(spec)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                        selectedSpecs.includes(spec)
+                          ? 'bg-plum text-white'
+                          : 'bg-white border border-gray-200 text-gray-600 hover:border-plum/30'
+                      }`}
+                    >
+                      {spec}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mobile primary Apply button */}
+              <div className="mt-6 md:hidden">
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="btn-primary w-full py-3 text-sm font-bold"
+                >
+                  Apply Filters
+                </button>
               </div>
             </div>
           </div>

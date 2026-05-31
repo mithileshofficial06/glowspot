@@ -184,9 +184,11 @@ Guidelines:
               <Sparkles className="w-4 h-4 text-rose-gold" />
               <span className="text-sm font-semibold text-gray-700">Recommended Salons</span>
             </div>
-            <div className="grid grid-cols-1 gap-4">
+            <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:overflow-x-visible md:pb-0">
               {recommendedSalons.map((salon) => (
-                <SalonCard key={salon.id} salon={salon} />
+                <div key={salon.id} className="w-[285px] md:w-auto shrink-0 md:shrink snap-start">
+                  <SalonCard salon={salon} />
+                </div>
               ))}
             </div>
           </div>
@@ -199,12 +201,12 @@ Guidelines:
       {messages.length <= 1 && (
         <div className="px-4 pb-3">
           <p className="text-xs text-gray-400 mb-2">Try asking:</p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex gap-2 overflow-x-auto pb-2 md:flex-wrap md:overflow-x-visible md:pb-0 no-scrollbar">
             {suggestions.map((s, i) => (
               <button
                 key={i}
                 onClick={() => handleSend(s)}
-                className="text-xs px-3 py-2 rounded-xl bg-rose-gold/5 text-rose-gold hover:bg-rose-gold/10 border border-rose-gold/10 transition-all duration-300 hover:scale-105"
+                className="text-xs px-3 py-2 rounded-xl bg-rose-gold/5 text-rose-gold hover:bg-rose-gold/10 border border-rose-gold/10 transition-all duration-300 hover:scale-105 shrink-0 md:shrink"
               >
                 {s}
               </button>
