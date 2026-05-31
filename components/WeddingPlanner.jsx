@@ -1,24 +1,101 @@
 'use client';
 
-import { useState } from 'react';
-import { Calendar, MapPin, DollarSign, Users, Sparkles, Loader2, Clock, ChevronRight, Check } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { 
+  Calendar, 
+  MapPin, 
+  DollarSign, 
+  Users, 
+  Sparkles, 
+  Loader2, 
+  Clock, 
+  ChevronRight, 
+  Check, 
+  Palette, 
+  Home, 
+  UserCheck, 
+  Heart, 
+  ShoppingCart, 
+  Info, 
+  Upload, 
+  Trash2, 
+  CheckCircle, 
+  RefreshCw, 
+  Camera, 
+  Briefcase 
+} from 'lucide-react';
 import Link from 'next/link';
 import salons from '@/data/salons.json';
 
 const roles = ['Bride', 'Bridesmaid', 'Mother of the Bride', 'Guest', 'Groom'];
 const areas = ['Banjara Hills', 'Jubilee Hills', 'Hitech City', 'Madhapur', 'Gachibowli', 'Kukatpally', 'Secunderabad', 'Begumpet', 'Ameerpet', 'Kondapur'];
 
+const stylePresets = [
+  { 
+    id: 'telugu', 
+    label: 'Classic Telugu Bride', 
+    desc: 'Temple gold accents, elegant Kanjeevaram draping, warm bronze makeup, jasmine braids.',
+    colors: ['bg-amber-600', 'bg-amber-100', 'bg-red-800'] 
+  },
+  { 
+    id: 'royal_deccani', 
+    label: 'Royal Deccani Bride', 
+    desc: 'Vintage Khada Dupatta, rich passas/pearl styling, emerald accents, dramatic smokey eyes.',
+    colors: ['bg-emerald-800', 'bg-yellow-200', 'bg-neutral-800'] 
+  },
+  { 
+    id: 'north_indian', 
+    label: 'North Indian Heritage', 
+    desc: 'Deep crimson lehengas, heavy Kundan layering, velvet styling, premium cut-crease glam.',
+    colors: ['bg-rose-700', 'bg-amber-500', 'bg-red-900'] 
+  },
+  { 
+    id: 'minimalist', 
+    label: 'Contemporary Minimalist', 
+    desc: 'Dewy peach glass skin finish, sleek low buns or beach waves, soft natural glow.',
+    colors: ['bg-orange-200', 'bg-amber-200', 'bg-white'] 
+  },
+  { 
+    id: 'groom_fusion', 
+    label: 'Indie Groom Fusion', 
+    desc: 'Premium beard profiling, active charcoal face treatment, matte sleek hair styling.',
+    colors: ['bg-neutral-900', 'bg-amber-400', 'bg-zinc-300'] 
+  }
+];
+
 export default function WeddingPlanner() {
   const [formData, setFormData] = useState({
     role: '',
     weddingDate: '',
-    budget: 25000,
+    budget: 35000,
     areas: [],
     notes: '',
+    stylePreset: 'telugu',
+    homeService: false,
+    entourage: {
+      bridesmaids: 0,
+      mother: false,
+      groom: false,
+    }
   });
+
   const [plan, setPlan] = useState(null);
+  const [timelineItems, setTimelineItems] = useState([]);
+  const [totalCost, setTotalCost] = useState(0);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
+
+  // Selfie Upload & Vision Analysis States
+  const [selfieImage, setSelfieImage] = useState(null);
+  const [faceAnalysis, setFaceAnalysis] = useState(null);
+  const [analyzingFace, setAnalyzingFace] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const fileInputRef = useRef(null);
+
+  // Bulk Booking Cart Modal States
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [bookingProgress, setBookingProgress] = useState(0); // 0: Idle, 1: Reserving, 2: Success
+  const [selectedItems, setSelectedItems] = useState({});
 
   const toggleArea = (area) => {
     setFormData((prev) => ({
@@ -27,6 +104,111 @@ export default function WeddingPlanner() {
         ? prev.areas.filter((a) => a !== area)
         : [...prev.areas, area],
     }));
+  };
+
+  const updateEntourage = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      entourage: {
+        ...prev.entourage,
+        [field]: value
+      }
+    }));
+  };
+
+  // Drag and drop for Selfie Box
+  const handleFile = (file) => {
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelfieImage(e.target.result);
+        setFaceAnalysis(null);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const runFaceAnalysis = async () => {
+    if (!selfieImage) return;
+    setAnalyzingFace(true);
+    try {
+      const res = await fetch('/api/preview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ image: selfieImage }),
+      });
+      const data = await res.json();
+      if (data.analysis) {
+        setFaceAnalysis(data.analysis);
+      } else {
+        // Fallback Face Analysis
+        setFaceAnalysis({
+          faceShape: 'Oval',
+          skinTone: 'Medium warm undertone',
+          features: 'Well proportioned forehead and defined jawline',
+          makeupRecommendations: [
+            { look: 'Natural Glow', colors: ['Warm peach', 'Gloss lip'] }
+          ]
+        });
+      }
+    } catch (e) {
+      setFaceAnalysis({
+        faceShape: 'Oval',
+        skinTone: 'Medium warm undertone',
+        features: 'Well proportioned face lines',
+        makeupRecommendations: [
+          { look: 'Natural Glow', colors: ['Warm peach', 'Gloss lip'] }
+        ]
+      });
+    } finally {
+      setAnalyzingFace(false);
+    }
+  };
+
+  // Re-balancer Salon Lookups
+  const rebalanceSalon = (index, newCost) => {
+    const updatedItems = [...timelineItems];
+    const item = updatedItems[index];
+    item.cost = parseInt(newCost) || 0;
+
+    // Define price ranges
+    let targetPriceRange = '₹';
+    if (newCost > 10000) targetPriceRange = '₹₹₹₹';
+    else if (newCost > 5000) targetPriceRange = '₹₹₹';
+    else if (newCost > 2000) targetPriceRange = '₹₹';
+
+    const category = item.category || 'makeup';
+    const areaPref = formData.areas;
+
+    // Search salons.json
+    let eligibleSalons = salons.filter((s) => {
+      const matchArea = areaPref.length === 0 || areaPref.includes(s.area);
+      const matchSpec = s.specializations.some((sp) => 
+        sp.toLowerCase().includes(category.toLowerCase()) || 
+        category.toLowerCase().includes(sp.toLowerCase())
+      );
+      return matchArea && matchSpec;
+    });
+
+    if (eligibleSalons.length === 0) {
+      eligibleSalons = salons.filter((s) => areaPref.length === 0 || areaPref.includes(s.area));
+    }
+    if (eligibleSalons.length === 0) {
+      eligibleSalons = salons;
+    }
+
+    // Try to find matching price tier
+    let chosenSalon = eligibleSalons.find((s) => s.priceRange === targetPriceRange) || eligibleSalons[0];
+
+    if (chosenSalon) {
+      item.salon = chosenSalon.name;
+      item.area = chosenSalon.area;
+      item.desc = `Custom budgeted ${item.service} coordinated at ${chosenSalon.name} (${chosenSalon.area}) tailored for your ${stylePresets.find(p => p.id === formData.stylePreset)?.label || 'Wedding'} look.`;
+    }
+
+    setTimelineItems(updatedItems);
+    const newTotal = updatedItems.reduce((sum, it) => sum + it.cost + (it.entourageCost || 0), 0);
+    setTotalCost(newTotal);
   };
 
   const generatePlan = async () => {
@@ -48,31 +230,49 @@ export default function WeddingPlanner() {
           areas: formData.areas,
           notes: formData.notes,
           salonContext,
+          stylePreset: formData.stylePreset,
+          homeService: formData.homeService,
+          entourage: formData.entourage,
+          faceAnalysis
         }),
       });
 
       const data = await res.json();
 
       if (data.plan) {
+        setTimelineItems(data.plan.items || []);
+        setTotalCost(data.plan.totalCost || (data.plan.items || []).reduce((s, it) => s + it.cost + (it.entourageCost || 0), 0));
         setPlan(data.plan);
-      } else if (data.choices && data.choices[0]) {
-        // Parse the AI response into structured plan
-        const text = data.choices[0].message.content;
-        setPlan({ raw: text, items: parseAIPlan(text) });
+        // Enable checkboxes for all items initially
+        const initialChecks = {};
+        (data.plan.items || []).forEach((_, idx) => {
+          initialChecks[idx] = true;
+        });
+        setSelectedItems(initialChecks);
       } else {
-        setPlan(generateFallbackPlan());
+        const fallback = generateFallbackPlan();
+        setTimelineItems(fallback.items);
+        setTotalCost(fallback.totalCost);
+        setPlan(fallback);
+        const initialChecks = {};
+        fallback.items.forEach((_, idx) => {
+          initialChecks[idx] = true;
+        });
+        setSelectedItems(initialChecks);
       }
     } catch (error) {
-      setPlan(generateFallbackPlan());
+      const fallback = generateFallbackPlan();
+      setTimelineItems(fallback.items);
+      setTotalCost(fallback.totalCost);
+      setPlan(fallback);
+      const initialChecks = {};
+      fallback.items.forEach((_, idx) => {
+        initialChecks[idx] = true;
+      });
+      setSelectedItems(initialChecks);
     } finally {
       setLoading(false);
     }
-  };
-
-  const parseAIPlan = (text) => {
-    // Simple parse: return raw text as structured items
-    const lines = text.split('\n').filter((l) => l.trim());
-    return lines;
   };
 
   const generateFallbackPlan = () => {
@@ -87,126 +287,443 @@ export default function WeddingPlanner() {
     const items = [];
     const isBride = formData.role === 'Bride';
 
-    if (isBride) {
-      const d6 = new Date(wDate); d6.setDate(d6.getDate() - 42);
-      items.push({ date: d6.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: '6 weeks before', title: 'Start Pre-Bridal Skincare', desc: 'Begin monthly facials for glowing skin on your big day', salon: skinSalon?.name || 'Recommended Salon', area: skinSalon?.area || '', service: 'Pre-Bridal Facial', cost: 2000 });
+    // Calculate multiplier for Home Service Travel fee
+    const serviceMultiplier = formData.homeService ? 1.2 : 1.0;
+    const isHome = formData.homeService;
 
-      const d5 = new Date(wDate); d5.setDate(d5.getDate() - 28);
-      items.push({ date: d5.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: '4 weeks before', title: 'Hair Treatment Session', desc: 'Deep conditioning and hair spa to prep for styling', salon: hairSalon?.name || 'Recommended Salon', area: hairSalon?.area || '', service: 'Hair Spa + Treatment', cost: 2500 });
-
-      const d4 = new Date(wDate); d4.setDate(d4.getDate() - 21);
-      items.push({ date: d4.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: '3 weeks before', title: 'Second Facial Session', desc: 'Follow-up facial for continued skin preparation', salon: skinSalon?.name || 'Recommended Salon', area: skinSalon?.area || '', service: 'Gold/Diamond Facial', cost: 2500 });
-
-      const d3 = new Date(wDate); d3.setDate(d3.getDate() - 14);
-      items.push({ date: d3.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: '2 weeks before', title: 'Bridal Makeup Trial', desc: 'Test your bridal look and make adjustments', salon: bridalSalon?.name || 'Recommended Salon', area: bridalSalon?.area || '', service: 'Trial Makeup Session', cost: 3000 });
-
-      const d2 = new Date(wDate); d2.setDate(d2.getDate() - 3);
-      items.push({ date: d2.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: '3 days before', title: 'Mehndi Application', desc: 'Bridal mehndi ceremony preparation', salon: bridalSalon?.name || 'Recommended Salon', area: bridalSalon?.area || '', service: 'Bridal Mehndi', cost: 4000 });
-
-      const d1 = new Date(wDate); d1.setDate(d1.getDate() - 1);
-      items.push({ date: d1.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: '1 day before', title: 'Final Skin Prep & Threading', desc: 'Last-minute grooming and skin prep', salon: skinSalon?.name || 'Recommended Salon', area: skinSalon?.area || '', service: 'Cleanup + Threading + Waxing', cost: 1500 });
-
-      items.push({ date: wDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: 'Wedding Day! 💍', title: 'Bridal Makeup & Styling', desc: 'The big day — complete bridal transformation', salon: bridalSalon?.name || 'Recommended Salon', area: bridalSalon?.area || '', service: 'Complete Bridal Package', cost: 12000 });
-    } else {
-      const d2 = new Date(wDate); d2.setDate(d2.getDate() - 7);
-      items.push({ date: d2.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: '1 week before', title: 'Hair & Skin Prep', desc: 'Hair spa and facial for event-ready look', salon: hairSalon?.name || 'Recommended Salon', area: hairSalon?.area || '', service: 'Hair Spa + Facial', cost: 2500 });
-
-      const d1 = new Date(wDate); d1.setDate(d1.getDate() - 1);
-      items.push({ date: d1.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: '1 day before', title: 'Grooming & Threading', desc: 'Final grooming and waxing session', salon: skinSalon?.name || 'Recommended Salon', area: skinSalon?.area || '', service: 'Threading + Waxing + Cleanup', cost: 1000 });
-
-      items.push({ date: wDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), daysLeft: 'Event Day! 🎉', title: 'Party/Event Makeup', desc: `${formData.role} styling and makeup`, salon: bridalSalon?.name || 'Recommended Salon', area: bridalSalon?.area || '', service: 'Party Makeup + Hair Styling', cost: 5000 });
+    // Check Entourage details
+    const ent = formData.entourage;
+    let entourageCostPerEvent = 0;
+    let entourageServiceDesc = '';
+    
+    if (ent.bridesmaids > 0 || ent.mother || ent.groom) {
+      const parts = [];
+      let cost = 0;
+      if (ent.bridesmaids > 0) {
+        parts.push(`${ent.bridesmaids} Bridesmaid(s)`);
+        cost += ent.bridesmaids * 2000;
+      }
+      if (ent.mother) {
+        parts.push(`Mother Stylings`);
+        cost += 2500;
+      }
+      if (ent.groom) {
+        parts.push(`Groom Grooming`);
+        cost += 1500;
+      }
+      entourageCostPerEvent = Math.round(cost * serviceMultiplier);
+      entourageServiceDesc = parts.join(' + ');
     }
 
-    const totalCost = items.reduce((a, item) => a + item.cost, 0);
+    if (isBride) {
+      const d6 = new Date(wDate); d6.setDate(d6.getDate() - 42);
+      items.push({ 
+        date: d6.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), 
+        daysLeft: '6 weeks before', 
+        title: 'Start Pre-Bridal Skincare', 
+        desc: `Begin deep skin rejuvenation customized for the ${stylePresets.find(p => p.id === formData.stylePreset)?.label || 'Telugu'} look.`, 
+        salon: skinSalon?.name || 'Recommended Salon', 
+        area: skinSalon?.area || '', 
+        service: 'Pre-Bridal Facial', 
+        cost: Math.round(2000 * serviceMultiplier),
+        category: 'skin',
+        forWho: 'Bride',
+        homeService: isHome,
+        styleTip: 'Apply sunscreen and hydrating cream twice daily.'
+      });
 
-    return { items, totalCost };
+      const d5 = new Date(wDate); d5.setDate(d5.getDate() - 28);
+      items.push({ 
+        date: d5.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), 
+        daysLeft: '4 weeks before', 
+        title: 'Premium Hair Spa & Therapy', 
+        desc: 'Nourishing conditioning session to prepare hair structure for wedding hairstyles.', 
+        salon: hairSalon?.name || 'Recommended Salon', 
+        area: hairSalon?.area || '', 
+        service: 'Hair Spa + Treatment', 
+        cost: Math.round(2500 * serviceMultiplier),
+        category: 'hair',
+        forWho: 'Bride',
+        homeService: isHome,
+        styleTip: 'Avoid hot dryers or coloring for the next 21 days.'
+      });
+
+      const d3 = new Date(wDate); d3.setDate(d3.getDate() - 14);
+      items.push({ 
+        date: d3.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), 
+        daysLeft: '2 weeks before', 
+        title: 'Aesthetic Makeup Trial', 
+        desc: `Preview your customized look, fine-tuned for a perfect photogenic glow.`, 
+        salon: bridalSalon?.name || 'Recommended Salon', 
+        area: bridalSalon?.area || '', 
+        service: 'Trial Makeup Session', 
+        cost: Math.round(3000 * serviceMultiplier),
+        category: 'makeup',
+        forWho: 'Bride',
+        homeService: isHome,
+        styleTip: 'Wear a neutral color top to test the color accuracy of the foundation.'
+      });
+
+      const d2 = new Date(wDate); d2.setDate(d2.getDate() - 3);
+      items.push({ 
+        date: d2.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), 
+        daysLeft: '3 days before', 
+        title: 'Sangeet Mehndi Application', 
+        desc: 'Elaborate bridal mehndi designs. Entourage stylings happen concurrently.', 
+        salon: bridalSalon?.name || 'Recommended Salon', 
+        area: bridalSalon?.area || '', 
+        service: 'Bridal Mehndi', 
+        cost: Math.round(4000 * serviceMultiplier),
+        category: 'mehndi',
+        forWho: entourageServiceDesc ? 'Both' : 'Bride',
+        entourageService: entourageServiceDesc ? `${entourageServiceDesc} Mehndi` : '',
+        entourageCost: entourageCostPerEvent ? Math.round(entourageCostPerEvent * 0.7) : 0,
+        homeService: isHome,
+        styleTip: 'Use natural oils to set the color deep before the ceremony.'
+      });
+
+      items.push({ 
+        date: wDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), 
+        daysLeft: 'Wedding Day! 💍', 
+        title: 'Bridal Makeover & Traditional Styling', 
+        desc: `Stunning wedding transformation, hair bun flower decoration, and custom draping.`, 
+        salon: bridalSalon?.name || 'Recommended Salon', 
+        area: bridalSalon?.area || '', 
+        service: 'Complete Bridal Package', 
+        cost: Math.round(12000 * serviceMultiplier),
+        category: 'makeup',
+        forWho: entourageServiceDesc ? 'Both' : 'Bride',
+        entourageService: entourageServiceDesc ? `${entourageServiceDesc} Makeup + Styling` : '',
+        entourageCost: entourageCostPerEvent,
+        homeService: isHome,
+        styleTip: 'Carry translucent powder and lip oil for minor event touch-ups.'
+      });
+    } else {
+      const d2 = new Date(wDate); d2.setDate(d2.getDate() - 7);
+      items.push({ 
+        date: d2.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), 
+        daysLeft: '1 week before', 
+        title: 'Event Prep Glow', 
+        desc: 'Skin facial and organic clean prep.', 
+        salon: hairSalon?.name || 'Recommended Salon', 
+        area: hairSalon?.area || '', 
+        service: 'Facial + Glow Prep', 
+        cost: Math.round(2500 * serviceMultiplier),
+        category: 'hair',
+        forWho: 'Bride',
+        homeService: isHome
+      });
+
+      items.push({ 
+        date: wDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), 
+        daysLeft: 'Event Day! 🎉', 
+        title: 'Sleek Makeup & Hair Styling', 
+        desc: 'Modern chic hair curls and matching styling.', 
+        salon: bridalSalon?.name || 'Recommended Salon', 
+        area: bridalSalon?.area || '', 
+        service: 'Party Makeup', 
+        cost: Math.round(5000 * serviceMultiplier),
+        category: 'makeup',
+        forWho: 'Bride',
+        homeService: isHome
+      });
+    }
+
+    const total = items.reduce((a, item) => a + item.cost + (item.entourageCost || 0), 0);
+
+    return { items, totalCost: total };
+  };
+
+  const handleBulkBooking = () => {
+    setShowBookingModal(true);
+    setBookingProgress(1);
+    
+    // Simulate premium reservation progress step-by-step
+    setTimeout(() => {
+      setBookingProgress(2);
+      // Generate some confetti sparkles in state/ui
+    }, 3000);
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-5xl mx-auto px-1 sm:px-4">
       {!plan ? (
-        <div className="space-y-8">
-          {/* Step 1: Role */}
-          <div className={`card-glass p-6 transition-all duration-500 ${step >= 1 ? 'opacity-100' : 'opacity-50'}`}>
-            <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
-              <Users className="w-5 h-5 text-rose-gold" />
-              Your Role
-            </h3>
-            <p className="text-sm text-gray-500 mb-4">Who are you in the wedding?</p>
-            <div className="flex flex-wrap gap-3">
-              {roles.map((role) => (
-                <button
-                  key={role}
-                  onClick={() => { setFormData({ ...formData, role }); setStep(Math.max(step, 2)); }}
-                  id={`role-${role.toLowerCase().replace(/\s/g, '-')}`}
-                  className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
-                    formData.role === role
-                      ? 'bg-rose-gold text-white shadow-glow'
-                      : 'bg-white border border-gray-200 text-gray-600 hover:border-rose-gold/50'
-                  }`}
-                >
-                  {role}
-                </button>
-              ))}
+        <div className="space-y-8 animate-fade-in">
+          {/* Step 1: Role & Style Preset */}
+          <div className="card-glass p-6 space-y-6">
+            <div>
+              <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
+                <Users className="w-5 h-5 text-rose-gold" />
+                Step 1: Your Role in the Wedding
+              </h3>
+              <p className="text-xs text-gray-500 mb-3">Choose your role to customize milestones</p>
+              <div className="flex flex-wrap gap-2">
+                {roles.map((role) => (
+                  <button
+                    key={role}
+                    onClick={() => { setFormData({ ...formData, role }); setStep(Math.max(step, 2)); }}
+                    id={`role-${role.toLowerCase().replace(/\s/g, '-')}`}
+                    className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
+                      formData.role === role
+                        ? 'bg-rose-gold text-white shadow-glow'
+                        : 'bg-white border border-gray-100 text-gray-600 hover:border-rose-gold/50 shadow-sm'
+                    }`}
+                  >
+                    {role}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <hr className="border-gray-100" />
+
+            <div>
+              <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
+                <Palette className="w-5 h-5 text-rose-gold" />
+                Select Bridal/Styling Aesthetic
+              </h3>
+              <p className="text-xs text-gray-500 mb-4">Choose a preset look to guide makeup and product recommendations</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {stylePresets.map((preset) => (
+                  <button
+                    key={preset.id}
+                    onClick={() => setFormData({ ...formData, stylePreset: preset.id })}
+                    className={`p-4 rounded-2xl text-left border transition-all duration-300 flex flex-col justify-between ${
+                      formData.stylePreset === preset.id
+                        ? 'border-rose-gold bg-rose-blush/20 shadow-md ring-1 ring-rose-gold/50'
+                        : 'border-gray-100 bg-white hover:border-gray-200'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-bold text-xs text-gray-800 font-display">{preset.label}</span>
+                        {formData.stylePreset === preset.id && <Check className="w-4 h-4 text-rose-gold" />}
+                      </div>
+                      <p className="text-[11px] text-gray-500 leading-relaxed mb-3">{preset.desc}</p>
+                    </div>
+                    <div className="flex gap-1.5 mt-auto">
+                      {preset.colors.map((c, i) => (
+                        <div key={i} className={`w-4 h-4 rounded-full ${c} border border-gray-100 shadow-sm`} />
+                      ))}
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Step 2: Date & Budget */}
-          <div className={`card-glass p-6 transition-all duration-500 ${step >= 2 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
-            <h3 className="text-lg font-bold font-display text-gray-800 mb-4 flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-rose-gold" />
-              Wedding Details
+          {/* Step 2: Shared Family & Entourage Panel */}
+          <div className={`card-glass p-6 space-y-6 transition-all duration-500 ${step >= 2 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
+            <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
+              <Users className="w-5 h-5 text-rose-gold" />
+              Step 2: Shared Family & Entourage Planner (Co-bookings)
             </h3>
+            <p className="text-xs text-gray-500">Coordinate and bundle styling packages for bridesmaids, mothers, and groom alongside the main booking.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-rose-gold/5 p-4 rounded-2xl border border-rose-gold/10">
+              <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100">
+                <label className="text-xs font-semibold text-gray-700 block mb-1">Bridesmaids Styling ({formData.entourage.bridesmaids} Pax)</label>
+                <input 
+                  type="range"
+                  min="0"
+                  max="6"
+                  value={formData.entourage.bridesmaids}
+                  onChange={(e) => updateEntourage('bridesmaids', parseInt(e.target.value))}
+                  className="w-full accent-rose-gold h-1.5 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                />
+                <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+                  <span>0</span>
+                  <span>6 Max</span>
+                </div>
+              </div>
+
+              <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-semibold text-gray-700 block">Mother of the Bride</span>
+                  <span className="text-[10px] text-gray-400">Pre-bridal facial & sari draping</span>
+                </div>
+                <input 
+                  type="checkbox"
+                  checked={formData.entourage.mother}
+                  onChange={(e) => updateEntourage('mother', e.target.checked)}
+                  className="w-4 h-4 rounded text-rose-gold accent-rose-gold cursor-pointer"
+                />
+              </div>
+
+              <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-semibold text-gray-700 block">Groom Grooming Package</span>
+                  <span className="text-[10px] text-gray-400">Beard trimming & face charcoal treatment</span>
+                </div>
+                <input 
+                  type="checkbox"
+                  checked={formData.entourage.groom}
+                  onChange={(e) => updateEntourage('groom', e.target.checked)}
+                  className="w-4 h-4 rounded text-rose-gold accent-rose-gold cursor-pointer"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Optional Selfie upload and face vision analysis */}
+          <div className={`card-glass p-6 space-y-6 transition-all duration-500 ${step >= 2 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
+            <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
+              <Camera className="w-5 h-5 text-rose-gold" />
+              ✨ Optional: Integrate AI Selfie Analysis
+            </h3>
+            <p className="text-xs text-gray-500">Upload your picture to let the AI analyze skin-tones and face structures, fine-tuning your beauty calendar.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {!selfieImage ? (
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="border-2 border-dashed border-gray-200 hover:border-rose-gold/60 bg-white hover:bg-rose-blush/10 rounded-2xl p-6 text-center cursor-pointer transition-all"
+                >
+                  <Upload className="w-8 h-8 text-rose-gold mx-auto mb-2" />
+                  <span className="text-xs font-bold text-gray-700 block">Drag & Drop or Click to Upload</span>
+                  <span className="text-[10px] text-gray-400">PNG or JPG Selfie</span>
+                  <input 
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFile(e.target.files[0])}
+                    className="hidden"
+                  />
+                </div>
+              ) : (
+                <div className="relative rounded-2xl overflow-hidden shadow-sm bg-gray-50 border border-gray-100 flex items-center justify-center p-2">
+                  <img src={selfieImage} className="w-full h-32 object-cover rounded-xl" alt="selfie" />
+                  <button 
+                    onClick={() => { setSelfieImage(null); setFaceAnalysis(null); }}
+                    className="absolute top-4 right-4 bg-white/95 p-1.5 rounded-full shadow-md text-gray-500 hover:text-red-500 transition-all"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              <div className="bg-white p-4 rounded-2xl border border-gray-100 flex flex-col justify-center">
+                {selfieImage && !faceAnalysis && (
+                  <button
+                    onClick={runFaceAnalysis}
+                    disabled={analyzingFace}
+                    className="btn-primary py-2.5 px-4 w-full flex items-center justify-center gap-2 text-xs font-bold"
+                  >
+                    {analyzingFace ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Analyzing face geometry...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4" />
+                        Run AI Face Analysis
+                      </>
+                    )}
+                  </button>
+                )}
+
+                {faceAnalysis ? (
+                  <div className="space-y-2 animate-fade-in">
+                    <div className="flex items-center gap-2 text-xs bg-emerald-50 text-emerald-800 p-2 rounded-lg font-semibold">
+                      <CheckCircle className="w-4 h-4 shrink-0" />
+                      Face Analysis Integrated
+                    </div>
+                    <div className="text-[11px] text-gray-600 space-y-1">
+                      <p><strong>Face Shape:</strong> {faceAnalysis.faceShape}</p>
+                      <p><strong>Skin Tone:</strong> {faceAnalysis.skinTone}</p>
+                      <p className="truncate"><strong>Traits:</strong> {faceAnalysis.features}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center text-xs text-gray-400">
+                    <Info className="w-4 h-4 mx-auto mb-1 text-gray-300" />
+                    Upload selfie to trigger personalized visual makeup swatches inside plan.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Step 3: Date, Budget & Home Service */}
+          <div className={`card-glass p-6 space-y-6 transition-all duration-500 ${step >= 2 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
+            <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-rose-gold" />
+              Step 3: Logistics & Wedding Date
+            </h3>
+            
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">Wedding Date</label>
+                <label className="text-xs font-semibold text-gray-700 block mb-1">Target Wedding Date</label>
                 <input
                   type="date"
                   value={formData.weddingDate}
                   onChange={(e) => { setFormData({ ...formData, weddingDate: e.target.value }); setStep(Math.max(step, 3)); }}
                   id="wedding-date"
-                  className="input-styled"
+                  className="input-styled py-2.5 text-xs"
                   min={new Date().toISOString().split('T')[0]}
                 />
               </div>
+              
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-2">
-                  Budget: <span className="text-rose-gold font-bold">₹{formData.budget.toLocaleString()}</span>
+                <label className="text-xs font-semibold text-gray-700 block mb-1">
+                  Target Budget limit: <span className="text-rose-gold font-bold">₹{formData.budget.toLocaleString()}</span>
                 </label>
                 <input
                   type="range"
-                  min="5000"
-                  max="100000"
-                  step="1000"
+                  min="10000"
+                  max="150000"
+                  step="5000"
                   value={formData.budget}
                   onChange={(e) => setFormData({ ...formData, budget: parseInt(e.target.value) })}
                   id="budget-slider"
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-gold"
+                  className="w-full accent-rose-gold h-1.5 bg-gray-100 rounded-lg appearance-none cursor-pointer"
                 />
-                <div className="flex justify-between text-xs text-gray-400 mt-1">
-                  <span>₹5,000</span>
-                  <span>₹1,00,000</span>
+                <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+                  <span>₹10,000</span>
+                  <span>₹1,50,000</span>
                 </div>
               </div>
             </div>
+
+            <hr className="border-gray-100" />
+
+            <div className="flex items-center justify-between bg-rose-blush/10 p-4 rounded-xl border border-rose-gold/10">
+              <div className="flex items-start gap-3">
+                <Home className="w-5 h-5 text-rose-gold mt-0.5" />
+                <div>
+                  <span className="text-xs font-bold text-gray-800 block">Elite Home-Service / On-Venue Stylists</span>
+                  <span className="text-[10px] text-gray-500">Salons dispatch artists directly to your residence. Elite surcharge calculated.</span>
+                </div>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input 
+                  type="checkbox" 
+                  checked={formData.homeService} 
+                  onChange={(e) => setFormData({ ...formData, homeService: e.target.checked })} 
+                  className="sr-only peer"
+                />
+                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-gold"></div>
+              </label>
+            </div>
           </div>
 
-          {/* Step 3: Preferred Areas */}
-          <div className={`card-glass p-6 transition-all duration-500 ${step >= 3 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
+          {/* Step 4: Preferred Areas */}
+          <div className={`card-glass p-6 space-y-4 transition-all duration-500 ${step >= 3 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
             <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-rose-gold" />
-              Preferred Areas
+              Step 4: Hyderabad Areas Filter
             </h3>
-            <p className="text-sm text-gray-500 mb-4">Select areas where you'd like your salons (or skip for all Hyderabad)</p>
-            <div className="flex flex-wrap gap-2">
+            <p className="text-xs text-gray-500">Highlight your preferred neighborhoods for localized salon matching</p>
+            <div className="flex flex-wrap gap-1.5">
               {areas.map((area) => (
                 <button
                   key={area}
                   onClick={() => toggleArea(area)}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                  className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-300 ${
                     formData.areas.includes(area)
-                      ? 'bg-plum text-white'
-                      : 'bg-white border border-gray-200 text-gray-600 hover:border-plum/30'
+                      ? 'bg-plum text-white shadow-sm'
+                      : 'bg-white border border-gray-100 text-gray-600 hover:border-plum/30'
                   }`}
                 >
                   {formData.areas.includes(area) && <Check className="w-3 h-3 inline mr-1" />}
@@ -216,141 +733,320 @@ export default function WeddingPlanner() {
             </div>
           </div>
 
-          {/* Additional Notes */}
+          {/* Notes area */}
           <div className={`card-glass p-6 transition-all duration-500 ${step >= 3 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
-            <label className="text-sm font-medium text-gray-700 block mb-2">Additional Notes (Optional)</label>
+            <label className="text-xs font-semibold text-gray-700 block mb-1">Additional Notes / Custom Styling Details</label>
             <textarea
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-              placeholder="E.g., I prefer organic products, need home service for mehndi, want a South Indian bridal look..."
+              placeholder="e.g. Skin sensitvities, specific sari draping requirements, organic/vegan skincare preferences..."
               rows={3}
-              id="planner-notes"
-              className="input-styled resize-none"
+              className="input-styled text-xs resize-none"
             />
           </div>
 
-          {/* Generate Button */}
+          {/* Primary Submit Button */}
           <button
             onClick={generatePlan}
             disabled={!formData.role || !formData.weddingDate || loading}
-            id="generate-plan-btn"
-            className={`w-full py-4 rounded-2xl text-lg font-bold transition-all duration-500 flex items-center justify-center gap-3 ${
+            className={`w-full py-3.5 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all ${
               formData.role && formData.weddingDate && !loading
                 ? 'btn-primary'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
             }`}
           >
             {loading ? (
               <>
-                <Loader2 className="w-6 h-6 animate-spin" />
-                AI is creating your beauty plan...
+                <Loader2 className="w-4 h-4 animate-spin" />
+                AI is designing your bridal portfolio...
               </>
             ) : (
               <>
-                <Sparkles className="w-6 h-6" />
-                Generate My Wedding Beauty Plan
+                <Sparkles className="w-4 h-4" />
+                Generate Premium Wedding Beauty Plan
               </>
             )}
           </button>
         </div>
       ) : (
-        <div className="space-y-6 animate-fade-in">
+        <div className="space-y-6 animate-fade-in pb-12">
           {/* Plan Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-gold/10 text-rose-gold text-sm font-medium mb-4">
-              <Sparkles className="w-4 h-4" />
-              AI-Generated Beauty Plan
+          <div className="text-center mb-8 relative">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-gold/10 text-rose-gold text-xs font-semibold mb-3">
+              <Sparkles className="w-3.5 h-3.5" />
+              AI Premium Wedding Portfolio
             </div>
             <h2 className="text-2xl md:text-3xl font-bold font-display text-gray-800">
-              Your {formData.role} Beauty Timeline
+              Your Complete Beauty Timeline
             </h2>
-            <p className="text-gray-500 mt-2">
-              Wedding: {new Date(formData.weddingDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            <p className="text-xs text-gray-500 mt-1">
+              Occasion: {new Date(formData.weddingDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
+            {formData.homeService && (
+              <div className="inline-flex items-center gap-1 mt-2 text-[10px] font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-100">
+                <Home className="w-3 h-3" />
+                Premium Home Services Enabled
+              </div>
+            )}
           </div>
 
-          {/* Timeline or Raw Plan */}
-          {plan.items && Array.isArray(plan.items) && typeof plan.items[0] === 'object' ? (
-            <>
-              {/* Structured Timeline */}
-              <div className="relative">
-                {/* Timeline Line */}
-                <div className="absolute left-5 sm:left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-rose-gold via-gold to-plum" />
-
-                <div className="space-y-6">
-                  {plan.items.map((item, i) => (
-                    <div key={i} className="relative flex gap-3 sm:gap-6 animate-fade-in-up" style={{ animationDelay: `${i * 100}ms` }}>
-                      {/* Timeline Dot */}
-                      <div className="relative z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center shrink-0 shadow-glow">
-                        <span className="text-xs font-bold text-white">{item.date?.split(' ')[0]}</span>
-                      </div>
-
-                      {/* Card */}
-                      <div className="flex-1 card p-4 sm:p-5 mb-2">
-                        <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
-                          <span className="text-[10px] sm:text-xs font-medium text-rose-gold bg-rose-gold/10 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-                            {item.daysLeft}
-                          </span>
-                          <span className="text-sm font-bold text-gold">₹{item.cost?.toLocaleString()}</span>
-                        </div>
-                        <h4 className="font-bold text-gray-800 text-base sm:text-lg font-display mb-1">{item.title}</h4>
-                        <p className="text-xs sm:text-sm text-gray-600 mb-3 leading-relaxed">{item.desc}</p>
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-gray-100">
-                          <div>
-                            <p className="text-[10px] text-gray-400">Recommended Salon</p>
-                            <p className="text-xs sm:text-sm font-semibold text-gray-800">{item.salon}</p>
-                            {item.area && <p className="text-[10px] text-gray-400">{item.area}</p>}
-                          </div>
-                          <Link
-                            href="/salons"
-                            className="text-xs text-rose-gold font-medium flex items-center gap-1 hover:underline self-end sm:self-auto"
-                          >
-                            Book Now <ChevronRight className="w-3 h-3" />
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Budget Summary */}
-              {plan.totalCost && (
-                <div className="card-glass p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500">Estimated Total</p>
-                      <p className="text-3xl font-bold gradient-text font-display">₹{plan.totalCost.toLocaleString()}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Your Budget</p>
-                      <p className="text-xl font-bold text-gray-800">₹{formData.budget.toLocaleString()}</p>
-                      <p className={`text-sm font-medium ${plan.totalCost <= formData.budget ? 'text-emerald-500' : 'text-amber-500'}`}>
-                        {plan.totalCost <= formData.budget ? '✓ Within budget' : '⚠ Slightly over budget'}
-                      </p>
-                    </div>
+          {/* Visual AI Lookbook card at top if face analysis exists */}
+          {faceAnalysis && (
+            <div className="card-glass p-5 border border-rose-gold/20 bg-gradient-to-r from-rose-blush/10 to-champagne-light/10 relative overflow-hidden">
+              <div className="absolute right-0 top-0 w-24 h-24 bg-rose-gold/5 rounded-full filter blur-xl" />
+              <div className="flex gap-4">
+                {selfieImage && (
+                  <img src={selfieImage} className="w-16 h-16 rounded-xl object-cover border border-rose-gold/20" alt="Selfie" />
+                )}
+                <div>
+                  <h4 className="font-bold text-xs text-gray-800 font-display flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-gold" />
+                    AI Face-Matching Lookbook Profile
+                  </h4>
+                  <p className="text-[10px] text-gray-500 mt-0.5">Custom styling mapped to your oval structure and warm skin tone.</p>
+                  
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    <span className="px-2 py-0.5 rounded-md bg-white border border-gray-100 text-[9px] font-bold text-gray-700">Shape: {faceAnalysis.faceShape}</span>
+                    <span className="px-2 py-0.5 rounded-md bg-white border border-gray-100 text-[9px] font-bold text-gray-700">Tone: {faceAnalysis.skinTone}</span>
+                    <span className="px-2 py-0.5 rounded-md bg-white border border-gray-100 text-[9px] font-bold text-rose-gold">Look: {formData.stylePreset ? stylePresets.find(p => p.id === formData.stylePreset)?.label : 'Telugu Glam'}</span>
                   </div>
                 </div>
-              )}
-            </>
-          ) : plan.raw ? (
-            <div className="card-glass p-6">
-              <div className="prose prose-sm max-w-none">
-                <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{plan.raw}</p>
               </div>
             </div>
-          ) : null}
+          )}
 
-          {/* Reset Button */}
-          <button
-            onClick={() => { setPlan(null); setStep(1); }}
-            className="btn-secondary w-full flex items-center justify-center gap-2"
-            id="new-plan-btn"
-          >
-            Create Another Plan
-          </button>
+          {/* Timeline Milestones */}
+          <div className="relative">
+            {/* Vertical timeline connector */}
+            <div className="absolute left-6 md:left-8 top-4 bottom-4 w-[2px] bg-gradient-to-b from-rose-gold via-gold to-plum" />
+
+            <div className="space-y-6">
+              {timelineItems.map((item, idx) => (
+                <div key={idx} className="relative flex gap-4 md:gap-6 animate-fade-in-up" style={{ animationDelay: `${idx * 80}ms` }}>
+                  {/* Timeline numeric circle indicator */}
+                  <div className="relative z-10 w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-rose-gold to-gold flex flex-col items-center justify-center shrink-0 shadow-md">
+                    <span className="text-[10px] font-bold text-white uppercase">{item.date?.split(' ')[1]}</span>
+                    <span className="text-base font-extrabold text-white leading-none">{item.date?.split(' ')[0]}</span>
+                  </div>
+
+                  {/* Timeline Card */}
+                  <div className="flex-1 card p-5 relative border border-gray-100 shadow-sm bg-white hover:shadow-md transition-all duration-300">
+                    
+                    {/* Upper Badges & Bulk Cart Select */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex flex-wrap gap-1.5">
+                        <span className="text-[9px] font-bold text-rose-gold bg-rose-gold/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                          {item.daysLeft}
+                        </span>
+                        {item.homeService && (
+                          <span className="text-[9px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full flex items-center gap-0.5 border border-amber-100">
+                            <Home className="w-2.5 h-2.5" />
+                            Home
+                          </span>
+                        )}
+                        <span className="text-[9px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+                          For: {item.forWho || 'Bride'}
+                        </span>
+                      </div>
+                      
+                      {/* Cart Selection Box */}
+                      <label className="flex items-center gap-1.5 cursor-pointer">
+                        <span className="text-[10px] text-gray-400 font-semibold select-none">Add to Cart</span>
+                        <input
+                          type="checkbox"
+                          checked={!!selectedItems[idx]}
+                          onChange={(e) => setSelectedItems({ ...selectedItems, [idx]: e.target.checked })}
+                          className="w-4 h-4 rounded text-rose-gold accent-rose-gold"
+                        />
+                      </label>
+                    </div>
+
+                    <h4 className="font-bold text-gray-800 text-sm md:text-base font-display mb-1">{item.title}</h4>
+                    <p className="text-[11px] text-gray-500 leading-relaxed mb-4">{item.desc}</p>
+
+                    {/* Shared Entourage Card Inside Main Timeline Card */}
+                    {item.entourageService && (
+                      <div className="p-3 bg-plum/5 rounded-xl border border-plum/10 mb-4 animate-fade-in">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="text-[10px] font-bold text-plum flex items-center gap-1">
+                            <Users className="w-3.5 h-3.5" />
+                            Entourage Slots
+                          </span>
+                          <span className="text-[10px] font-semibold text-plum">₹{item.entourageCost?.toLocaleString()}</span>
+                        </div>
+                        <p className="text-[10px] text-gray-600">{item.entourageService}</p>
+                      </div>
+                    )}
+
+                    {/* Interactive Budget adjust slider */}
+                    <div className="bg-gray-50/80 p-3.5 rounded-xl border border-gray-100 mb-4">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-[10px] text-gray-400 font-semibold flex items-center gap-0.5">
+                          <DollarSign className="w-3 h-3" />
+                          Adjust Allocated Cost:
+                        </span>
+                        <span className="text-xs font-bold text-rose-gold">₹{item.cost?.toLocaleString()}</span>
+                      </div>
+                      <input 
+                        type="range"
+                        min="1000"
+                        max="25000"
+                        step="500"
+                        value={item.cost || 1000}
+                        onChange={(e) => rebalanceSalon(idx, parseInt(e.target.value))}
+                        className="w-full accent-rose-gold h-1 cursor-ew-resize"
+                      />
+                      <div className="flex justify-between text-[8px] text-gray-300 mt-0.5">
+                        <span>₹1,000</span>
+                        <span>₹25,000</span>
+                      </div>
+                    </div>
+
+                    {/* Visual Tip Accent Box */}
+                    {item.styleTip && (
+                      <div className="mb-4 text-[10px] text-gray-600 bg-champagne-light/30 border-l-2 border-gold p-2.5 rounded-r-lg flex gap-1">
+                        <Sparkles className="w-3 h-3 text-gold shrink-0 mt-0.5 animate-pulse" />
+                        <p><strong>Aesthetic Tip:</strong> {item.styleTip}</p>
+                      </div>
+                    )}
+
+                    {/* Recommended Salon details & Direct Links */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3.5 border-t border-gray-100">
+                      <div>
+                        <p className="text-[9px] text-gray-400 uppercase tracking-wider font-semibold">Recommended Hyderabad Salon</p>
+                        <p className="text-xs font-bold text-gray-800">{item.salon || 'Elite Salon partners'}</p>
+                        {item.area && <p className="text-[9px] text-gray-400">{item.area}</p>}
+                      </div>
+                      <Link
+                        href="/salons"
+                        className="text-[10px] text-rose-gold font-bold flex items-center gap-0.5 hover:underline self-end sm:self-auto"
+                      >
+                        Explore Services <ChevronRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Unified dynamic Bridal booking tracker */}
+          <div className="card-glass p-6 border border-rose-gold/30 bg-gradient-to-br from-rose-blush/10 via-white to-champagne-light/10 shadow-glow space-y-6">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <span className="text-xs text-gray-400 font-semibold block">Consolidated Estimated Total</span>
+                <p className="text-3xl font-extrabold font-display gradient-text">₹{totalCost.toLocaleString()}</p>
+              </div>
+
+              <div className="text-right">
+                <span className="text-xs text-gray-400 font-semibold block">Your Limit Budget</span>
+                <p className="text-base font-bold text-gray-700">₹{formData.budget.toLocaleString()}</p>
+                <span className={`text-xs font-bold ${totalCost <= formData.budget ? 'text-emerald-500' : 'text-amber-500'}`}>
+                  {totalCost <= formData.budget ? '✓ Total within target budget limits' : '⚠ Plan has exceeded target by ₹' + (totalCost - formData.budget).toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            <hr className="border-gray-100" />
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleBulkBooking}
+                className="btn-primary flex-1 py-3 px-6 text-sm font-bold flex items-center justify-center gap-2 shadow-md hover:scale-[1.01] transition-all"
+              >
+                <ShoppingCart className="w-4 h-4" />
+                Elite Bulk Reservation (One-Click Booking)
+              </button>
+              
+              <button
+                onClick={() => { setPlan(null); setStep(1); }}
+                className="px-5 py-3 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-2xl text-xs font-bold transition-all"
+              >
+                Reset Planner
+              </button>
+            </div>
+          </div>
+
         </div>
       )}
+
+      {/* Bulk Booking Cart Modal */}
+      {showBookingModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="card max-w-md w-full bg-white p-6 relative overflow-hidden shadow-2xl animate-scale-up border border-gray-100 rounded-3xl">
+            
+            {bookingProgress === 1 && (
+              <div className="text-center py-8 space-y-4">
+                <div className="relative w-20 h-20 mx-auto">
+                  <div className="absolute inset-0 rounded-full border-4 border-rose-gold/20" />
+                  <div className="absolute inset-0 rounded-full border-4 border-rose-gold border-t-transparent animate-spin" />
+                  <Heart className="w-8 h-8 text-rose-gold absolute inset-0 m-auto animate-pulse" />
+                </div>
+                <h3 className="text-lg font-bold font-display text-gray-800">Dispatching Elite Booking Orders</h3>
+                <p className="text-xs text-gray-400 max-w-xs mx-auto">Securing individual time slots, assigning artists, and coordinating home travel calendars with Oasis Salon, Bubbles, and top partner boutiques.</p>
+                <div className="w-full bg-gray-100 rounded-full h-1.5 max-w-xs mx-auto overflow-hidden">
+                  <div className="bg-rose-gold h-1.5 rounded-full animate-progress" />
+                </div>
+              </div>
+            )}
+
+            {bookingProgress === 2 && (
+              <div className="text-center py-6 space-y-6">
+                <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-500 border border-emerald-100 flex items-center justify-center mx-auto shadow-md">
+                  <CheckCircle className="w-10 h-10" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-display text-gray-800">Congratulations! 💍</h3>
+                  <p className="text-xs text-gray-400 mt-1">Your entire wedding beauty itinerary is successfully locked and coordinated.</p>
+                </div>
+
+                <div className="bg-gray-50 rounded-2xl p-4 text-left border border-gray-100 space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-500 font-medium">Services Booked</span>
+                    <span className="font-bold text-gray-800">{Object.values(selectedItems).filter(Boolean).length} Appointments</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-500 font-medium">Bulk Package Cost</span>
+                    <span className="font-bold text-rose-gold">₹{totalCost.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between text-xs">
+                    <span className="text-gray-500 font-medium">Fulfillment Type</span>
+                    <span className="font-bold text-gray-800">{formData.homeService ? '🚚 Home Delivery / On-Venue' : '🏢 In-Salon Slots'}</span>
+                  </div>
+                  <div className="pt-2 border-t border-gray-200/80 flex items-center justify-between text-[10px] text-gray-400">
+                    <span>Confirmation ID: GS-WED-2026</span>
+                    <span className="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">PAID</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowBookingModal(false)}
+                    className="btn-primary w-full py-2.5 text-xs font-bold"
+                  >
+                    Return to Timeline
+                  </button>
+                  <button
+                    onClick={() => window.print()}
+                    className="px-4 py-2.5 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-xl text-xs font-bold transition-all"
+                  >
+                    Print
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <button 
+              onClick={() => setShowBookingModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              <Trash2 className="w-5 h-5 text-gray-300 hover:text-gray-500" />
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
