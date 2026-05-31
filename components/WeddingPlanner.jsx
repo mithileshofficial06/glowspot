@@ -820,114 +820,152 @@ export default function WeddingPlanner() {
             {/* Vertical timeline connector */}
             <div className="absolute left-6 md:left-8 top-4 bottom-4 w-[2px] bg-gradient-to-b from-rose-gold via-gold to-plum" />
 
-            <div className="space-y-6">
-              {timelineItems.map((item, idx) => (
-                <div key={idx} className="relative flex gap-4 md:gap-6 animate-fade-in-up" style={{ animationDelay: `${idx * 80}ms` }}>
-                  {/* Timeline numeric circle indicator */}
-                  <div className="relative z-10 w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-rose-gold to-gold flex flex-col items-center justify-center shrink-0 shadow-md">
-                    <span className="text-[10px] font-bold text-white uppercase">{item.date?.split(' ')[1]}</span>
-                    <span className="text-base font-extrabold text-white leading-none">{item.date?.split(' ')[0]}</span>
-                  </div>
+            <div className="space-y-8">
+              {timelineItems.map((item, idx) => {
+                // Parse date string robustly to avoid squishing
+                let dayVal = '01';
+                let monthVal = 'JUN';
+                if (item.date) {
+                  if (item.date.includes('-')) {
+                    const parts = item.date.split('-');
+                    const d = new Date(item.date);
+                    if (!isNaN(d.getTime())) {
+                      dayVal = d.toLocaleDateString('en-IN', { day: '2-digit' });
+                      monthVal = d.toLocaleDateString('en-IN', { month: 'short' }).toUpperCase();
+                    } else if (parts.length === 3) {
+                      dayVal = parts[2];
+                      monthVal = parts[1];
+                    }
+                  } else if (item.date.includes(' ')) {
+                    const parts = item.date.split(' ');
+                    dayVal = parts[0];
+                    monthVal = parts[1]?.toUpperCase();
+                  } else {
+                    dayVal = item.date.substring(0, 2);
+                    monthVal = 'WED';
+                  }
+                }
 
-                  {/* Timeline Card */}
-                  <div className="flex-1 card p-5 relative border border-gray-100 shadow-sm bg-white hover:shadow-md transition-all duration-300">
-                    
-                    {/* Upper Badges & Bulk Cart Select */}
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex flex-wrap gap-1.5">
-                        <span className="text-[9px] font-bold text-rose-gold bg-rose-gold/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                          {item.daysLeft}
-                        </span>
-                        {item.homeService && (
-                          <span className="text-[9px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full flex items-center gap-0.5 border border-amber-100">
-                            <Home className="w-2.5 h-2.5" />
-                            Home
-                          </span>
-                        )}
-                        <span className="text-[9px] font-bold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
-                          For: {item.forWho || 'Bride'}
-                        </span>
-                      </div>
-                      
-                      {/* Cart Selection Box */}
-                      <label className="flex items-center gap-1.5 cursor-pointer">
-                        <span className="text-[10px] text-gray-400 font-semibold select-none">Add to Cart</span>
-                        <input
-                          type="checkbox"
-                          checked={!!selectedItems[idx]}
-                          onChange={(e) => setSelectedItems({ ...selectedItems, [idx]: e.target.checked })}
-                          className="w-4 h-4 rounded text-rose-gold accent-rose-gold"
-                        />
-                      </label>
+                return (
+                  <div key={idx} className="relative flex gap-4 md:gap-6 animate-fade-in-up" style={{ animationDelay: `${idx * 80}ms` }}>
+                    {/* Timeline Date Circle Indicator */}
+                    <div className="relative z-10 w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-rose-gold to-gold flex flex-col items-center justify-center shrink-0 shadow-md border-2 border-white">
+                      <span className="text-[9px] md:text-[10px] font-bold text-white uppercase tracking-wider leading-none mb-0.5">{monthVal}</span>
+                      <span className="text-sm md:text-lg font-extrabold text-white leading-none">{dayVal}</span>
                     </div>
 
-                    <h4 className="font-bold text-gray-800 text-sm md:text-base font-display mb-1">{item.title}</h4>
-                    <p className="text-[11px] text-gray-500 leading-relaxed mb-4">{item.desc}</p>
+                    {/* Timeline Card - Sleek grid-based multi-column layout */}
+                    <div className="flex-1 card p-0 overflow-hidden relative border border-gray-100 shadow-sm bg-white hover:shadow-md transition-all duration-300 rounded-3xl">
+                      <div className="grid grid-cols-1 lg:grid-cols-5">
+                        
+                        {/* LEFT COLUMN: Milestone Details (60% width on desktop) */}
+                        <div className="lg:col-span-3 p-6 flex flex-col justify-between space-y-4">
+                          <div>
+                            {/* Badges and Cart Selector */}
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="flex flex-wrap gap-1">
+                                <span className="text-[9px] font-bold text-rose-gold bg-rose-gold/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                  {item.daysLeft}
+                                </span>
+                                {item.homeService && (
+                                  <span className="text-[9px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full flex items-center gap-0.5 border border-amber-100">
+                                    <Home className="w-2.5 h-2.5" />
+                                    Home Service
+                                  </span>
+                                )}
+                                <span className="text-[9px] font-bold text-gray-500 bg-gray-50 px-2.5 py-0.5 rounded-full">
+                                  {item.forWho || 'Bride'}
+                                </span>
+                              </div>
 
-                    {/* Shared Entourage Card Inside Main Timeline Card */}
-                    {item.entourageService && (
-                      <div className="p-3 bg-plum/5 rounded-xl border border-plum/10 mb-4 animate-fade-in">
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-[10px] font-bold text-plum flex items-center gap-1">
-                            <Users className="w-3.5 h-3.5" />
-                            Entourage Slots
-                          </span>
-                          <span className="text-[10px] font-semibold text-plum">₹{item.entourageCost?.toLocaleString()}</span>
+                              <label className="flex items-center gap-1.5 cursor-pointer scale-90">
+                                <span className="text-[10px] text-gray-400 font-bold select-none uppercase tracking-wider">Add to Cart</span>
+                                <input
+                                  type="checkbox"
+                                  checked={!!selectedItems[idx]}
+                                  onChange={(e) => setSelectedItems({ ...selectedItems, [idx]: e.target.checked })}
+                                  className="w-4 h-4 rounded text-rose-gold accent-rose-gold border-gray-200"
+                                />
+                              </label>
+                            </div>
+
+                            <h4 className="font-extrabold text-gray-800 text-base md:text-lg font-display mb-2">{item.title}</h4>
+                            <p className="text-[11px] sm:text-xs text-gray-500 leading-relaxed font-medium">{item.desc}</p>
+                          </div>
+
+                          {/* Elegant, clean visual tip at the bottom of text */}
+                          {item.styleTip && (
+                            <div className="text-[10px] text-gray-600 bg-champagne-light/20 border-l-2 border-gold p-2.5 rounded-r-xl flex gap-1.5 items-start mt-2">
+                              <Sparkles className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
+                              <p className="leading-relaxed"><strong className="text-gray-700">Aesthetic Tip:</strong> {item.styleTip}</p>
+                            </div>
+                          )}
                         </div>
-                        <p className="text-[10px] text-gray-600">{item.entourageService}</p>
-                      </div>
-                    )}
 
-                    {/* Interactive Budget adjust slider */}
-                    <div className="bg-gray-50/80 p-3.5 rounded-xl border border-gray-100 mb-4">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-[10px] text-gray-400 font-semibold flex items-center gap-0.5">
-                          <DollarSign className="w-3 h-3" />
-                          Adjust Allocated Cost:
-                        </span>
-                        <span className="text-xs font-bold text-rose-gold">₹{item.cost?.toLocaleString()}</span>
-                      </div>
-                      <input 
-                        type="range"
-                        min="1000"
-                        max="25000"
-                        step="500"
-                        value={item.cost || 1000}
-                        onChange={(e) => rebalanceSalon(idx, parseInt(e.target.value))}
-                        className="w-full accent-rose-gold h-1 cursor-ew-resize"
-                      />
-                      <div className="flex justify-between text-[8px] text-gray-300 mt-0.5">
-                        <span>₹1,000</span>
-                        <span>₹25,000</span>
+                        {/* RIGHT COLUMN: Control Panel & Pricing Dashboard (40% width on desktop) */}
+                        <div className="lg:col-span-2 bg-gray-50/50 p-6 border-t lg:border-t-0 lg:border-l border-gray-100 flex flex-col justify-between space-y-4">
+                          
+                          {/* Cost Adjuster Slider */}
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-[9px] text-gray-400 font-extrabold uppercase tracking-wider flex items-center gap-0.5">
+                                <DollarSign className="w-3 h-3 text-gray-400" />
+                                Custom Cost Allocator
+                              </span>
+                              <span className="text-sm font-extrabold text-rose-gold bg-white border border-rose-gold/20 px-2 py-0.5 rounded-lg shadow-sm">
+                                ₹{item.cost?.toLocaleString()}
+                              </span>
+                            </div>
+                            <input 
+                              type="range"
+                              min="1000"
+                              max="25000"
+                              step="500"
+                              value={item.cost || 1000}
+                              onChange={(e) => rebalanceSalon(idx, parseInt(e.target.value))}
+                              className="w-full accent-rose-gold h-1.5 cursor-ew-resize bg-gray-200 rounded-lg appearance-none"
+                            />
+                            <div className="flex justify-between text-[8px] font-bold text-gray-300">
+                              <span>₹1,000</span>
+                              <span>₹25,000</span>
+                            </div>
+                          </div>
+
+                          {/* Entourage Slot Panel if active */}
+                          {item.entourageService && (
+                            <div className="p-3 bg-plum/5 rounded-2xl border border-plum/10 flex items-center justify-between text-[11px] animate-fade-in shadow-inner">
+                              <div className="min-w-0 pr-2">
+                                <span className="font-extrabold text-plum block text-[9px] uppercase tracking-wider">Entourage Slots</span>
+                                <span className="text-gray-500 text-[10px] font-medium block truncate">{item.entourageService}</span>
+                              </div>
+                              <span className="font-bold text-plum bg-white/80 px-2 py-0.5 rounded-lg border border-plum/10 shrink-0">
+                                +₹{item.entourageCost?.toLocaleString()}
+                              </span>
+                            </div>
+                          )}
+
+                          {/* Recommended Salon Details */}
+                          <div className="pt-4 border-t border-gray-200/80 flex items-center justify-between">
+                            <div className="min-w-0">
+                              <span className="text-[8px] text-gray-400 uppercase tracking-wider font-extrabold block">Fulfillment Location</span>
+                              <span className="text-xs font-extrabold text-gray-800 truncate block">{item.salon || 'Elite Salon partners'}</span>
+                              {item.area && <span className="text-[9px] text-gray-400 font-bold block">{item.area}</span>}
+                            </div>
+                            <Link
+                              href="/salons"
+                              className="text-[10px] text-rose-gold font-extrabold flex items-center gap-0.5 hover:underline shrink-0 ml-2"
+                            >
+                              Explore <ChevronRight className="w-3.5 h-3.5" />
+                            </Link>
+                          </div>
+
+                        </div>
+
                       </div>
                     </div>
-
-                    {/* Visual Tip Accent Box */}
-                    {item.styleTip && (
-                      <div className="mb-4 text-[10px] text-gray-600 bg-champagne-light/30 border-l-2 border-gold p-2.5 rounded-r-lg flex gap-1">
-                        <Sparkles className="w-3 h-3 text-gold shrink-0 mt-0.5 animate-pulse" />
-                        <p><strong>Aesthetic Tip:</strong> {item.styleTip}</p>
-                      </div>
-                    )}
-
-                    {/* Recommended Salon details & Direct Links */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3.5 border-t border-gray-100">
-                      <div>
-                        <p className="text-[9px] text-gray-400 uppercase tracking-wider font-semibold">Recommended Hyderabad Salon</p>
-                        <p className="text-xs font-bold text-gray-800">{item.salon || 'Elite Salon partners'}</p>
-                        {item.area && <p className="text-[9px] text-gray-400">{item.area}</p>}
-                      </div>
-                      <Link
-                        href="/salons"
-                        className="text-[10px] text-rose-gold font-bold flex items-center gap-0.5 hover:underline self-end sm:self-auto"
-                      >
-                        Explore Services <ChevronRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
-
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
