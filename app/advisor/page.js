@@ -8,25 +8,25 @@ export const metadata = {
 
 export default function Advisor() {
   return (
-    <div className="min-h-screen pt-20 bg-cream flex flex-col">
-      {/* Compact Header */}
-      <div className="bg-gradient-to-r from-plum-deep via-plum to-rose-gold/30 py-4 px-4 shrink-0">
+    <div className="h-[calc(100dvh-80px)] bg-cream flex flex-col overflow-hidden">
+      {/* Compact Locked Header */}
+      <div className="bg-gradient-to-r from-plum-deep via-plum to-rose-gold/30 py-3 px-4 shrink-0">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs font-medium mb-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-[10px] md:text-xs font-medium mb-1.5">
             <Sparkles className="w-3.5 h-3.5 text-gold-light" />
             Powered by Llama 3.3 70B
           </div>
-          <h1 className="text-xl md:text-2xl font-bold font-display text-white mb-1">
+          <h1 className="text-xl md:text-2xl font-bold font-display text-white mb-0.5">
             AI Style Advisor
           </h1>
-          <p className="text-white/60 text-xs max-w-xl mx-auto">
+          <p className="text-white/60 text-[10px] md:text-xs max-w-xl mx-auto">
             Tell me about your occasion, style, and budget. I&apos;ll recommend the perfect look and find the best Hyderabad salon for you.
           </p>
         </div>
       </div>
 
-      {/* Spacious Chat Interface Container */}
-      <div className="flex-1 max-w-4xl w-full mx-auto flex flex-col overflow-hidden relative" style={{ height: 'calc(100dvh - 210px)', minHeight: '680px' }}>
+      {/* Spacious Full Height Chat Workspace Container */}
+      <div className="flex-1 max-w-4xl w-full mx-auto flex flex-col overflow-hidden relative bg-white md:rounded-t-2xl shadow-sm border-x border-gray-100/50">
         <ChatInterface />
       </div>
     </div>
