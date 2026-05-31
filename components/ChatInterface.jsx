@@ -50,6 +50,20 @@ export default function ChatInterface() {
       return matchArea || matchSpec || matchTag || matchName;
     }).slice(0, 3);
   };
+  
+  const hasRecommendationIntent = (userText) => {
+    const lower = userText.toLowerCase();
+    return (
+      lower.includes('recommend') ||
+      lower.includes('suggest') ||
+      lower.includes('list') ||
+      lower.includes('seek') ||
+      lower.includes('find') ||
+      lower.includes('show') ||
+      lower.includes('where') ||
+      lower.includes('book')
+    );
+  };
 
   const handleSend = async (messageText) => {
     const text = messageText || input.trim();
@@ -76,14 +90,12 @@ Here are the salons in our Hyderabad database:
 ${salonContext}
 
 Guidelines:
-- Always recommend specific salons from the database above
-- Include salon name, area, relevant services, and price range
-- Be warm, professional, and knowledgeable about Hyderabad neighborhoods
-- If the user mentions a wedding, suggest pre-bridal packages and timelines
-- If they mention budget constraints, recommend affordable options
-- Mention home service options when relevant
-- Keep responses concise but helpful (max 3-4 paragraphs)
-- Use emojis sparingly for warmth`
+- Recommend specific salons ONLY when the user asks for suggestions, lists, or to find options.
+- If they ask general questions (e.g. "who are you?", "how many shops are there?"), answer the question directly and warm, and do NOT list salons unless they ask.
+- Include salon name, area, relevant services, and price range when recommending.
+- Be warm, professional, and knowledgeable about Hyderabad neighborhoods.
+- Keep responses concise but helpful (max 3 paragraphs).
+- Use emojis sparingly for warmth.`
         },
         ...newMessages.map(m => ({ role: m.role, content: m.content }))
       ];
@@ -100,33 +112,51 @@ Guidelines:
         const aiContent = data.choices[0].message.content;
         setMessages((prev) => [...prev, { role: 'assistant', content: aiContent }]);
 
-        // Find matching salons to display as cards
-        const matched = findMatchingSalons(aiContent + ' ' + text);
-        setRecommendedSalons(matched);
+        // Only recommend cards if the user has requested recommendations/finding
+        if (hasRecommendationIntent(text)) {
+          const matched = findMatchingSalons(aiContent + ' ' + text);
+          setRecommendedSalons(matched);
+        } else {
+          setRecommendedSalons([]);
+        }
       } else {
         // Fallback if API fails
-        const matched = findMatchingSalons(text);
-        setRecommendedSalons(matched);
-
-        const fallback = matched.length > 0
-          ? `Based on your request, I'd recommend checking out **${matched.map(s => s.name).join(', ')}**. ${matched[0] ? `${matched[0].name} in ${matched[0].area} specializes in ${matched[0].specializations.join(', ')} with prices ranging ${matched[0].priceRange}.` : ''}\n\nI've shown the salon cards below — tap any to see full details and book!`
-          : "I'd love to help! Could you tell me more about what you're looking for? For example: the occasion, your preferred Hyderabad area, and your budget range?";
-
-        setMessages((prev) => [...prev, { role: 'assistant', content: fallback }]);
+        if (hasRecommendationIntent(text)) {
+          const matched = findMatchingSalons(text);
+          setRecommendedSalons(matched);
+          const fallback = matched.length > 0
+            ? `Based on your request, I'd recommend checking out **${matched.map(s => s.name).join(', ')}**. ${matched[0] ? `${matched[0].name} in ${matched[0].area} specializes in ${matched[0].specializations.join(', ')}.` : ''}\n\nI've shown the salon cards below — tap any to see details and book!`
+            : "I'd love to help! Could you tell me more about what you're looking for?";
+          setMessages((prev) => [...prev, { role: 'assistant', content: fallback }]);
+        } else {
+          setRecommendedSalons([]);
+          const fallback = "I'd love to help! How can I assist you with your beauty styling journey today?";
+          setMessages((prev) => [...prev, { role: 'assistant', content: fallback }]);
+        }
       }
     } catch (error) {
-      const matched = findMatchingSalons(text);
-      setRecommendedSalons(matched);
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: matched.length > 0
-            ? `I found some great options for you! Check out **${matched.map(s => s.name).join(', ')}** below. Tap any salon card to see details and book your appointment.`
-            : "I'd love to help you find the perfect salon! Could you tell me the area you prefer in Hyderabad and what service you're looking for?",
-        },
-      ]);
+      if (hasRecommendationIntent(text)) {
+        const matched = findMatchingSalons(text);
+        setRecommendedSalons(matched);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: matched.length > 0
+              ? `I found some great options for you! Check out **${matched.map(s => s.name).join(', ')}** below.`
+              : "I'd love to help you find the perfect salon! Could you tell me the area you prefer in Hyderabad and what service you're looking for?",
+          },
+        ]);
+      } else {
+        setRecommendedSalons([]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            content: "I'd love to assist you! Feel free to ask me questions, seek style advice, or ask me to recommend the best local salons.",
+          },
+        ]);
+      }
     } finally {
       setLoading(false);
     }
