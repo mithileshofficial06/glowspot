@@ -3,26 +3,24 @@
 @tailwind utilities;
 
 /* ========================================
-   GlowSpot Hyderabad — Design System
+   GlowSpot Hyderabad — Dark Luxury Theme
    ======================================== */
 
 :root {
-  --color-rose-gold: #B76E79;
-  --color-rose-light: #F4C2C2;
-  --color-rose-blush: #FFF0F0;
-  --color-plum: #4A1942;
-  --color-plum-deep: #2D1035;
-  --color-plum-light: #6B3A6B;
-  --color-champagne: #F7E7CE;
-  --color-champagne-light: #FDF5E6;
-  --color-cream: #FFFDF7;
-  --color-gold: #D4AF37;
-  --color-gold-light: #F5D063;
-  --gradient-primary: linear-gradient(135deg, #B76E79 0%, #D4AF37 100%);
-  --gradient-hero: linear-gradient(135deg, #2D1035 0%, #4A1942 30%, #B76E79 70%, #F7E7CE 100%);
-  --gradient-card: linear-gradient(135deg, rgba(74,25,66,0.03) 0%, rgba(183,110,121,0.08) 100%);
-  --shadow-glow: 0 0 30px rgba(183,110,121,0.3);
-  --shadow-card: 0 4px 20px rgba(0,0,0,0.08);
+  --color-noir: #0a0a0a;
+  --color-noir-50: #141414;
+  --color-noir-100: #1a1a1a;
+  --color-noir-200: #222222;
+  --color-noir-300: #2a2a2a;
+  --color-neon-gold: #FFD700;
+  --color-neon-amber: #FFBF00;
+  --color-emerald-glow: #00E676;
+  --color-white-soft: rgba(255, 255, 255, 0.85);
+  --gradient-primary: linear-gradient(135deg, #FFD700 0%, #00E676 100%);
+  --gradient-hero: linear-gradient(135deg, #0a0a0a 0%, #141414 40%, #1a1a1a 100%);
+  --gradient-card: linear-gradient(135deg, rgba(255,215,0,0.04) 0%, rgba(0,230,118,0.06) 100%);
+  --shadow-glow: 0 0 30px rgba(255,215,0,0.15);
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.4);
 }
 
 /* ========================================
@@ -43,28 +41,91 @@ html {
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--color-cream);
-  color: #1a1a2e;
+  background-color: var(--color-noir);
+  color: rgba(255, 255, 255, 0.85);
   overflow-x: hidden;
   line-height: 1.6;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar — Dark Luxury */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-champagne-light);
+  background: #0a0a0a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-rose-gold);
-  border-radius: 4px;
+  background: #333333;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-plum-light);
+  background: #FFD700;
+}
+
+/* ========================================
+   Silk Fabric Background
+   ======================================== */
+
+.silk-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.silk-layer {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  opacity: 0.04;
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(255, 255, 255, 0.08) 2px,
+    rgba(255, 255, 255, 0.08) 4px,
+    transparent 4px,
+    transparent 20px
+  );
+  animation: silkWave 12s ease-in-out infinite;
+}
+
+.silk-layer-2 {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  opacity: 0.03;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(255, 215, 0, 0.06) 3px,
+    rgba(255, 215, 0, 0.06) 5px,
+    transparent 5px,
+    transparent 25px
+  );
+  animation: silkWave2 15s ease-in-out infinite;
+}
+
+/* Film grain overlay */
+.grain-overlay {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  animation: grain 8s steps(10) infinite;
 }
 
 /* ========================================
@@ -72,31 +133,31 @@ body {
    ======================================== */
 
 @layer components {
-  /* Glassmorphism */
+  /* Glassmorphism — Dark */
   .glass {
-    background: rgba(255, 253, 247, 0.7);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(183, 110, 121, 0.15);
+    background: rgba(20, 20, 20, 0.75);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
   }
 
   .glass-dark {
-    background: rgba(45, 16, 53, 0.75);
+    background: rgba(10, 10, 10, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(183, 110, 121, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.04);
   }
 
-  /* Gradient Text */
+  /* Gradient Text — Gold */
   .gradient-text {
-    background: linear-gradient(135deg, var(--color-rose-gold) 0%, var(--color-gold) 50%, var(--color-rose-gold) 100%);
+    background: linear-gradient(135deg, #FFD700 0%, #FFBF00 50%, #FFD700 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .gradient-text-plum {
-    background: linear-gradient(135deg, var(--color-plum) 0%, var(--color-rose-gold) 100%);
+  .gradient-text-emerald {
+    background: linear-gradient(135deg, #00E676 0%, #FFD700 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -104,14 +165,15 @@ body {
 
   /* Premium Buttons */
   .btn-primary {
-    @apply px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300;
-    background: linear-gradient(135deg, var(--color-rose-gold) 0%, var(--color-plum-light) 100%);
-    box-shadow: 0 4px 15px rgba(183, 110, 121, 0.3);
+    @apply px-6 py-3 rounded-xl font-semibold text-black transition-all duration-300;
+    background: linear-gradient(135deg, #FFD700 0%, #FFBF00 50%, #FFE44D 100%);
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.25);
   }
 
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(183, 110, 121, 0.45);
+    box-shadow: 0 8px 30px rgba(255, 215, 0, 0.4);
+    filter: brightness(1.1);
   }
 
   .btn-primary:active {
@@ -121,20 +183,20 @@ body {
   .btn-secondary {
     @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300;
     background: transparent;
-    border: 2px solid var(--color-rose-gold);
-    color: var(--color-rose-gold);
+    border: 1.5px solid rgba(255, 215, 0, 0.3);
+    color: #FFD700;
   }
 
   .btn-secondary:hover {
-    background: var(--color-rose-gold);
-    color: white;
+    background: rgba(255, 215, 0, 0.08);
+    border-color: #FFD700;
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(183, 110, 121, 0.3);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.15);
   }
 
   .btn-gold {
-    @apply px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300;
-    background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 50%, var(--color-gold) 100%);
+    @apply px-6 py-3 rounded-xl font-semibold text-black transition-all duration-300;
+    background: linear-gradient(135deg, #FFD700 0%, #FFE44D 50%, #FFD700 100%);
     background-size: 200% 200%;
     animation: shimmerGold 3s ease-in-out infinite;
   }
@@ -145,68 +207,77 @@ body {
     100% { background-position: 0% 50%; }
   }
 
-  /* Cards */
+  /* Cards — Dark Glass */
   .card {
     @apply rounded-2xl overflow-hidden transition-all duration-300;
-    background: white;
+    background: rgba(20, 20, 20, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: var(--shadow-card);
   }
 
   .card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(183, 110, 121, 0.18);
+    border-color: rgba(255, 215, 0, 0.12);
+    box-shadow: 0 12px 40px rgba(255, 215, 0, 0.08);
   }
 
   .card-glass {
     @apply rounded-2xl overflow-hidden transition-all duration-300;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(26, 26, 26, 0.5);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(183, 110, 121, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: var(--shadow-card);
   }
 
   /* Tags / Badges */
   .tag {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-    background: rgba(183, 110, 121, 0.1);
-    color: var(--color-rose-gold);
+    background: rgba(255, 215, 0, 0.08);
+    color: #FFD700;
   }
 
   .tag-gold {
     @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-    background: rgba(212, 175, 55, 0.12);
-    color: var(--color-gold-dark, #B8960C);
+    background: rgba(0, 230, 118, 0.08);
+    color: #00E676;
   }
 
   /* Section Styling */
   .section-heading {
     @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-4;
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+    color: white;
   }
 
   .section-subheading {
-    @apply text-lg md:text-xl text-gray-600 max-w-2xl mx-auto;
+    @apply text-lg md:text-xl max-w-2xl mx-auto;
+    color: rgba(255, 255, 255, 0.45);
   }
 
   /* Input Styling */
   .input-styled {
     @apply w-full px-4 py-3 rounded-xl border transition-all duration-300 outline-none;
-    border-color: rgba(183, 110, 121, 0.2);
-    background: white;
+    border-color: rgba(255, 255, 255, 0.08);
+    background: rgba(20, 20, 20, 0.6);
+    color: white;
   }
 
   .input-styled:focus {
-    border-color: var(--color-rose-gold);
-    box-shadow: 0 0 0 3px rgba(183, 110, 121, 0.1);
+    border-color: rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.08);
+  }
+
+  .input-styled::placeholder {
+    color: rgba(255, 255, 255, 0.25);
   }
 
   /* Shimmer Loading */
   .shimmer {
     background: linear-gradient(
       90deg,
-      rgba(183, 110, 121, 0.06) 0%,
-      rgba(183, 110, 121, 0.15) 50%,
-      rgba(183, 110, 121, 0.06) 100%
+      rgba(255, 215, 0, 0.03) 0%,
+      rgba(255, 215, 0, 0.08) 50%,
+      rgba(255, 215, 0, 0.03) 100%
     );
     background-size: 200% 100%;
     animation: shimmer 2s linear infinite;
@@ -223,14 +294,14 @@ body {
     content: '';
     position: absolute;
     border-radius: 50%;
-    opacity: 0.12;
+    opacity: 0.08;
     animation: float 8s ease-in-out infinite;
   }
 
   .particles-bg::before {
     width: 300px;
     height: 300px;
-    background: var(--color-rose-gold);
+    background: #FFD700;
     top: -100px;
     right: -100px;
     animation-delay: 0s;
@@ -239,7 +310,7 @@ body {
   .particles-bg::after {
     width: 200px;
     height: 200px;
-    background: var(--color-gold);
+    background: #00E676;
     bottom: -60px;
     left: -60px;
     animation-delay: 3s;
@@ -288,15 +359,16 @@ body {
 
 .chat-bubble-user {
   @apply px-4 py-3 rounded-2xl rounded-br-md max-w-[85%] ml-auto;
-  background: linear-gradient(135deg, var(--color-rose-gold) 0%, var(--color-plum-light) 100%);
-  color: white;
+  background: linear-gradient(135deg, #FFD700 0%, #FFBF00 100%);
+  color: #0a0a0a;
 }
 
 .chat-bubble-ai {
   @apply px-4 py-3 rounded-2xl rounded-bl-md max-w-[85%];
-  background: white;
-  border: 1px solid rgba(183, 110, 121, 0.12);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  background: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 /* Typing Indicator */
@@ -310,7 +382,7 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--color-rose-gold);
+  background: #FFD700;
   opacity: 0.4;
   animation: typingBounce 1.4s infinite;
 }
@@ -322,10 +394,6 @@ body {
   0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
   30% { transform: translateY(-8px); opacity: 1; }
 }
-
-/* ========================================
-   Page Transitions
-   ======================================== */
 
 /* ========================================
    Responsive & Accessibility Adjustments
@@ -352,12 +420,10 @@ body {
     @apply text-sm md:text-base;
   }
 
-  /* Reduce body font size slightly on small screens */
   body {
     font-size: 0.95rem;
   }
 
-  /* Improve touch accessibility */
   .touch-target {
     min-height: 44px;
     min-width: 44px;
@@ -366,6 +432,5 @@ body {
 
 /* Star Rating */
 .star-rating {
-  color: var(--color-gold);
+  color: #FFD700;
 }
-

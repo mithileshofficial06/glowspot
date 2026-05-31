@@ -35,13 +35,13 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group" id="nav-logo">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-              <Scissors className="w-5 h-5 text-white" />
+          <Link href="/" className="flex items-center gap-2.5 group" id="nav-logo">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-gold to-emerald-glow flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-glow">
+              <Scissors className="w-5 h-5 text-black" />
             </div>
             <div>
               <span className="text-xl font-bold font-display gradient-text">GlowSpot</span>
-              <span className="hidden sm:inline text-xs text-gray-500 ml-1 font-body">Hyderabad</span>
+              <span className="hidden sm:inline text-xs text-white/30 ml-1.5 font-body">Hyderabad</span>
             </div>
           </Link>
 
@@ -57,8 +57,8 @@ export default function Navbar() {
                   id={`nav-${link.label.toLowerCase().replace(/\s/g, '-')}`}
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                     isActive
-                      ? 'bg-rose-gold/10 text-rose-gold'
-                      : 'text-gray-600 hover:text-rose-gold hover:bg-rose-gold/5'
+                      ? 'bg-neon-gold/10 text-neon-gold'
+                      : 'text-white/50 hover:text-neon-gold hover:bg-white/[0.03]'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -83,7 +83,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-xl text-gray-600 hover:text-rose-gold hover:bg-rose-gold/5 transition-all duration-300"
+            className="md:hidden p-2 rounded-xl text-white/50 hover:text-neon-gold hover:bg-white/[0.03] transition-all duration-300"
             id="nav-mobile-toggle"
             aria-label="Toggle menu"
           >
@@ -100,7 +100,7 @@ export default function Navbar() {
       >
         {/* Backdrop */}
         <div
-          className={`absolute inset-0 bg-plum-deep/50 backdrop-blur-sm transition-opacity duration-500 ${
+          className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-500 ${
             isOpen ? 'opacity-100' : 'opacity-0'
           }`}
           onClick={() => setIsOpen(false)}
@@ -108,7 +108,7 @@ export default function Navbar() {
 
         {/* Drawer */}
         <div
-          className={`absolute right-0 top-0 h-full w-72 bg-cream shadow-2xl transition-transform duration-500 ${
+          className={`absolute right-0 top-0 h-full w-72 bg-noir-50 border-l border-white/[0.05] shadow-2xl transition-transform duration-500 ${
             isOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
@@ -116,7 +116,7 @@ export default function Navbar() {
             {/* Close Button */}
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-xl text-gray-400 hover:text-rose-gold transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-xl text-white/30 hover:text-neon-gold transition-colors"
               aria-label="Close menu"
             >
               <X className="w-6 h-6" />
@@ -124,8 +124,8 @@ export default function Navbar() {
 
             {/* Logo */}
             <div className="flex items-center gap-2 mb-8 mt-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center">
-                <Scissors className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-gold to-emerald-glow flex items-center justify-center shadow-glow">
+                <Scissors className="w-5 h-5 text-black" />
               </div>
               <span className="text-xl font-bold font-display gradient-text">GlowSpot</span>
             </div>
@@ -142,8 +142,8 @@ export default function Navbar() {
                     onClick={() => setIsOpen(false)}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
                       isActive
-                        ? 'bg-rose-gold/10 text-rose-gold'
-                        : 'text-gray-600 hover:text-rose-gold hover:bg-rose-gold/5'
+                        ? 'bg-neon-gold/10 text-neon-gold'
+                        : 'text-white/50 hover:text-neon-gold hover:bg-white/[0.03]'
                     }`}
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
@@ -168,7 +168,7 @@ export default function Navbar() {
 
             {/* Bottom Info */}
             <div className="absolute bottom-8 left-6 right-6">
-              <div className="text-xs text-gray-400 flex items-center gap-1">
+              <div className="text-xs text-white/20 flex items-center gap-1">
                 <MapPin className="w-3 h-3" />
                 Serving Hyderabad
               </div>

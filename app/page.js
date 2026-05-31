@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { Sparkles, MessageCircle, Eye, Calendar, Star, MapPin, ArrowRight, Zap, Shield, Clock } from 'lucide-react';
 
 const howItWorks = [
-  { step: '01', title: 'Describe Your Look', desc: 'Tell our AI what you need — occasion, style, budget, area', icon: MessageCircle, color: 'from-rose-gold to-pink-400' },
-  { step: '02', title: 'Preview on Your Face', desc: 'Upload a selfie and see AI-recommended styles visualized', icon: Eye, color: 'from-purple-500 to-plum' },
-  { step: '03', title: 'Get Matched', desc: 'AI finds the perfect Hyderabad salon for your specific look', icon: Sparkles, color: 'from-gold to-amber-500' },
+  { step: '01', title: 'Describe Your Look', desc: 'Tell our AI what you need — occasion, style, budget, area', icon: MessageCircle, color: 'from-neon-gold to-neon-amber' },
+  { step: '02', title: 'Preview on Your Face', desc: 'Upload a selfie and see AI-recommended styles visualized', icon: Eye, color: 'from-violet-500 to-purple-600' },
+  { step: '03', title: 'Get Matched', desc: 'AI finds the perfect Hyderabad salon for your specific look', icon: Sparkles, color: 'from-emerald-glow to-green-500' },
   { step: '04', title: 'Book Instantly', desc: 'Confirm your appointment in one tap with available time slots', icon: Calendar, color: 'from-emerald-500 to-teal-500' },
 ];
 
@@ -36,7 +36,7 @@ export default function Home() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="how-it-works">
         <div className="text-center mb-14">
           <span className="tag-gold mb-4 inline-block">How It Works</span>
-          <h2 className="section-heading gradient-text-plum">Your Beauty Journey in 4 Steps</h2>
+          <h2 className="section-heading gradient-text">Your Beauty Journey in 4 Steps</h2>
           <p className="section-subheading">From first thought to booked appointment — AI handles everything.</p>
         </div>
 
@@ -47,15 +47,15 @@ export default function Home() {
               <div key={i} className="relative card p-6 text-center group">
                 {i < 3 && (
                   <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
-                    <ArrowRight className="w-6 h-6 text-gray-200" />
+                    <ArrowRight className="w-6 h-6 text-white/10" />
                   </div>
                 )}
-                <div className="text-xs font-bold text-rose-gold/40 mb-4">{item.step}</div>
+                <div className="text-xs font-bold text-neon-gold/40 mb-4">{item.step}</div>
                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
                   <Icon className="w-7 h-7 text-white" />
                 </div>
-                <h3 className="text-lg font-bold font-display text-gray-800 mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-500">{item.desc}</p>
+                <h3 className="text-lg font-bold font-display text-white mb-2">{item.title}</h3>
+                <p className="text-sm text-white/35">{item.desc}</p>
               </div>
             );
           })}
@@ -67,8 +67,8 @@ export default function Home() {
         <div className="flex items-end justify-between mb-10">
           <div>
             <span className="tag mb-3 inline-block">Top Rated</span>
-            <h2 className="section-heading gradient-text-plum text-left">Featured Salons</h2>
-            <p className="text-gray-500 mt-2">Highest-rated beauty destinations in Hyderabad</p>
+            <h2 className="section-heading gradient-text text-left">Featured Salons</h2>
+            <p className="text-white/35 mt-2">Highest-rated beauty destinations in Hyderabad</p>
           </div>
           <Link href="/salons" className="btn-secondary hidden sm:flex items-center gap-2">
             View All <ArrowRight className="w-4 h-4" />
@@ -90,11 +90,11 @@ export default function Home() {
 
       {/* AI Features Showcase */}
       <section className="py-20 relative overflow-hidden" id="ai-features">
-        <div className="absolute inset-0 bg-gradient-to-br from-plum-deep via-plum to-rose-gold/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-noir-50 via-noir-100 to-noir-200 border-y border-white/[0.04]" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/80 text-sm font-medium mb-4">
-              <Zap className="w-4 h-4 text-gold" />
+              <Zap className="w-4 h-4 text-neon-gold" />
               Powered by NVIDIA NIM
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-display text-white mb-4">
@@ -116,12 +116,12 @@ export default function Home() {
               <Link
                 key={i}
                 href={f.href}
-                className="group p-6 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-rose-gold/30 hover:bg-white/10 transition-all duration-500"
+                className="group p-6 rounded-2xl bg-white/[0.02] backdrop-blur-sm border border-white/[0.05] hover:border-neon-gold/20 hover:bg-white/[0.04] transition-all duration-500"
               >
                 <span className="text-3xl mb-4 block">{f.icon}</span>
                 <h3 className="text-lg font-bold text-white mb-2 font-display">{f.title}</h3>
                 <p className="text-sm text-white/50 leading-relaxed">{f.desc}</p>
-                <span className="inline-flex items-center gap-1 mt-4 text-sm text-rose-gold font-medium group-hover:gap-2 transition-all">
+                <span className="inline-flex items-center gap-1 mt-4 text-sm text-neon-gold font-medium group-hover:gap-2 transition-all">
                   Try it <ArrowRight className="w-4 h-4" />
                 </span>
               </Link>
@@ -137,7 +137,7 @@ export default function Home() {
             <MapPin className="w-3 h-3 inline mr-1" />
             Explore
           </span>
-          <h2 className="section-heading gradient-text-plum">Salons Across Hyderabad</h2>
+          <h2 className="section-heading gradient-text">Salons Across Hyderabad</h2>
           <p className="section-subheading">10 neighborhoods. 25 verified salons. One city we love.</p>
         </div>
 
@@ -146,21 +146,21 @@ export default function Home() {
             <Link
               key={i}
               href={`/salons?area=${encodeURIComponent(n.name)}`}
-              className="card p-4 text-center group hover:bg-gradient-to-br hover:from-rose-gold/5 hover:to-gold/5"
+              className="card p-4 text-center group hover:bg-gradient-to-br hover:from-neon-gold/[0.03] hover:to-emerald-glow/[0.03]"
             >
-              <div className="w-10 h-10 rounded-xl bg-plum/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-plum/20 transition-colors">
-                <MapPin className="w-5 h-5 text-plum" />
+              <div className="w-10 h-10 rounded-xl bg-neon-gold/5 border border-white/[0.05] flex items-center justify-center mx-auto mb-3 group-hover:bg-neon-gold/10 transition-colors">
+                <MapPin className="w-5 h-5 text-neon-gold" />
               </div>
-              <h4 className="text-sm font-bold text-gray-800 mb-1">{n.name}</h4>
-              <p className="text-xs text-gray-400">{n.tagline}</p>
-              <p className="text-xs text-rose-gold mt-1 font-medium">{n.count} salons</p>
+              <h4 className="text-sm font-bold text-white mb-1">{n.name}</h4>
+              <p className="text-xs text-white/30">{n.tagline}</p>
+              <p className="text-xs text-neon-gold mt-1 font-medium">{n.count} salons</p>
             </Link>
           ))}
         </div>
       </section>
 
       {/* Stats Banner */}
-      <section className="py-16 bg-gradient-to-r from-rose-blush to-champagne-light">
+      <section className="py-16 bg-gradient-to-r from-noir-100 to-noir-200 border-y border-white/[0.04]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
@@ -171,7 +171,7 @@ export default function Home() {
             ].map((s, i) => (
               <div key={i}>
                 <p className="text-3xl md:text-4xl font-bold gradient-text font-display">{s.value}</p>
-                <p className="text-sm text-gray-500 mt-1">{s.label}</p>
+                <p className="text-sm text-white/35 mt-1">{s.label}</p>
               </div>
             ))}
           </div>
@@ -180,10 +180,10 @@ export default function Home() {
 
       {/* CTA Banner */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        <div className="relative rounded-3xl overflow-hidden p-12 md:p-16 text-center bg-gradient-to-br from-plum-deep via-plum to-rose-gold/30">
+        <div className="relative rounded-3xl overflow-hidden p-12 md:p-16 text-center bg-gradient-to-br from-noir-100 via-noir-200 to-noir-300 border border-white/[0.05]">
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute w-64 h-64 rounded-full bg-rose-gold/10 blur-3xl -top-10 -right-10 animate-float" />
-            <div className="absolute w-48 h-48 rounded-full bg-gold/10 blur-3xl bottom-10 -left-10 animate-float" style={{ animationDelay: '3s' }} />
+            <div className="absolute w-64 h-64 rounded-full bg-neon-gold/5 blur-3xl -top-10 -right-10 animate-float" />
+            <div className="absolute w-48 h-48 rounded-full bg-emerald-glow/5 blur-3xl bottom-10 -left-10 animate-float" style={{ animationDelay: '3s' }} />
           </div>
           <div className="relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold font-display text-white mb-4">
