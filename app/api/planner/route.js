@@ -1,26 +1,81 @@
 export async function POST(request) {
   try {
-    const { role, weddingDate, budget, areas, notes, salonContext } = await request.json();
+    const { 
+      role, 
+      weddingDate, 
+      budget, 
+      areas, 
+      notes, 
+      salonContext,
+      stylePreset,
+      homeService,
+      entourage,
+      faceAnalysis
+    } = await request.json();
 
-    const systemPrompt = `You are a wedding beauty planner AI for Hyderabad, India. Create a detailed day-by-day beauty schedule for a ${role} with a wedding on ${weddingDate} and a budget of ₹${budget?.toLocaleString()}.
+    // Construct Entourage text representation
+    let entourageText = '';
+    if (entourage) {
+      const parts = [];
+      if (entourage.bridesmaids && entourage.bridesmaids > 0) {
+        parts.push(`${entourage.bridesmaids} Bridesmaid(s)`);
+      }
+      if (entourage.mother) {
+        parts.push(`Mother of the Bride`);
+      }
+      if (entourage.groom) {
+        parts.push(`Groom`);
+      }
+      entourageText = parts.join(', ');
+    }
 
-${areas?.length > 0 ? `Preferred areas: ${areas.join(', ')}` : 'Cover all Hyderabad areas.'}
-${notes ? `Additional notes: ${notes}` : ''}
+    const systemPrompt = `You are an elite wedding beauty planner and luxury bridal coordinator for Hyderabad, India. Create a detailed wedding beauty schedule in strict JSON format.
 
-Available salons in Hyderabad:
-${salonContext || 'Use your knowledge of Hyderabad salons.'}
+Aesthetics style preset: ${stylePreset || 'Traditional Indian Bride'}
+${faceAnalysis ? `User Face Analysis: Shape is ${faceAnalysis.faceShape}, Skin Tone is ${faceAnalysis.skinTone}, Features: ${faceAnalysis.features}` : ''}
+${homeService ? 'NOTE: The user requested premium home-services/on-venue styling. Include a travel surcharge (+₹2,000 to ₹5,000 depending on budget) to costs, prioritize mobile services, and set "homeService": true on items.' : ''}
+${entourageText ? `Include side-by-side or coordinated milestones for the Entourage: ${entourageText}. Add them in the same timeline. Set "forWho" to "Bride", "Entourage", or "Both". If it includes entourage, specify "entourageService" (what they will get) and "entourageCost".` : ''}
 
-Create a timeline with:
-- Pre-wedding skincare sessions (starting 4-6 weeks before)
-- Hair treatments and trials
-- Mehndi session
-- Final grooming
-- Wedding day makeup and styling
+Create a beautiful timeline tailored for a ${role} with a wedding on ${weddingDate} and a total target budget of ₹${budget?.toLocaleString()}.
+${areas?.length > 0 ? `Preferred Hyderabad areas: ${areas.join(', ')}` : 'Available across all Hyderabad.'}
+${notes ? `Additional requirements: ${notes}` : ''}
 
-For each item include: date/timing relative to wedding, service name, recommended salon name and area, estimated cost.
-Keep the total within the budget of ₹${budget?.toLocaleString()}.
-Be specific to Hyderabad's wedding culture (Telugu, Muslim, and North Indian traditions).
-Format clearly with dates and details.`;
+Available salons context in Hyderabad:
+${salonContext || 'Use major top-rated salons like Bubbles Hair & Beauty, Oasis Spa, Page 3, Mirrors Salon.'}
+
+You MUST output ONLY a valid JSON object matching the following structure (no markdown wrapper, no extra text):
+{
+  "plan": {
+    "totalCost": 35000,
+    "items": [
+      {
+        "date": "20 Jun",
+        "daysLeft": "6 weeks before",
+        "title": "Start Pre-Bridal Skincare",
+        "desc": "Detail exactly what skincare/hair treatment they should get, customized for their aesthetic style preset and skin tone/face shape.",
+        "salon": "Name of recommended salon from context",
+        "area": "Salon area",
+        "service": "Service name",
+        "cost": 3000,
+        "category": "skin",
+        "forWho": "Bride",
+        "entourageService": "Optional entourage service name",
+        "entourageCost": 0,
+        "homeService": ${homeService ? 'true' : 'false'},
+        "styleTip": "Elite makeup/skin tips tailored for this milestone and their style preset."
+      }
+    ]
+  }
+}
+
+Timeline requirements:
+1. Skincare/facial starts 6 weeks before.
+2. Hair prep/spa starts 4 weeks before.
+3. Makeup trial/consultation 2 weeks before.
+4. Mehndi application 2-3 days before.
+5. Final groomings 1 day before.
+6. The Big Day makeup, styling, draping.
+All items MUST fit within the budget of ₹${budget?.toLocaleString()}. Return ONLY valid JSON.`;
 
     const response = await fetch(
       'https://integrate.api.nvidia.com/v1/chat/completions',
@@ -34,10 +89,10 @@ Format clearly with dates and details.`;
           model: 'meta/llama-3.3-70b-instruct',
           messages: [
             { role: 'system', content: systemPrompt },
-            { role: 'user', content: `Please create my complete wedding beauty plan. I am the ${role}, wedding date is ${weddingDate}, budget is ₹${budget?.toLocaleString()}.${notes ? ` ${notes}` : ''}` },
+            { role: 'user', content: `Generate my premium JSON wedding beauty plan for: Role: ${role}, Date: ${weddingDate}, Budget: ₹${budget?.toLocaleString()}, Preset: ${stylePreset || 'Default'}.` },
           ],
-          max_tokens: 1500,
-          temperature: 0.7,
+          max_tokens: 2000,
+          temperature: 0.5,
           top_p: 0.9,
         }),
       }
@@ -53,7 +108,21 @@ Format clearly with dates and details.`;
     }
 
     const data = await response.json();
-    return Response.json(data);
+    
+    if (data.choices && data.choices[0]) {
+      const content = data.choices[0].message.content;
+      try {
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
+          return Response.json(parsed);
+        }
+      } catch (parseError) {
+        console.error('JSON parse error in route:', parseError, content);
+      }
+    }
+
+    return Response.json({ error: 'Failed to generate structured plan' }, { status: 500 });
   } catch (error) {
     console.error('Planner API error:', error);
     return Response.json(

@@ -1,29 +1,19 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Bot, User, Loader2 } from 'lucide-react';
+import { Send, Sparkles, Bot, User, Loader2, MessageSquare, Flame, Lightbulb, HelpCircle } from 'lucide-react';
 import SalonCard from './SalonCard';
 import salons from '@/data/salons.json';
 
 const suggestions = [
-  "Bridal Makeup", 
-  "Hair Spa", 
-  "Near Hitech City", 
-  "Under ₹1000", 
-  "Home Service", 
-  "Men's Grooming",
-  "Party Makeup", 
-  "Keratin Treatment", 
-  "Mehndi"
+  { text: "Bridal Makeup for a Telugu wedding", category: "Wedding", icon: Flame },
+  { text: "Premium Hair Spa near Hitech City", category: "Trending", icon: Lightbulb },
+  { text: "Home service for facial and grooming", category: "Convenient", icon: Sparkles },
+  { text: "Trendy haircut at premium Madhapur salon", category: "Style Guide", icon: HelpCircle },
 ];
 
 export default function ChatInterface() {
-  const [messages, setMessages] = useState([
-    {
-      role: 'assistant',
-      content: "✨ Welcome to GlowSpot AI! I'm your personal beauty advisor for Hyderabad.\n\nTell me about your occasion, style preference, budget, and preferred area — I'll recommend the perfect salon and look for you.\n\nTry something like: \"I need bridal makeup for my wedding next week in Banjara Hills under ₹15,000\"",
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const chatContainerRef = useRef(null);
@@ -68,12 +58,7 @@ export default function ChatInterface() {
   };
 
   const handleClearChat = () => {
-    setMessages([
-      {
-        role: 'assistant',
-        content: "✨ Welcome to GlowSpot AI! I'm your personal beauty advisor for Hyderabad.\n\nTell me about your occasion, style preference, budget, and preferred area — I'll recommend the perfect salon and look for you.",
-      },
-    ]);
+    setMessages([]);
   };
 
   const handleSend = async (messageText) => {
@@ -94,14 +79,14 @@ export default function ChatInterface() {
       const apiMessages = [
         {
           role: 'system',
-          content: `You are GlowSpot AI, a beauty salon advisor for Hyderabad. You help users find the perfect salon, recommend styles, and book appointments.
+          content: `You are GlowSpot AI, a premium beauty salon advisor and personal stylist for Hyderabad. You help users find the perfect salon, recommend styles, and book appointments.
 
 Here are the salons in our Hyderabad database:
 ${salonContext}
 
 Guidelines:
 - CRITICAL: If the user mentions an upcoming event, wedding, marriage, function, or service request, DO NOT directly suggest specific salons or make final service recommendations on the first turn.
-- Instead, congratulate them warmly and ask 2-3 warm, targeted questions to understand their needs (e.g. style feel like traditional vs modern, skin type, hair texture, budget range, or favorite neighborhood in Hyderabad).
+- Instead, congratulate them warmly and ask 2-3 warm, targeted questions to understand their needs (e.g. preferred look like traditional vs modern, skin type, hair texture, budget range, or favorite neighborhood in Hyderabad).
 - Act as a true consultative beauty advisor: gather insights first and only suggest specific salons once you have their answers, or if they explicitly request: "recommend a salon" or "list the options".
 - Recommend specific salons ONLY when the user asks for suggestions, lists, or to find/book options.
 - If they ask general questions (e.g. "who are you?", "how many shops are there?"), answer the question directly and warmly, and do NOT list salons unless they ask.
@@ -163,12 +148,14 @@ Guidelines:
           <span className="font-bold font-display text-gray-800 text-sm md:text-base">GlowSpot AI</span>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleClearChat}
-            className="text-xs px-3 py-1.5 rounded-xl bg-gray-50 hover:bg-rose-gold/10 text-gray-500 hover:text-rose-gold transition-colors font-medium border border-gray-100"
-          >
-            Clear Chat
-          </button>
+          {messages.length > 0 && (
+            <button
+              onClick={handleClearChat}
+              className="text-xs px-3 py-1.5 rounded-xl bg-gray-50 hover:bg-rose-gold/10 text-gray-500 hover:text-rose-gold transition-colors font-medium border border-gray-100"
+            >
+              Clear Chat
+            </button>
+          )}
           <a
             href="/salons"
             target="_blank"
@@ -181,108 +168,135 @@ Guidelines:
       </div>
 
       {/* Messages */}
-      <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
-        {messages.map((msg, i) => (
-          <div key={i} className="space-y-4">
-            <div
-              className={`flex gap-3 animate-fade-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              {msg.role === 'assistant' && (
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center shrink-0 shadow-sm">
-                  <Bot className="w-4 h-4 text-white" />
-                </div>
-              )}
-              <div
-                className={msg.role === 'user' ? 'chat-bubble-user shadow-md' : 'chat-bubble-ai'}
-              >
-                <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto px-4 py-6">
+        <div className="max-w-3xl mx-auto w-full space-y-6">
+          {messages.length === 0 ? (
+            /* Gemini-like Centered Greetings Dashboard */
+            <div className="py-12 text-center animate-fade-in">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-rose-gold/20 to-gold/25 flex items-center justify-center mx-auto mb-6 shadow-sm">
+                <Sparkles className="w-8 h-8 text-rose-gold animate-pulse" />
               </div>
-              {msg.role === 'user' && (
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-plum to-plum-light flex items-center justify-center shrink-0 shadow-sm">
-                  <User className="w-4 h-4 text-white" />
-                </div>
-              )}
-            </div>
+              <h2 className="text-3xl md:text-4xl font-bold font-display gradient-text-plum text-center mb-3">
+                How can I help you style today?
+              </h2>
+              <p className="text-sm text-gray-500 text-center max-w-md mx-auto mb-10 leading-relaxed font-body">
+                I'm your AI beauty consultant. Tell me about your occasion, ask for bridal advice, or search matching Hyderabad salons.
+              </p>
 
-            {/* Inline Salon Cards bound to this specific message */}
-            {msg.salons && msg.salons.length > 0 && (
-              <div className="pl-11 animate-fade-in-up w-full">
-                <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:overflow-x-visible md:pb-0">
-                  {msg.salons.map((salon) => (
-                    <div key={salon.id} className="w-[285px] md:w-auto shrink-0 md:shrink snap-start">
-                      <SalonCard salon={salon} />
+              {/* Gemini Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto text-left">
+                {suggestions.map((item, i) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => handleSend(item.text)}
+                      className="p-5 rounded-2xl border border-gray-100 hover:border-rose-gold/30 hover:bg-rose-gold/5 transition-all duration-300 shadow-sm text-left group"
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="text-[10px] font-bold text-rose-gold uppercase tracking-wider bg-rose-gold/5 px-2 py-0.5 rounded-md">
+                          {item.category}
+                        </span>
+                        <Icon className="w-4 h-4 text-gray-300 group-hover:text-rose-gold transition-colors" />
+                      </div>
+                      <span className="text-sm text-gray-700 font-semibold leading-snug block">
+                        {item.text}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            /* Message Log */
+            messages.map((msg, i) => (
+              <div key={i} className="space-y-4">
+                <div
+                  className={`flex gap-3 animate-fade-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  {msg.role === 'assistant' && (
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-rose-gold to-gold flex items-center justify-center shrink-0 shadow-sm">
+                      <Bot className="w-4 h-4 text-white" />
                     </div>
-                  ))}
+                  )}
+                  <div
+                    className={msg.role === 'user' ? 'chat-bubble-user shadow-md' : 'chat-bubble-ai'}
+                  >
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                  </div>
+                  {msg.role === 'user' && (
+                    <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-plum to-plum-light flex items-center justify-center shrink-0 shadow-sm">
+                      <User className="w-4 h-4 text-white" />
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
-          </div>
-        ))}
 
-        {/* Typing Indicator */}
-        {loading && (
-          <div className="flex items-center gap-2 pl-11 animate-fade-in text-xs text-rose-gold font-medium">
-            <Sparkles className="w-4 h-4 text-gold animate-spin" />
-            <span>GlowSpot AI is thinking</span>
-            <div className="typing-indicator !p-0 !py-1 flex gap-1">
-              <span></span>
-              <span></span>
-              <span></span>
+                {/* Recommended Salon Cards Inline inside the specific message */}
+                {msg.salons && msg.salons.length > 0 && (
+                  <div className="pl-11 animate-fade-in-up w-full">
+                    <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 md:overflow-x-visible md:pb-0">
+                      {msg.salons.map((salon) => (
+                        <div key={salon.id} className="w-[285px] md:w-auto shrink-0 md:shrink snap-start">
+                          <SalonCard salon={salon} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+
+          {/* Typing Indicator */}
+          {loading && (
+            <div className="flex items-center gap-2 pl-11 animate-fade-in text-xs text-rose-gold font-medium">
+              <Sparkles className="w-4 h-4 text-gold animate-spin" />
+              <span>GlowSpot AI is thinking</span>
+              <div className="typing-indicator !p-0 !py-1 flex gap-1">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
-      {/* Suggestion Chips */}
-      {messages.length <= 1 && (
-        <div className="px-4 pb-3">
-          <p className="text-xs text-gray-400 mb-2">Try asking:</p>
-          <div className="flex gap-2 overflow-x-auto pb-2 md:flex-wrap md:overflow-x-visible md:pb-0 no-scrollbar">
-            {suggestions.map((s, i) => (
-              <button
-                key={i}
-                onClick={() => handleSend(s)}
-                className="text-xs px-3 py-2 rounded-xl bg-rose-gold/5 text-rose-gold hover:bg-rose-gold/10 border border-rose-gold/10 transition-all duration-300 hover:scale-105 shrink-0 md:shrink"
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Input Bar */}
-      <div className="border-t border-gray-100 p-4 bg-white/50 backdrop-blur-sm shrink-0">
-        <div className="flex gap-3 items-end max-w-4xl mx-auto">
-          <div className="flex-1 relative">
+      {/* Centered Floating Input Bar (ChatGPT/Gemini Style) */}
+      <div className="p-4 bg-white shrink-0">
+        <div className="max-w-3xl mx-auto w-full">
+          <div className="flex gap-3 items-end relative border border-gray-200 rounded-3xl bg-white p-2 shadow-sm focus-within:border-rose-gold/60 focus-within:ring-2 focus-within:ring-rose-gold/10 transition-all">
             <textarea
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Describe what you're looking for..."
+              placeholder="Message GlowSpot AI..."
               rows={1}
               id="chat-input"
-              className="input-styled resize-none pr-4 text-sm"
+              className="w-full pl-4 pr-12 py-3 bg-transparent resize-none outline-none text-sm text-gray-800"
               style={{ minHeight: '44px', maxHeight: '120px' }}
             />
+            <button
+              onClick={() => handleSend()}
+              disabled={!input.trim() || loading}
+              id="chat-send-btn"
+              className={`absolute right-3 bottom-3 p-2.5 rounded-full transition-all duration-300 ${
+                input.trim() && !loading
+                  ? 'bg-rose-gold hover:bg-plum text-white shadow-sm'
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }`}
+            >
+              {loading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Send className="w-5 h-5" />
+              )}
+            </button>
           </div>
-          <button
-            onClick={() => handleSend()}
-            disabled={!input.trim() || loading}
-            id="chat-send-btn"
-            className={`p-3 rounded-xl transition-all duration-300 ${
-              input.trim() && !loading
-                ? 'btn-primary'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-            }`}
-          >
-            {loading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <Send className="w-5 h-5" />
-            )}
-          </button>
+          <p className="text-[10px] text-gray-400 text-center mt-2 font-body">
+            GlowSpot AI can make mistakes. Consider checking important salon info.
+          </p>
         </div>
       </div>
     </div>
