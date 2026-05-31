@@ -1,5 +1,5 @@
 import HeroSection from '@/components/HeroSection';
-import SalonCard from '@/components/SalonCard';
+import SalonCarousel from '@/components/SalonCarousel';
 import salons from '@/data/salons.json';
 import Link from 'next/link';
 import { Sparkles, MessageCircle, Eye, Calendar, Star, MapPin, ArrowRight, Zap, Shield, Clock } from 'lucide-react';
@@ -25,7 +25,7 @@ const neighborhoods = [
 ];
 
 export default function Home() {
-  const topSalons = [...salons].sort((a, b) => b.rating - a.rating).slice(0, 6);
+  const topSalons = [...salons].sort((a, b) => b.rating - a.rating).slice(0, 12);
 
   return (
     <div>
@@ -63,25 +63,23 @@ export default function Home() {
       </section>
 
       {/* Featured Salons */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="featured-salons">
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <span className="tag mb-3 inline-block">Top Rated</span>
-            <h2 className="section-heading gradient-text text-left">Featured Salons</h2>
-            <p className="text-white/35 mt-2">Highest-rated beauty destinations in Hyderabad</p>
+      <section className="py-20" id="featured-salons">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+          <div className="flex items-end justify-between">
+            <div>
+              <span className="tag mb-3 inline-block">Top Rated</span>
+              <h2 className="section-heading gradient-text text-left">Featured Salons</h2>
+              <p className="text-white/35 mt-2">Highest-rated beauty destinations in Hyderabad</p>
+            </div>
+            <Link href="/salons" className="btn-secondary hidden sm:flex items-center gap-2">
+              View All <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-          <Link href="/salons" className="btn-secondary hidden sm:flex items-center gap-2">
-            View All <ArrowRight className="w-4 h-4" />
-          </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {topSalons.map((salon) => (
-            <SalonCard key={salon.id} salon={salon} />
-          ))}
-        </div>
+        <SalonCarousel salons={topSalons} />
 
-        <div className="mt-8 text-center sm:hidden">
+        <div className="mt-8 text-center sm:hidden px-4">
           <Link href="/salons" className="btn-secondary inline-flex items-center gap-2">
             View All Salons <ArrowRight className="w-4 h-4" />
           </Link>
