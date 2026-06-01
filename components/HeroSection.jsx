@@ -47,23 +47,22 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background — relies on the global SilkBackground, just add subtle orbs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute w-96 h-96 rounded-full bg-neon-gold/[0.04] blur-3xl -top-20 -right-20 animate-float" />
-        <div className="absolute w-72 h-72 rounded-full bg-emerald-glow/[0.03] blur-3xl bottom-20 -left-20 animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute w-64 h-64 rounded-full bg-neon-gold/[0.02] blur-3xl top-1/3 left-1/3 animate-float" style={{ animationDelay: '4s' }} />
+      {/* Animated Mesh Gradient Background */}
+      <div className="mesh-gradient-bg" />
 
+      {/* Additional depth layers */}
+      <div className="absolute inset-0 overflow-hidden">
         {/* Sparkle Particles */}
-        {[...Array(15)].map((_, i) => (
+        {[...Array(20)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-1 h-1 bg-neon-gold rounded-full animate-sparkle"
+            className="absolute w-[2px] h-[2px] bg-neon-gold rounded-full animate-sparkle"
             style={{
-              top: `${10 + (i * 6)}%`,
-              left: `${5 + (i * 6.5)}%`,
-              animationDelay: `${i * 0.25}s`,
-              animationDuration: `${2 + (i % 3)}s`,
-              opacity: 0.2 + (i % 4) * 0.1,
+              top: `${8 + (i * 4.5)}%`,
+              left: `${3 + (i * 5)}%`,
+              animationDelay: `${i * 0.2}s`,
+              animationDuration: `${2 + (i % 4)}s`,
+              opacity: 0.15 + (i % 5) * 0.08,
             }}
           />
         ))}

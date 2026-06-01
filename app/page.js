@@ -1,11 +1,67 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import HeroSection from '@/components/HeroSection';
 import SalonCarousel from '@/components/SalonCarousel';
 import salons from '@/data/salons.json';
 import Link from 'next/link';
 import { Sparkles, MessageCircle, Eye, Calendar, Star, MapPin, ArrowRight, Zap, Shield, Clock } from 'lucide-react';
+
+/* ─── Animated Counter Component ─── */
+function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
+  const [count, setCount] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [hasStarted]);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+    const numericTarget = parseInt(target, 10);
+    const startTime = performance.now();
+
+    function step(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.round(eased * numericTarget));
+      if (progress < 1) requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+  }, [hasStarted, target, duration]);
+
+  return (
+    <span ref={ref} className="tabular-nums">
+      {count}{suffix}
+    </span>
+  );
+}
+
+/* ─── Glow card mouse tracking ─── */
+function useGlowTracking() {
+  const handleMouseMove = useCallback((e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    card.style.setProperty('--mouse-x', `${x}%`);
+    card.style.setProperty('--mouse-y', `${y}%`);
+  }, []);
+  return handleMouseMove;
+}
 
 const howItWorks = [
   { step: '01', title: 'Describe Your Look', desc: 'Tell our AI what you need — occasion, style, budget, area', icon: MessageCircle, color: 'from-neon-gold to-neon-amber' },
@@ -29,6 +85,7 @@ const neighborhoods = [
 
 export default function Home() {
   const topSalons = [...salons].sort((a, b) => b.rating - a.rating).slice(0, 8);
+  const onGlowMove = useGlowTracking();
 
   useEffect(() => {
     const observerOptions = {
@@ -73,20 +130,23 @@ export default function Home() {
             return (
               <div
                 key={i}
-                className="relative card p-6 text-center group scroll-reveal"
+                className="relative card-glow p-6 text-center group scroll-reveal"
                 style={{ transitionDelay: `${i * 150}ms` }}
+                onMouseMove={onGlowMove}
               >
                 {i < 3 && (
-                  <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
+                  <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-30">
                     <ArrowRight className="w-6 h-6 text-white/10" />
                   </div>
                 )}
-                <div className="text-xs font-bold text-neon-gold/40 mb-4">{item.step}</div>
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className="w-7 h-7 text-white" />
+                <div className="relative z-10">
+                  <div className="text-xs font-bold text-neon-gold/40 mb-4 font-mono">{item.step}</div>
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold font-display text-white mb-2">{item.title}</h3>
+                  <p className="text-sm text-white/35">{item.desc}</p>
                 </div>
-                <h3 className="text-lg font-bold font-display text-white mb-2">{item.title}</h3>
-                <p className="text-sm text-white/35">{item.desc}</p>
               </div>
             );
           })}
@@ -145,16 +205,19 @@ export default function Home() {
               <Link
                 key={i}
                 href={f.href}
-                className="group p-6 rounded-2xl bg-white/[0.02] backdrop-blur-sm border border-white/[0.05] hover:border-neon-gold/20 hover:bg-white/[0.04] transition-all duration-500"
+                className="group card-glow p-6"
+                onMouseMove={onGlowMove}
               >
-                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                  <f.Icon className="w-6 h-6 text-white" />
+                <div className="relative z-10">
+                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <f.Icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2 font-display">{f.title}</h3>
+                  <p className="text-sm text-white/50 leading-relaxed">{f.desc}</p>
+                  <span className="inline-flex items-center gap-1 mt-4 text-sm text-neon-gold font-medium group-hover:gap-2 transition-all">
+                    Try it <ArrowRight className="w-4 h-4" />
+                  </span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 font-display">{f.title}</h3>
-                <p className="text-sm text-white/50 leading-relaxed">{f.desc}</p>
-                <span className="inline-flex items-center gap-1 mt-4 text-sm text-neon-gold font-medium group-hover:gap-2 transition-all">
-                  Try it <ArrowRight className="w-4 h-4" />
-                </span>
               </Link>
             ))}
           </div>
@@ -177,33 +240,43 @@ export default function Home() {
             <Link
               key={i}
               href={`/salons?area=${encodeURIComponent(n.name)}`}
-              className="card p-4 text-center group hover:bg-gradient-to-br hover:from-neon-gold/[0.03] hover:to-emerald-glow/[0.03] scroll-reveal"
+              className="card-glow p-4 text-center group scroll-reveal"
               style={{ transitionDelay: `${i * 80}ms` }}
+              onMouseMove={onGlowMove}
             >
-              <div className="w-10 h-10 rounded-xl bg-neon-gold/5 border border-white/[0.05] flex items-center justify-center mx-auto mb-3 group-hover:bg-neon-gold/10 transition-colors">
-                <MapPin className="w-5 h-5 text-neon-gold" />
+              <div className="relative z-10">
+                <div className="w-10 h-10 rounded-xl bg-neon-gold/5 border border-white/[0.05] flex items-center justify-center mx-auto mb-3 group-hover:bg-neon-gold/10 transition-colors">
+                  <MapPin className="w-5 h-5 text-neon-gold" />
+                </div>
+                <h4 className="text-sm font-bold text-white mb-1">{n.name}</h4>
+                <p className="text-xs text-white/30">{n.tagline}</p>
+                <p className="text-xs text-neon-gold mt-1 font-medium font-mono">{n.count} salons</p>
               </div>
-              <h4 className="text-sm font-bold text-white mb-1">{n.name}</h4>
-              <p className="text-xs text-white/30">{n.tagline}</p>
-              <p className="text-xs text-neon-gold mt-1 font-medium">{n.count} salons</p>
             </Link>
           ))}
         </div>
       </section>
 
       {/* Stats Banner */}
-      <section className="py-16 bg-gradient-to-r from-noir-100 to-noir-200 border-y border-white/[0.04]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-noir-100 via-noir-200 to-noir-100 border-y border-white/[0.04]" />
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute w-80 h-80 rounded-full bg-neon-gold/[0.03] blur-3xl top-0 left-1/4 animate-float" />
+          <div className="absolute w-64 h-64 rounded-full bg-emerald-glow/[0.02] blur-3xl bottom-0 right-1/4 animate-float" style={{ animationDelay: '3s' }} />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {[
-              { value: '25+', label: 'Verified Salons' },
-              { value: '10', label: 'Neighborhoods' },
-              { value: '5', label: 'AI Features' },
-              { value: '200+', label: 'Services Listed' },
+              { value: '25', suffix: '+', label: 'Verified Salons' },
+              { value: '10', suffix: '', label: 'Neighborhoods' },
+              { value: '5', suffix: '', label: 'AI Features' },
+              { value: '200', suffix: '+', label: 'Services Listed' },
             ].map((s, i) => (
-              <div key={i}>
-                <p className="text-3xl md:text-4xl font-bold gradient-text font-display">{s.value}</p>
-                <p className="text-sm text-white/35 mt-1">{s.label}</p>
+              <div key={i} className="group">
+                <p className="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text font-mono tracking-tight">
+                  <AnimatedCounter target={s.value} suffix={s.suffix} duration={2000 + i * 300} />
+                </p>
+                <p className="text-sm text-white/40 mt-2 font-medium tracking-wide uppercase">{s.label}</p>
               </div>
             ))}
           </div>

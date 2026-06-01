@@ -53,8 +53,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Playfair Display', 'Outfit', 'Inter', 'system-ui', 'serif'],
+        heading: ['Outfit', 'Inter', 'system-ui', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['Space Grotesk', 'monospace'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-out forwards',
