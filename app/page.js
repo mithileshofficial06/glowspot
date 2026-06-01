@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import HeroSection from '@/components/HeroSection';
 import SalonCarousel from '@/components/SalonCarousel';
 import salons from '@/data/salons.json';
@@ -50,18 +50,7 @@ function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
   );
 }
 
-/* ─── Glow card mouse tracking ─── */
-function useGlowTracking() {
-  const handleMouseMove = useCallback((e) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    card.style.setProperty('--mouse-x', `${x}%`);
-    card.style.setProperty('--mouse-y', `${y}%`);
-  }, []);
-  return handleMouseMove;
-}
+
 
 const howItWorks = [
   { step: '01', title: 'Describe Your Look', desc: 'Tell our AI what you need — occasion, style, budget, area', icon: MessageCircle, color: 'from-neon-gold to-neon-amber' },
@@ -85,7 +74,6 @@ const neighborhoods = [
 
 export default function Home() {
   const topSalons = [...salons].sort((a, b) => b.rating - a.rating).slice(0, 8);
-  const onGlowMove = useGlowTracking();
 
   useEffect(() => {
     const observerOptions = {
@@ -131,8 +119,6 @@ export default function Home() {
               <div
                 key={i}
                 className="relative card-glow p-6 text-center group scroll-reveal"
-                style={{ transitionDelay: `${i * 150}ms` }}
-                onMouseMove={onGlowMove}
               >
                 {i < 3 && (
                   <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-30">
@@ -206,7 +192,6 @@ export default function Home() {
                 key={i}
                 href={f.href}
                 className="group card-glow p-6"
-                onMouseMove={onGlowMove}
               >
                 <div className="relative z-10">
                   <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
@@ -241,8 +226,6 @@ export default function Home() {
               key={i}
               href={`/salons?area=${encodeURIComponent(n.name)}`}
               className="card-glow p-4 text-center group scroll-reveal"
-              style={{ transitionDelay: `${i * 80}ms` }}
-              onMouseMove={onGlowMove}
             >
               <div className="relative z-10">
                 <div className="w-10 h-10 rounded-xl bg-neon-gold/5 border border-white/[0.05] flex items-center justify-center mx-auto mb-3 group-hover:bg-neon-gold/10 transition-colors">

@@ -50,23 +50,7 @@ export default function HeroSection() {
       {/* Animated Mesh Gradient Background */}
       <div className="mesh-gradient-bg" />
 
-      {/* Additional depth layers */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Sparkle Particles */}
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-[2px] h-[2px] bg-neon-gold rounded-full animate-sparkle"
-            style={{
-              top: `${8 + (i * 4.5)}%`,
-              left: `${3 + (i * 5)}%`,
-              animationDelay: `${i * 0.2}s`,
-              animationDuration: `${2 + (i % 4)}s`,
-              opacity: 0.15 + (i % 5) * 0.08,
-            }}
-          />
-        ))}
-      </div>
+
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
@@ -113,7 +97,7 @@ export default function HeroSection() {
                   key={i}
                   href={feature.href}
                   id={`hero-feature-${i}`}
-                  className="group p-5 rounded-2xl bg-white/[0.02] backdrop-blur-sm border border-white/[0.05] hover:border-neon-gold/20 hover:bg-white/[0.04] transition-all duration-500 text-left"
+                  className="group p-5 rounded-2xl bg-white/[0.03] border border-white/[0.05] hover:border-neon-gold/20 hover:bg-white/[0.05] transition-all duration-300 text-left"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300`}>
