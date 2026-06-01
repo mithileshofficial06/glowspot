@@ -1,5 +1,4 @@
 'use client';
-
 import { useState, useRef } from 'react';
 import { 
   Calendar, 
@@ -23,7 +22,8 @@ import {
   RefreshCw, 
   Camera, 
   Briefcase,
-  Truck
+  Truck,
+  X
 } from 'lucide-react';
 import Link from 'next/link';
 import salons from '@/data/salons.json';
@@ -95,7 +95,9 @@ export default function WeddingPlanner() {
 
   // Bulk Booking Cart Modal States
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showMoodBoard, setShowMoodBoard] = useState(false);
   const [bookingProgress, setBookingProgress] = useState(0); // 0: Idle, 1: Reserving, 2: Success
+
   const [selectedItems, setSelectedItems] = useState({});
 
   const toggleArea = (area) => {
@@ -988,15 +990,21 @@ export default function WeddingPlanner() {
               </div>
             </div>
 
-            <hr className="border-gray-100" />
-
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={handleBulkBooking}
-                className="btn-primary flex-1 py-3 px-6 text-sm font-bold flex items-center justify-center gap-2 shadow-md hover:scale-[1.01] transition-all"
+                className="btn-primary flex-1 py-3 px-6 text-sm font-bold flex items-center justify-center gap-2 shadow-md hover:scale-[1.01] transition-all min-w-[200px]"
               >
                 <ShoppingCart className="w-4 h-4" />
                 Elite Bulk Reservation (One-Click Booking)
+              </button>
+
+              <button
+                onClick={() => setShowMoodBoard(true)}
+                className="px-5 py-3 border border-rose-gold/30 bg-rose-blush/5 hover:bg-rose-blush/10 text-rose-gold rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+              >
+                <Sparkles className="w-4 h-4" />
+                View Mood Board
               </button>
               
               <button
@@ -1006,8 +1014,8 @@ export default function WeddingPlanner() {
                 Reset Planner
               </button>
             </div>
-          </div>
 
+          </div>
         </div>
       )}
 
@@ -1086,6 +1094,130 @@ export default function WeddingPlanner() {
           </div>
         </div>
       )}
+
+      {/* Bridal Mood Board Modal */}
+      {showMoodBoard && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in print:bg-white print:p-0 print:relative">
+          <div className="card max-w-2xl w-full bg-white p-6 relative overflow-y-auto max-h-[90vh] shadow-2xl border border-gray-100 rounded-3xl animate-scale-up print:shadow-none print:border-none print:w-full print:max-h-full print:p-0">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-6 print:hidden">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-rose-gold" />
+                <h3 className="text-lg font-bold font-display text-gray-800">Your AI Bridal Lookbook & Mood Board</h3>
+              </div>
+              <button 
+                onClick={() => setShowMoodBoard(false)}
+                className="text-gray-400 hover:text-gray-600 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Mood Board Canvas Layout */}
+            <div id="mood-board-print-area" className="space-y-6 print:space-y-4 print:text-black">
+              {/* Top Banner */}
+              <div className="bg-gradient-to-r from-plum to-rose-gold p-6 rounded-2xl text-white flex items-center justify-between shadow-sm">
+                <div>
+                  <h4 className="text-xl font-bold font-display">GlowSpot Bridal Portfolio</h4>
+                  <p className="text-xs opacity-80 mt-1">Aesthetic direction curated for Hyderabad beauty styles</p>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] font-mono tracking-widest uppercase opacity-70">Itinerary Code</span>
+                  <p className="text-sm font-bold font-mono">GS-WED-2026</p>
+                </div>
+              </div>
+
+              {/* Grid 2 Column */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 print:grid-cols-2">
+                
+                {/* Left Side: Profile & Aesthetic Details */}
+                <div className="space-y-4">
+                  <div className="bg-gray-50 p-4 rounded-xl border border-gray-100/50">
+                    <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Aesthetic Theme</span>
+                    <h5 className="font-extrabold text-gray-800 text-sm mt-1">
+                      {formData.stylePreset ? stylePresets.find(p => p.id === formData.stylePreset)?.label : 'Custom Look'}
+                    </h5>
+                    <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                      {formData.stylePreset ? stylePresets.find(p => p.id === formData.stylePreset)?.desc : 'Custom curated schedule'}
+                    </p>
+                    <div className="flex gap-1.5 mt-3">
+                      {formData.stylePreset && stylePresets.find(p => p.id === formData.stylePreset)?.colors.map((c, i) => (
+                        <div key={i} className={`w-5 h-5 rounded-full ${c} border border-white shadow-sm`} />
+                      ))}
+                    </div>
+                  </div>
+
+                  {faceAnalysis && (
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-100/50 space-y-2">
+                      <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Face Shape & Skin Profile</span>
+                      <p className="text-xs text-gray-700"><strong>Face Shape:</strong> {faceAnalysis.faceShape}</p>
+                      <p className="text-xs text-gray-700"><strong>Complexion undertones:</strong> {faceAnalysis.skinTone}</p>
+                      <p className="text-[11px] text-gray-500 leading-relaxed italic">{faceAnalysis.features}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Right Side: Key Milestones Summary */}
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100/50 flex flex-col justify-between">
+                  <div>
+                    <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Timeline Highlights</span>
+                    <ul className="space-y-2.5 mt-3">
+                      {timelineItems.slice(-3).map((item, i) => (
+                        <li key={i} className="flex gap-2 text-xs text-gray-700">
+                          <span className="font-bold text-rose-gold shrink-0">{item.daysLeft}:</span>
+                          <span className="truncate">{item.service} at <strong>{item.salon}</strong></span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-gray-200">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500 font-semibold">Total Cost Estimate:</span>
+                      <strong className="text-rose-gold">₹{totalCost.toLocaleString()}</strong>
+                    </div>
+                    {formData.homeService && (
+                      <span className="text-[9px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full mt-1.5 inline-block font-bold font-body">
+                        ✓ Travel/Venue Delivery Service Configured
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Handcrafted Styling Instructions */}
+              <div className="bg-rose-blush/5 p-4 rounded-xl border border-rose-gold/10 text-xs text-gray-600 leading-relaxed">
+                <strong>Bridal Preparation Checklist:</strong> Apply cold pressed oils, drink 3L of water daily leading to the wedding day, and share this lookbook sheet with your boutique coordinator so they can sync Kanjeevaram sari pleating or Khada dupatta setups directly.
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center gap-3 mt-6 pt-4 border-t border-gray-100 print:hidden">
+              <button
+                onClick={() => window.print()}
+                className="btn-primary flex-1 py-2.5 text-xs font-bold flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" />
+                Print / Download PDF Lookbook
+              </button>
+              
+              <button
+                onClick={() => {
+                  const presetName = stylePresets.find(p => p.id === formData.stylePreset)?.label || 'Wedding';
+                  const text = `Hi! Check out my GlowSpot Bridal beauty schedule: *${presetName}* aesthetic, scheduled on ${formData.weddingDate} with top Hyderabad salons. Total estimated package: ₹${totalCost.toLocaleString()}. Generate yours at http://localhost:3000/planner`;
+                  window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+                }}
+                className="px-4 py-2.5 border border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+              >
+                Share Lookbook on WhatsApp
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
     </div>
   );

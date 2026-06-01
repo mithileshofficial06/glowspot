@@ -4,7 +4,6 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { Upload, Camera, Sparkles, Loader2, ChevronRight, RotateCcw, User, Palette, Scissors, Wand2, MessageCircle, Send, X, Bot, Star } from 'lucide-react';
 import Link from 'next/link';
 import salons from '@/data/salons.json';
-
 export default function FacePreview() {
   const [image, setImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -15,6 +14,24 @@ export default function FacePreview() {
   const [matchedSalons, setMatchedSalons] = useState([]);
   const fileInputRef = useRef(null);
   const canvasRef = useRef(null);
+  const imgRef = useRef(null);
+  const imageContainerRef = useRef(null);
+
+  // Virtual Try-On States
+  const [lipstickColor, setLipstickColor] = useState('#ff003c'); // default ruby red
+  const [lipstickOpacity, setLipstickOpacity] = useState(0.4);
+  const [blushColor, setBlushColor] = useState('#ff6b8b'); // rose blush
+  const [blushOpacity, setBlushOpacity] = useState(0.3);
+  const [hairColor, setHairColor] = useState('#c68642'); // caramel highlights
+  const [hairOpacity, setHairOpacity] = useState(0.35);
+
+  const [lipCoords, setLipCoords] = useState({ x: 50, y: 55 }); // center as default percent
+  const [cheekCoords, setCheekCoords] = useState({ x: 40, y: 48 }); // left cheek
+  const [hairCoords, setHairCoords] = useState({ x: 30, y: 28 }); // left hair side
+
+  const [activeDragNode, setActiveDragNode] = useState(null); // 'lip', 'cheek', 'hair'
+
+  const tryOnActive = activeCategory === 'tryon';
 
   // Contextual Chat Widget State
   const [chatOpen, setChatOpen] = useState(false);
@@ -31,6 +48,163 @@ export default function FacePreview() {
     }
   }, [chatMessages, chatLoading]);
 
+  // Pointer drag event handlers for Try-On nodes
+  const handlePointerDown = (nodeType) => (e) => {
+    e.preventDefault();
+    setActiveDragNode(nodeType);
+  };
+
+  const handlePointerMove = useCallback((e) => {
+    if (!activeDragNode || !imageContainerRef.current) return;
+    const rect = imageContainerRef.current.getBoundingClientRect();
+    
+    // Calculate client coordinates inside container
+    const x = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+    const y = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+    
+    if (activeDragNode === 'lip') setLipCoords({ x, y });
+    else if (activeDragNode === 'cheek') setCheekCoords({ x, y });
+    else if (activeDragNode === 'hair') setHairCoords({ x, y });
+  }, [activeDragNode]);
+
+  const handlePointerUp = useCallback(() => {
+    setActiveDragNode(null);
+  }, []);
+
+  useEffect(() => {
+    if (activeDragNode) {
+      window.addEventListener('pointermove', handlePointerMove);
+      window.addEventListener('pointerup', handlePointerUp);
+    }
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+    };
+  }, [activeDragNode, handlePointerMove, handlePointerUp]);
+
+  const hexToRgbA = (hex, opacity) => {
+    let c;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+      c= hex.substring(1).split('');
+      if(c.length === 3){
+        c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c= '0x' + c.join('');
+      return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+opacity+')';
+    }
+    return 'rgba(0,0,0,0)';
+  };
+
+  // Canvas Redraw Logic
+  const redrawTryOn = useCallback(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !image) return;
+    const ctx = canvas.getContext('2d');
+    
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    if (!tryOnActive) return;
+
+    // Draw Lipstick overlay
+    const lipX = (lipCoords.x / 100) * canvas.width;
+    const lipY = (lipCoords.y / 100) * canvas.height;
+    const lipRadius = Math.min(canvas.width, canvas.height) * 0.08;
+    
+    const lipGrad = ctx.createRadialGradient(lipX, lipY, 0, lipX, lipY, lipRadius);
+    lipGrad.addColorStop(0, hexToRgbA(lipstickColor, lipstickOpacity));
+    lipGrad.addColorStop(0.4, hexToRgbA(lipstickColor, lipstickOpacity * 0.7));
+    lipGrad.addColorStop(1, 'rgba(0,0,0,0)');
+    
+    ctx.fillStyle = lipGrad;
+    ctx.beginPath();
+    ctx.arc(lipX, lipY, lipRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw Blush Left
+    const cheekLX = (cheekCoords.x / 100) * canvas.width;
+    const cheekLY = (cheekCoords.y / 100) * canvas.height;
+    const cheekRadius = Math.min(canvas.width, canvas.height) * 0.12;
+    
+    const cheekGradL = ctx.createRadialGradient(cheekLX, cheekLY, 0, cheekLX, cheekLY, cheekRadius);
+    cheekGradL.addColorStop(0, hexToRgbA(blushColor, blushOpacity));
+    cheekGradL.addColorStop(0.5, hexToRgbA(blushColor, blushOpacity * 0.5));
+    cheekGradL.addColorStop(1, 'rgba(0,0,0,0)');
+    
+    ctx.fillStyle = cheekGradL;
+    ctx.beginPath();
+    ctx.arc(cheekLX, cheekLY, cheekRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw Blush Right (Symmetrical)
+    const cheekRX = ((100 - cheekCoords.x) / 100) * canvas.width;
+    const cheekGradR = ctx.createRadialGradient(cheekRX, cheekLY, 0, cheekRX, cheekLY, cheekRadius);
+    cheekGradR.addColorStop(0, hexToRgbA(blushColor, blushOpacity));
+    cheekGradR.addColorStop(0.5, hexToRgbA(blushColor, blushOpacity * 0.5));
+    cheekGradR.addColorStop(1, 'rgba(0,0,0,0)');
+    
+    ctx.fillStyle = cheekGradR;
+    ctx.beginPath();
+    ctx.arc(cheekRX, cheekLY, cheekRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw Hair Left
+    const hairLX = (hairCoords.x / 100) * canvas.width;
+    const hairLY = (hairCoords.y / 100) * canvas.height;
+    const hairRadius = Math.min(canvas.width, canvas.height) * 0.18;
+    
+    const hairGradL = ctx.createRadialGradient(hairLX, hairLY, 0, hairLX, hairLY, hairRadius);
+    hairGradL.addColorStop(0, hexToRgbA(hairColor, hairOpacity));
+    hairGradL.addColorStop(0.5, hexToRgbA(hairColor, hairOpacity * 0.5));
+    hairGradL.addColorStop(1, 'rgba(0,0,0,0)');
+    
+    ctx.fillStyle = hairGradL;
+    ctx.beginPath();
+    ctx.arc(hairLX, hairLY, hairRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Draw Hair Right (Symmetrical)
+    const hairRX = ((100 - hairCoords.x) / 100) * canvas.width;
+    const hairGradR = ctx.createRadialGradient(hairRX, hairLY, 0, hairRX, hairLY, hairRadius);
+    hairGradR.addColorStop(0, hexToRgbA(hairColor, hairOpacity));
+    hairGradR.addColorStop(0.5, hexToRgbA(hairColor, hairOpacity * 0.5));
+    hairGradR.addColorStop(1, 'rgba(0,0,0,0)');
+    
+    ctx.fillStyle = hairGradR;
+    ctx.beginPath();
+    ctx.arc(hairRX, hairLY, hairRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+  }, [tryOnActive, lipstickColor, lipstickOpacity, blushColor, blushOpacity, hairColor, hairOpacity, lipCoords, cheekCoords, hairCoords, image]);
+
+  const resizeCanvas = useCallback(() => {
+    const canvas = canvasRef.current;
+    const img = imgRef.current;
+    if (canvas && img) {
+      canvas.width = img.clientWidth;
+      canvas.height = img.clientHeight;
+      redrawTryOn();
+    }
+  }, [redrawTryOn]);
+
+  useEffect(() => {
+    if (image) {
+      const img = imgRef.current;
+      if (img) {
+        if (img.complete) {
+          resizeCanvas();
+        } else {
+          img.onload = resizeCanvas;
+        }
+      }
+    }
+    window.addEventListener('resize', resizeCanvas);
+    return () => window.removeEventListener('resize', resizeCanvas);
+  }, [image, resizeCanvas]);
+
+  useEffect(() => {
+    redrawTryOn();
+  }, [redrawTryOn]);
   // Build the system prompt with analysis context
   const buildSystemPrompt = () => {
     const hairstyles = analysis?.hairstyleRecommendations?.map(r => r.style).join(', ') || 'N/A';
@@ -99,6 +273,7 @@ Rules:
     { id: 'hairstyle', label: 'Hairstyles', icon: Scissors },
     { id: 'makeup', label: isMale ? 'Grooming' : 'Makeup', icon: Wand2 },
     { id: 'haircolor', label: 'Hair Colors', icon: Palette },
+    ...(analysis ? [{ id: 'tryon', label: 'Virtual Try-On 💄', icon: Sparkles }] : []),
   ];
 
   const quickChatSuggestions = isMale
@@ -280,8 +455,12 @@ Rules:
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Image Display */}
             <div className="space-y-4">
-              <div className="relative rounded-2xl overflow-hidden shadow-card">
+              <div 
+                ref={imageContainerRef}
+                className="relative rounded-2xl overflow-hidden shadow-card select-none"
+              >
                 <img
+                  ref={imgRef}
                   src={image}
                   alt="Your photo"
                   className="w-full h-auto max-h-[500px] object-contain bg-noir-100"
@@ -289,8 +468,39 @@ Rules:
                 <canvas
                   ref={canvasRef}
                   className="absolute inset-0 w-full h-full pointer-events-none"
-                  style={{ display: 'none' }}
+                  style={{ display: tryOnActive ? 'block' : 'none' }}
                 />
+                {tryOnActive && (
+                  <>
+                    {/* Draggable Lips Node */}
+                    <div
+                      onPointerDown={handlePointerDown('lip')}
+                      className="absolute w-8 h-8 rounded-full border-2 border-white bg-neon-gold/80 shadow-glow cursor-move flex items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none z-30 group"
+                      style={{ left: `${lipCoords.x}%`, top: `${lipCoords.y}%` }}
+                    >
+                      <span className="text-[9px] font-extrabold text-black uppercase">Lip</span>
+                      <div className="absolute top-10 bg-black/85 border border-white/10 px-2 py-0.5 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">💄 Drag to Lips</div>
+                    </div>
+                    {/* Draggable Cheek Node */}
+                    <div
+                      onPointerDown={handlePointerDown('cheek')}
+                      className="absolute w-8 h-8 rounded-full border-2 border-white bg-emerald-glow/80 shadow-glow cursor-move flex items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none z-30 group"
+                      style={{ left: `${cheekCoords.x}%`, top: `${cheekCoords.y}%` }}
+                    >
+                      <span className="text-[9px] font-extrabold text-black uppercase">Blsh</span>
+                      <div className="absolute top-10 bg-black/85 border border-white/10 px-2 py-0.5 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">🌸 Drag to Cheek</div>
+                    </div>
+                    {/* Draggable Hair Node */}
+                    <div
+                      onPointerDown={handlePointerDown('hair')}
+                      className="absolute w-8 h-8 rounded-full border-2 border-white bg-neon-amber/80 shadow-glow cursor-move flex items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none z-30 group"
+                      style={{ left: `${hairCoords.x}%`, top: `${hairCoords.y}%` }}
+                    >
+                      <span className="text-[9px] font-extrabold text-black uppercase">Hair</span>
+                      <div className="absolute top-10 bg-black/85 border border-white/10 px-2 py-0.5 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">💇 Drag to Hair</div>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="flex gap-3">
@@ -432,6 +642,141 @@ Rules:
                         </div>
                       </div>
                     ))}
+                  </div>
+                )}
+
+                {/* Virtual Try-On Controls */}
+                {activeCategory === 'tryon' && (
+                  <div className="space-y-4 animate-fade-in card-glass p-5 border border-white/[0.05]">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Sparkles className="w-4 h-4 text-neon-gold" />
+                      <h4 className="font-bold text-white text-sm font-display">Virtual Makeup & Hair Swatches</h4>
+                    </div>
+                    <p className="text-white/40 text-[11px] leading-relaxed font-body">
+                      Drag the glowing pointer nodes (<strong>Lip</strong>, <strong>Blsh</strong>, <strong>Hair</strong>) directly on your photo to position the color blends on your face.
+                    </p>
+
+                    {/* Lipstick Section */}
+                    <div className="space-y-2.5 pt-2 border-t border-white/[0.04]">
+                      <span className="text-[10px] uppercase font-bold text-white/50 tracking-wider font-mono">💄 Lipstick Overlay</span>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { name: 'Ruby Red', hex: '#ff003c' },
+                          { name: 'Nude Pink', hex: '#d48a97' },
+                          { name: 'Plum Wine', hex: '#6b2d5c' },
+                          { name: 'Peach Satin', hex: '#e79a82' },
+                        ].map((sw) => (
+                          <button
+                            key={sw.hex}
+                            onClick={() => setLipstickColor(sw.hex)}
+                            className={`px-2 py-1 rounded-md text-[10px] font-semibold border flex items-center gap-1.5 transition-all font-body ${
+                              lipstickColor === sw.hex
+                                ? 'border-neon-gold bg-neon-gold/10 text-neon-gold'
+                                : 'border-white/[0.06] bg-white/[0.02] text-white/40 hover:border-white/10'
+                            }`}
+                          >
+                            <span className="w-2.5 h-2.5 rounded-full border border-black/20" style={{ backgroundColor: sw.hex }} />
+                            {sw.name}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-[10px] text-white/35 font-body">
+                          <span>Intensity / Opacity</span>
+                          <span className="text-neon-gold font-bold">{Math.round(lipstickOpacity * 100)}%</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="1"
+                          step="0.05"
+                          value={lipstickOpacity}
+                          onChange={(e) => setLipstickOpacity(parseFloat(e.target.value))}
+                          className="w-full accent-neon-gold h-1 bg-white/[0.05] rounded-lg appearance-none cursor-ew-resize"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Blush Section */}
+                    <div className="space-y-2.5 pt-3 border-t border-white/[0.04]">
+                      <span className="text-[10px] uppercase font-bold text-white/50 tracking-wider font-mono">🌸 Cheek Blush Overlay</span>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { name: 'Rose Petal', hex: '#ff6b8b' },
+                          { name: 'Peach Glow', hex: '#ff9e80' },
+                          { name: 'Golden Hue', hex: '#ffd54f' },
+                        ].map((sw) => (
+                          <button
+                            key={sw.hex}
+                            onClick={() => setBlushColor(sw.hex)}
+                            className={`px-2 py-1 rounded-md text-[10px] font-semibold border flex items-center gap-1.5 transition-all font-body ${
+                              blushColor === sw.hex
+                                ? 'border-emerald-glow bg-emerald-glow/10 text-emerald-glow'
+                                : 'border-white/[0.06] bg-white/[0.02] text-white/40 hover:border-white/10'
+                            }`}
+                          >
+                            <span className="w-2.5 h-2.5 rounded-full border border-black/20" style={{ backgroundColor: sw.hex }} />
+                            {sw.name}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-[10px] text-white/35 font-body">
+                          <span>Intensity / Opacity</span>
+                          <span className="text-emerald-glow font-bold">{Math.round(blushOpacity * 100)}%</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="0.8"
+                          step="0.05"
+                          value={blushOpacity}
+                          onChange={(e) => setBlushOpacity(parseFloat(e.target.value))}
+                          className="w-full accent-emerald-glow h-1 bg-white/[0.05] rounded-lg appearance-none cursor-ew-resize"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Hair Streaks Section */}
+                    <div className="space-y-2.5 pt-3 border-t border-white/[0.04]">
+                      <span className="text-[10px] uppercase font-bold text-white/50 tracking-wider font-mono">💇 Hair Highlights / Streaks</span>
+                      <div className="flex flex-wrap gap-2">
+                        {[
+                          { name: 'Caramel', hex: '#c68642' },
+                          { name: 'Burgundy', hex: '#4a1525' },
+                          { name: 'Honey Blonde', hex: '#d4b26f' },
+                          { name: 'Ash Silver', hex: '#a0a0a0' },
+                        ].map((sw) => (
+                          <button
+                            key={sw.hex}
+                            onClick={() => setHairColor(sw.hex)}
+                            className={`px-2 py-1 rounded-md text-[10px] font-semibold border flex items-center gap-1.5 transition-all font-body ${
+                              hairColor === sw.hex
+                                ? 'border-neon-amber bg-neon-amber/10 text-neon-amber'
+                                : 'border-white/[0.06] bg-white/[0.02] text-white/40 hover:border-white/10'
+                            }`}
+                          >
+                            <span className="w-2.5 h-2.5 rounded-full border border-black/20" style={{ backgroundColor: sw.hex }} />
+                            {sw.name}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-[10px] text-white/35 font-body">
+                          <span>Intensity / Opacity</span>
+                          <span className="text-neon-amber font-bold">{Math.round(hairOpacity * 100)}%</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="0"
+                          max="0.9"
+                          step="0.05"
+                          value={hairOpacity}
+                          onChange={(e) => setHairOpacity(parseFloat(e.target.value))}
+                          className="w-full accent-neon-amber h-1 bg-white/[0.05] rounded-lg appearance-none cursor-ew-resize"
+                        />
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

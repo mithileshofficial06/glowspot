@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function Advisor() {
   return (
-    <div className="fixed inset-0 z-30 pt-20 bg-noir flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-40 pt-20 bg-noir flex flex-col overflow-hidden">
       {/* Full Viewport Chat Workspace Container */}
       <div className="flex-1 w-full flex flex-col overflow-hidden relative">
         <ChatInterface />

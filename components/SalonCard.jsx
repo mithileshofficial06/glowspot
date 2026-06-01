@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Star, MapPin, Clock, Home, Sparkles, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 const SALON_PHOTO_IDS = [
   'photo-1560066984-138dadb4c035',
@@ -21,7 +22,7 @@ function getSalonImageUrl(salonId) {
   return `https://images.unsplash.com/${SALON_PHOTO_IDS[index]}?w=600&auto=format&fit=crop&q=80`;
 }
 
-export default function SalonCard({ salon }) {
+export default function SalonCard({ salon, onBook }) {
   const [imgError, setImgError] = useState(false);
   const imageUrl = getSalonImageUrl(salon.id);
 
@@ -134,10 +135,23 @@ export default function SalonCard({ salon }) {
             <Clock className="w-3 h-3" />
             <span>{salon.openHours}</span>
           </div>
-          <span className="text-neon-gold text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
-            View Details
-            <ChevronRight className="w-4 h-4" />
-          </span>
+          {onBook ? (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onBook(salon);
+              }}
+              className="px-3 py-1.5 bg-neon-gold hover:bg-neon-gold/90 text-black text-xs font-bold rounded-xl transition-all shadow-md select-none shrink-0"
+            >
+              Book Instantly
+            </button>
+          ) : (
+            <span className="text-neon-gold text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
+              View Details
+              <ChevronRight className="w-4 h-4" />
+            </span>
+          )}
         </div>
       </div>
     </Link>
