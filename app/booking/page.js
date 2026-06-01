@@ -19,8 +19,8 @@ function BookingContent() {
     <div className="max-w-lg w-full text-center animate-fade-in py-16">
       {/* Success Animation */}
       <div className="relative mb-8">
-        <div className="w-24 h-24 rounded-full bg-emerald-glow/10 border border-emerald-glow/20 flex items-center justify-center mx-auto animate-bounce-gentle">
-          <PartyPopper className="w-12 h-12 text-emerald-glow" />
+        <div className="w-24 h-24 rounded-full bg-mauve/10 border border-mauve/20 flex items-center justify-center mx-auto animate-bounce-gentle">
+          <PartyPopper className="w-12 h-12 text-mauve" />
         </div>
         {[...Array(12)].map((_, i) => (
           <div
@@ -48,13 +48,13 @@ function BookingContent() {
       {salon && (
         <div className="bg-white/[0.02] border border-white/[0.05] p-6 text-left space-y-4 mb-8 rounded-2xl">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-neon-gold/20 to-neon-amber/20 border border-neon-gold/15 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold-light/20 border border-gold/15 flex items-center justify-center">
               <span className="text-lg font-bold text-white font-display">{salon.name.charAt(0)}</span>
             </div>
             <div>
               <h3 className="font-bold text-white">{salon.name}</h3>
               <p className="text-sm text-white/40 flex items-center gap-1">
-                <MapPin className="w-3 h-3 text-neon-gold" />
+                <MapPin className="w-3 h-3 text-gold" />
                 {salon.area}, Hyderabad
               </p>
             </div>
@@ -107,8 +107,8 @@ export default function Booking() {
     <div className="min-h-screen pt-20 bg-noir flex items-center justify-center px-4 text-white/90">
       <Suspense fallback={
         <div className="text-center py-16">
-          <div className="w-16 h-16 rounded-full bg-neon-gold/10 border border-neon-gold/20 flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <Check className="w-8 h-8 text-neon-gold" />
+          <div className="w-16 h-16 rounded-full bg-gold/10 border border-gold/20 flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <Check className="w-8 h-8 text-gold" />
           </div>
           <p className="text-white/40">Loading booking details...</p>
         </div>

@@ -466,9 +466,9 @@ export default function WeddingPlanner() {
                     key={role}
                     onClick={() => { setFormData({ ...formData, role }); setStep(Math.max(step, 2)); }}
                     id={`role-${role.toLowerCase().replace(/\s/g, '-')}`}
-                    className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
+                    className={`px-4 py-2  text-xs font-semibold transition-all duration-300 ${
                       formData.role === role
-                        ? 'bg-rose-gold text-white shadow-glow'
+                        ? 'bg-rose-gold text-ivory shadow-glow'
                         : 'bg-white border border-gray-100 text-gray-600 hover:border-rose-gold/50 shadow-sm'
                     }`}
                   >
@@ -491,7 +491,7 @@ export default function WeddingPlanner() {
                   <button
                     key={preset.id}
                     onClick={() => setFormData({ ...formData, stylePreset: preset.id })}
-                    className={`p-4 rounded-2xl text-left border transition-all duration-300 flex flex-col justify-between ${
+                    className={`p-4  text-left border transition-all duration-300 flex flex-col justify-between ${
                       formData.stylePreset === preset.id
                         ? 'border-rose-gold bg-rose-blush/20 shadow-md ring-1 ring-rose-gold/50'
                         : 'border-gray-100 bg-white hover:border-gray-200'
@@ -506,7 +506,7 @@ export default function WeddingPlanner() {
                     </div>
                     <div className="flex gap-1.5 mt-auto">
                       {preset.colors.map((c, i) => (
-                        <div key={i} className={`w-4 h-4 rounded-full ${c} border border-gray-100 shadow-sm`} />
+                        <div key={i} className={`w-4 h-4  ${c} border border-gray-100 shadow-sm`} />
                       ))}
                     </div>
                   </button>
@@ -523,8 +523,8 @@ export default function WeddingPlanner() {
             </h3>
             <p className="text-xs text-gray-500">Coordinate and bundle styling packages for bridesmaids, mothers, and groom alongside the main booking.</p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-rose-gold/5 p-4 rounded-2xl border border-rose-gold/10">
-              <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-rose-gold/5 p-4  border border-rose-gold/10">
+              <div className="bg-white p-3  shadow-sm border border-gray-100">
                 <label className="text-xs font-semibold text-gray-700 block mb-1">Bridesmaids Styling ({formData.entourage.bridesmaids} Pax)</label>
                 <input 
                   type="range"
@@ -532,7 +532,7 @@ export default function WeddingPlanner() {
                   max="6"
                   value={formData.entourage.bridesmaids}
                   onChange={(e) => updateEntourage('bridesmaids', parseInt(e.target.value))}
-                  className="w-full accent-rose-gold h-1.5 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                  className="w-full accent-rose-gold h-1.5 bg-gray-100  appearance-none cursor-pointer"
                 />
                 <div className="flex justify-between text-[10px] text-gray-400 mt-1">
                   <span>0</span>
@@ -540,7 +540,7 @@ export default function WeddingPlanner() {
                 </div>
               </div>
 
-              <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+              <div className="bg-white p-3  shadow-sm border border-gray-100 flex items-center justify-between">
                 <div>
                   <span className="text-xs font-semibold text-gray-700 block">Mother of the Bride</span>
                   <span className="text-[10px] text-gray-400">Pre-bridal facial & sari draping</span>
@@ -553,7 +553,7 @@ export default function WeddingPlanner() {
                 />
               </div>
 
-              <div className="bg-white p-3 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+              <div className="bg-white p-3  shadow-sm border border-gray-100 flex items-center justify-between">
                 <div>
                   <span className="text-xs font-semibold text-gray-700 block">Groom Grooming Package</span>
                   <span className="text-[10px] text-gray-400">Beard trimming & face charcoal treatment</span>
@@ -581,7 +581,7 @@ export default function WeddingPlanner() {
               {!selfieImage ? (
                 <div 
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-200 hover:border-rose-gold/60 bg-white hover:bg-rose-blush/10 rounded-2xl p-6 text-center cursor-pointer transition-all"
+                  className="border-2 border-dashed border-gray-200 hover:border-rose-gold/60 bg-white hover:bg-rose-blush/10  p-6 text-center cursor-pointer transition-all"
                 >
                   <Upload className="w-8 h-8 text-rose-gold mx-auto mb-2" />
                   <span className="text-xs font-bold text-gray-700 block">Drag & Drop or Click to Upload</span>
@@ -595,18 +595,18 @@ export default function WeddingPlanner() {
                   />
                 </div>
               ) : (
-                <div className="relative rounded-2xl overflow-hidden shadow-sm bg-gray-50 border border-gray-100 flex items-center justify-center p-2">
-                  <img src={selfieImage} className="w-full h-32 object-cover rounded-xl" alt="selfie" />
+                <div className="relative  overflow-hidden shadow-sm bg-gray-50 border border-gray-100 flex items-center justify-center p-2">
+                  <img src={selfieImage} className="w-full h-32 object-cover " alt="selfie" />
                   <button 
                     onClick={() => { setSelfieImage(null); setFaceAnalysis(null); }}
-                    className="absolute top-4 right-4 bg-white/95 p-1.5 rounded-full shadow-md text-gray-500 hover:text-red-500 transition-all"
+                    className="absolute top-4 right-4 bg-white/95 p-1.5  shadow-md text-gray-500 hover:text-red-500 transition-all"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               )}
 
-              <div className="bg-white p-4 rounded-2xl border border-gray-100 flex flex-col justify-center">
+              <div className="bg-white p-4  border border-gray-100 flex flex-col justify-center">
                 {selfieImage && !faceAnalysis && (
                   <button
                     onClick={runFaceAnalysis}
@@ -629,7 +629,7 @@ export default function WeddingPlanner() {
 
                 {faceAnalysis ? (
                   <div className="space-y-2 animate-fade-in">
-                    <div className="flex items-center gap-2 text-xs bg-emerald-50 text-emerald-800 p-2 rounded-lg font-semibold">
+                    <div className="flex items-center gap-2 text-xs bg-emerald-50 text-emerald-800 p-2  font-semibold">
                       <CheckCircle className="w-4 h-4 shrink-0" />
                       Face Analysis Integrated
                     </div>
@@ -681,7 +681,7 @@ export default function WeddingPlanner() {
                   value={formData.budget}
                   onChange={(e) => setFormData({ ...formData, budget: parseInt(e.target.value) })}
                   id="budget-slider"
-                  className="w-full accent-rose-gold h-1.5 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                  className="w-full accent-rose-gold h-1.5 bg-gray-100  appearance-none cursor-pointer"
                 />
                 <div className="flex justify-between text-[10px] text-gray-400 mt-1">
                   <span>₹10,000</span>
@@ -692,7 +692,7 @@ export default function WeddingPlanner() {
 
             <hr className="border-gray-100" />
 
-            <div className="flex items-center justify-between bg-rose-blush/10 p-4 rounded-xl border border-rose-gold/10">
+            <div className="flex items-center justify-between bg-rose-blush/10 p-4  border border-rose-gold/10">
               <div className="flex items-start gap-3">
                 <Home className="w-5 h-5 text-rose-gold mt-0.5" />
                 <div>
@@ -707,7 +707,7 @@ export default function WeddingPlanner() {
                   onChange={(e) => setFormData({ ...formData, homeService: e.target.checked })} 
                   className="sr-only peer"
                 />
-                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-gold"></div>
+                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none  peer peer-checked:after:translate-x-full peer-checked:after:border-ivory after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after: after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-gold"></div>
               </label>
             </div>
           </div>
@@ -724,9 +724,9 @@ export default function WeddingPlanner() {
                 <button
                   key={area}
                   onClick={() => toggleArea(area)}
-                  className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-300 ${
+                  className={`px-3 py-1.5  text-[11px] font-semibold transition-all duration-300 ${
                     formData.areas.includes(area)
-                      ? 'bg-plum text-white shadow-sm'
+                      ? 'bg-plum text-ivory shadow-sm'
                       : 'bg-white border border-gray-100 text-gray-600 hover:border-plum/30'
                   }`}
                 >
@@ -753,7 +753,7 @@ export default function WeddingPlanner() {
           <button
             onClick={generatePlan}
             disabled={!formData.role || !formData.weddingDate || loading}
-            className={`w-full py-3.5 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all ${
+            className={`w-full py-3.5  text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all ${
               formData.role && formData.weddingDate && !loading
                 ? 'btn-primary'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
@@ -776,7 +776,7 @@ export default function WeddingPlanner() {
         <div className="space-y-6 animate-fade-in pb-12">
           {/* Plan Header */}
           <div className="text-center mb-8 relative">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-gold/10 text-rose-gold text-xs font-semibold mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1  bg-rose-gold/10 text-rose-gold text-xs font-semibold mb-3">
               <Sparkles className="w-3.5 h-3.5" />
               AI Premium Wedding Portfolio
             </div>
@@ -787,7 +787,7 @@ export default function WeddingPlanner() {
               Occasion: {new Date(formData.weddingDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
             {formData.homeService && (
-              <div className="inline-flex items-center gap-1 mt-2 text-[10px] font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-100">
+              <div className="inline-flex items-center gap-1 mt-2 text-[10px] font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5  border border-amber-100">
                 <Home className="w-3 h-3" />
                 Premium Home Services Enabled
               </div>
@@ -797,10 +797,10 @@ export default function WeddingPlanner() {
           {/* Visual AI Lookbook card at top if face analysis exists */}
           {faceAnalysis && (
             <div className="card-glass p-5 border border-rose-gold/20 bg-gradient-to-r from-rose-blush/10 to-champagne-light/10 relative overflow-hidden">
-              <div className="absolute right-0 top-0 w-24 h-24 bg-rose-gold/5 rounded-full filter blur-xl" />
+              <div className="absolute right-0 top-0 w-24 h-24 bg-rose-gold/5  filter blur-xl" />
               <div className="flex gap-4">
                 {selfieImage && (
-                  <img src={selfieImage} className="w-16 h-16 rounded-xl object-cover border border-rose-gold/20" alt="Selfie" />
+                  <img src={selfieImage} className="w-16 h-16  object-cover border border-rose-gold/20" alt="Selfie" />
                 )}
                 <div>
                   <h4 className="font-bold text-xs text-gray-800 font-display flex items-center gap-1.5">
@@ -853,9 +853,9 @@ export default function WeddingPlanner() {
                 return (
                   <div key={idx} className="relative flex gap-4 md:gap-6 animate-fade-in-up" style={{ animationDelay: `${idx * 80}ms` }}>
                     {/* Timeline Date Circle Indicator */}
-                    <div className="relative z-10 w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-br from-rose-gold to-gold flex flex-col items-center justify-center shrink-0 shadow-md border-2 border-white">
-                      <span className="text-[9px] md:text-[10px] font-bold text-white uppercase tracking-wider leading-none mb-0.5">{monthVal}</span>
-                      <span className="text-sm md:text-lg font-extrabold text-white leading-none">{dayVal}</span>
+                    <div className="relative z-10 w-12 h-12 md:w-16 md:h-16  bg-gradient-to-br from-rose-gold to-gold flex flex-col items-center justify-center shrink-0 shadow-md border-2 border-ivory">
+                      <span className="text-[9px] md:text-[10px] font-bold text-ivory uppercase tracking-wider leading-none mb-0.5">{monthVal}</span>
+                      <span className="text-sm md:text-lg font-extrabold text-ivory leading-none">{dayVal}</span>
                     </div>
 
                     {/* Timeline Card - Sleek grid-based multi-column layout */}
@@ -868,16 +868,16 @@ export default function WeddingPlanner() {
                             {/* Badges and Cart Selector */}
                             <div className="flex items-center justify-between mb-3">
                               <div className="flex flex-wrap gap-1">
-                                <span className="text-[9px] font-bold text-rose-gold bg-rose-gold/10 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                <span className="text-[9px] font-bold text-rose-gold bg-rose-gold/10 px-2.5 py-0.5  uppercase tracking-wider">
                                   {item.daysLeft}
                                 </span>
                                 {item.homeService && (
-                                  <span className="text-[9px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full flex items-center gap-0.5 border border-amber-100">
+                                  <span className="text-[9px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5  flex items-center gap-0.5 border border-amber-100">
                                     <Home className="w-2.5 h-2.5" />
                                     Home Service
                                   </span>
                                 )}
-                                <span className="text-[9px] font-bold text-gray-500 bg-gray-50 px-2.5 py-0.5 rounded-full">
+                                <span className="text-[9px] font-bold text-gray-500 bg-gray-50 px-2.5 py-0.5 ">
                                   {item.forWho || 'Bride'}
                                 </span>
                               </div>
@@ -916,7 +916,7 @@ export default function WeddingPlanner() {
                                 <DollarSign className="w-3 h-3 text-gray-400" />
                                 Custom Cost Allocator
                               </span>
-                              <span className="text-sm font-extrabold text-rose-gold bg-white border border-rose-gold/20 px-2 py-0.5 rounded-lg shadow-sm">
+                              <span className="text-sm font-extrabold text-rose-gold bg-white border border-rose-gold/20 px-2 py-0.5  shadow-sm">
                                 ₹{item.cost?.toLocaleString()}
                               </span>
                             </div>
@@ -927,7 +927,7 @@ export default function WeddingPlanner() {
                               step="500"
                               value={item.cost || 1000}
                               onChange={(e) => rebalanceSalon(idx, parseInt(e.target.value))}
-                              className="w-full accent-rose-gold h-1.5 cursor-ew-resize bg-gray-200 rounded-lg appearance-none"
+                              className="w-full accent-rose-gold h-1.5 cursor-ew-resize bg-gray-200  appearance-none"
                             />
                             <div className="flex justify-between text-[8px] font-bold text-gray-300">
                               <span>₹1,000</span>
@@ -937,12 +937,12 @@ export default function WeddingPlanner() {
 
                           {/* Entourage Slot Panel if active */}
                           {item.entourageService && (
-                            <div className="p-3 bg-plum/5 rounded-2xl border border-plum/10 flex items-center justify-between text-[11px] animate-fade-in shadow-inner">
+                            <div className="p-3 bg-plum/5  border border-plum/10 flex items-center justify-between text-[11px] animate-fade-in shadow-inner">
                               <div className="min-w-0 pr-2">
                                 <span className="font-extrabold text-plum block text-[9px] uppercase tracking-wider">Entourage Slots</span>
                                 <span className="text-gray-500 text-[10px] font-medium block truncate">{item.entourageService}</span>
                               </div>
-                              <span className="font-bold text-plum bg-white/80 px-2 py-0.5 rounded-lg border border-plum/10 shrink-0">
+                              <span className="font-bold text-plum bg-white/80 px-2 py-0.5  border border-plum/10 shrink-0">
                                 +₹{item.entourageCost?.toLocaleString()}
                               </span>
                             </div>
@@ -1001,7 +1001,7 @@ export default function WeddingPlanner() {
 
               <button
                 onClick={() => setShowMoodBoard(true)}
-                className="px-5 py-3 border border-rose-gold/30 bg-rose-blush/5 hover:bg-rose-blush/10 text-rose-gold rounded-2xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+                className="px-5 py-3 border border-rose-gold/30 bg-rose-blush/5 hover:bg-rose-blush/10 text-rose-gold  text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
               >
                 <Sparkles className="w-4 h-4" />
                 View Mood Board
@@ -1009,7 +1009,7 @@ export default function WeddingPlanner() {
               
               <button
                 onClick={() => { setPlan(null); setStep(1); }}
-                className="px-5 py-3 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-2xl text-xs font-bold transition-all"
+                className="px-5 py-3 border border-gray-200 text-gray-600 hover:bg-gray-50  text-xs font-bold transition-all"
               >
                 Reset Planner
               </button>
@@ -1027,21 +1027,21 @@ export default function WeddingPlanner() {
             {bookingProgress === 1 && (
               <div className="text-center py-8 space-y-4">
                 <div className="relative w-20 h-20 mx-auto">
-                  <div className="absolute inset-0 rounded-full border-4 border-rose-gold/20" />
-                  <div className="absolute inset-0 rounded-full border-4 border-rose-gold border-t-transparent animate-spin" />
+                  <div className="absolute inset-0  border-4 border-rose-gold/20" />
+                  <div className="absolute inset-0  border-4 border-rose-gold border-t-transparent animate-spin" />
                   <Heart className="w-8 h-8 text-rose-gold absolute inset-0 m-auto animate-pulse" />
                 </div>
                 <h3 className="text-lg font-bold font-display text-gray-800">Dispatching Elite Booking Orders</h3>
                 <p className="text-xs text-gray-400 max-w-xs mx-auto">Securing individual time slots, assigning artists, and coordinating home travel calendars with Oasis Salon, Bubbles, and top partner boutiques.</p>
-                <div className="w-full bg-gray-100 rounded-full h-1.5 max-w-xs mx-auto overflow-hidden">
-                  <div className="bg-rose-gold h-1.5 rounded-full animate-progress" />
+                <div className="w-full bg-gray-100  h-1.5 max-w-xs mx-auto overflow-hidden">
+                  <div className="bg-rose-gold h-1.5  animate-progress" />
                 </div>
               </div>
             )}
 
             {bookingProgress === 2 && (
               <div className="text-center py-6 space-y-6">
-                <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-500 border border-emerald-100 flex items-center justify-center mx-auto shadow-md">
+                <div className="w-16 h-16  bg-emerald-50 text-emerald-500 border border-emerald-100 flex items-center justify-center mx-auto shadow-md">
                   <CheckCircle className="w-10 h-10" />
                 </div>
                 <div>
@@ -1049,7 +1049,7 @@ export default function WeddingPlanner() {
                   <p className="text-xs text-gray-400 mt-1">Your entire wedding beauty itinerary is successfully locked and coordinated.</p>
                 </div>
 
-                <div className="bg-gray-50 rounded-2xl p-4 text-left border border-gray-100 space-y-2">
+                <div className="bg-gray-50  p-4 text-left border border-gray-100 space-y-2">
                   <div className="flex justify-between text-xs">
                     <span className="text-gray-500 font-medium">Services Booked</span>
                     <span className="font-bold text-gray-800">{Object.values(selectedItems).filter(Boolean).length} Appointments</span>
@@ -1077,7 +1077,7 @@ export default function WeddingPlanner() {
                   </button>
                   <button
                     onClick={() => window.print()}
-                    className="px-4 py-2.5 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-xl text-xs font-bold transition-all"
+                    className="px-4 py-2.5 border border-gray-200 text-gray-600 hover:bg-gray-50  text-xs font-bold transition-all"
                   >
                     Print
                   </button>
@@ -1115,9 +1115,9 @@ export default function WeddingPlanner() {
             </div>
 
             {/* Mood Board Canvas Layout */}
-            <div id="mood-board-print-area" className="space-y-6 print:space-y-4 print:text-black">
+            <div id="mood-board-print-area" className="space-y-6 print:space-y-4 print:text-[#080608]">
               {/* Top Banner */}
-              <div className="bg-gradient-to-r from-plum to-rose-gold p-6 rounded-2xl text-white flex items-center justify-between shadow-sm">
+              <div className="bg-gradient-to-r from-plum to-rose-gold p-6  text-ivory flex items-center justify-between shadow-sm">
                 <div>
                   <h4 className="text-xl font-bold font-display">GlowSpot Bridal Portfolio</h4>
                   <p className="text-xs opacity-80 mt-1">Aesthetic direction curated for Hyderabad beauty styles</p>
@@ -1133,7 +1133,7 @@ export default function WeddingPlanner() {
                 
                 {/* Left Side: Profile & Aesthetic Details */}
                 <div className="space-y-4">
-                  <div className="bg-gray-50 p-4 rounded-xl border border-gray-100/50">
+                  <div className="bg-gray-50 p-4  border border-gray-100/50">
                     <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Aesthetic Theme</span>
                     <h5 className="font-extrabold text-gray-800 text-sm mt-1">
                       {formData.stylePreset ? stylePresets.find(p => p.id === formData.stylePreset)?.label : 'Custom Look'}
@@ -1143,13 +1143,13 @@ export default function WeddingPlanner() {
                     </p>
                     <div className="flex gap-1.5 mt-3">
                       {formData.stylePreset && stylePresets.find(p => p.id === formData.stylePreset)?.colors.map((c, i) => (
-                        <div key={i} className={`w-5 h-5 rounded-full ${c} border border-white shadow-sm`} />
+                        <div key={i} className={`w-5 h-5  ${c} border border-ivory shadow-sm`} />
                       ))}
                     </div>
                   </div>
 
                   {faceAnalysis && (
-                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-100/50 space-y-2">
+                    <div className="bg-gray-50 p-4  border border-gray-100/50 space-y-2">
                       <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Face Shape & Skin Profile</span>
                       <p className="text-xs text-gray-700"><strong>Face Shape:</strong> {faceAnalysis.faceShape}</p>
                       <p className="text-xs text-gray-700"><strong>Complexion undertones:</strong> {faceAnalysis.skinTone}</p>
@@ -1159,7 +1159,7 @@ export default function WeddingPlanner() {
                 </div>
 
                 {/* Right Side: Key Milestones Summary */}
-                <div className="bg-gray-50 p-4 rounded-xl border border-gray-100/50 flex flex-col justify-between">
+                <div className="bg-gray-50 p-4  border border-gray-100/50 flex flex-col justify-between">
                   <div>
                     <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Timeline Highlights</span>
                     <ul className="space-y-2.5 mt-3">
@@ -1178,7 +1178,7 @@ export default function WeddingPlanner() {
                       <strong className="text-rose-gold">₹{totalCost.toLocaleString()}</strong>
                     </div>
                     {formData.homeService && (
-                      <span className="text-[9px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full mt-1.5 inline-block font-bold font-body">
+                      <span className="text-[9px] text-amber-700 bg-amber-50 px-2 py-0.5  mt-1.5 inline-block font-bold font-body">
                         ✓ Travel/Venue Delivery Service Configured
                       </span>
                     )}
@@ -1188,7 +1188,7 @@ export default function WeddingPlanner() {
               </div>
 
               {/* Handcrafted Styling Instructions */}
-              <div className="bg-rose-blush/5 p-4 rounded-xl border border-rose-gold/10 text-xs text-gray-600 leading-relaxed">
+              <div className="bg-rose-blush/5 p-4  border border-rose-gold/10 text-xs text-gray-600 leading-relaxed">
                 <strong>Bridal Preparation Checklist:</strong> Apply cold pressed oils, drink 3L of water daily leading to the wedding day, and share this lookbook sheet with your boutique coordinator so they can sync Kanjeevaram sari pleating or Khada dupatta setups directly.
               </div>
             </div>
@@ -1209,7 +1209,7 @@ export default function WeddingPlanner() {
                   const text = `Hi! Check out my GlowSpot Bridal beauty schedule: *${presetName}* aesthetic, scheduled on ${formData.weddingDate} with top Hyderabad salons. Total estimated package: ₹${totalCost.toLocaleString()}. Generate yours at http://localhost:3000/planner`;
                   window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
                 }}
-                className="px-4 py-2.5 border border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+                className="px-4 py-2.5 border border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100  text-xs font-bold transition-all flex items-center gap-1.5"
               >
                 Share Lookbook on WhatsApp
               </button>

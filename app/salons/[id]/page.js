@@ -59,7 +59,7 @@ export default function SalonDetail() {
       <div className="relative h-64 md:h-96 overflow-hidden bg-noir-100">
         {imgError ? (
           <div className="absolute inset-0 bg-gradient-to-br from-noir-50 via-noir-100 to-noir-200 flex flex-col items-center justify-center p-8 border border-white/[0.04] transition-all duration-300">
-            <span className="text-3xl md:text-4xl font-bold text-neon-gold font-display text-center drop-shadow-md">
+            <span className="text-3xl md:text-4xl font-bold text-gold font-display text-center drop-shadow-md">
               {salon.name}
             </span>
             <span className="text-xs md:text-sm text-white/40 tracking-wider uppercase font-semibold mt-3">
@@ -94,13 +94,13 @@ export default function SalonDetail() {
               <h1 className="text-3xl font-bold font-display text-white mb-2">{salon.name}</h1>
               <div className="flex flex-wrap items-center gap-3 text-sm text-white/50 mb-4">
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-neon-gold shrink-0" />
+                  <MapPin className="w-4 h-4 text-gold shrink-0" />
                   {salon.address}
                 </span>
               </div>
               <div className="flex flex-wrap items-center gap-4 text-sm">
                 <span className="flex items-center gap-1 font-bold text-white">
-                  <Star className="w-4 h-4 text-neon-gold fill-neon-gold shrink-0" />
+                  <Star className="w-4 h-4 text-gold fill-gold shrink-0" />
                   {salon.rating}
                 </span>
                 <span className="text-white/40">({salon.reviewCount} reviews)</span>
@@ -110,17 +110,17 @@ export default function SalonDetail() {
                   {salon.openHours}
                 </span>
                 {salon.closedDay !== 'None' && (
-                  <span className="text-xs text-neon-amber bg-neon-amber/10 border border-neon-amber/20 px-2.5 py-0.5 rounded-lg font-medium">
+                  <span className="text-xs text-gold-light bg-gold-light/10 border border-gold-light/20 px-2.5 py-0.5 rounded-lg font-medium">
                     Closed on {salon.closedDay}
                   </span>
                 )}
               </div>
             </div>
             <div className="flex flex-col items-start md:items-end gap-2 md:text-right shrink-0">
-              <span className="text-xl font-bold text-neon-gold">{salon.priceRange}</span>
+              <span className="text-xl font-bold text-gold">{salon.priceRange}</span>
               <div className="flex flex-wrap gap-2">
                 {salon.homeService && (
-                  <span className="px-2.5 py-1 rounded-lg bg-emerald-glow/10 border border-emerald-glow/20 text-emerald-glow text-xs font-semibold flex items-center gap-1">
+                  <span className="px-2.5 py-1 rounded-lg bg-mauve/10 border border-mauve/20 text-mauve text-xs font-semibold flex items-center gap-1">
                     <Home className="w-3.5 h-3.5" />
                     Home Service
                   </span>
@@ -146,7 +146,7 @@ export default function SalonDetail() {
               </span>
             ))}
             {salon.tags?.map((tag, i) => (
-              <span key={i} className="px-3 py-1 rounded-lg bg-neon-gold/10 border border-neon-gold/20 text-neon-gold text-xs font-semibold capitalize">
+              <span key={i} className="px-3 py-1 rounded-lg bg-gold/10 border border-gold/20 text-gold text-xs font-semibold capitalize">
                 {tag.replace('-', ' ')}
               </span>
             ))}
@@ -169,7 +169,7 @@ export default function SalonDetail() {
                 id={`tab-${tab.id}`}
                 className={`flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-300 snap-start ${
                   activeTab === tab.id
-                    ? 'bg-neon-gold text-black shadow-glow font-bold'
+                    ? 'bg-gold text-black shadow-glow font-bold'
                     : 'bg-white/[0.02] text-white/55 hover:bg-white/[0.05] border border-white/[0.05]'
                 }`}
               >
@@ -196,10 +196,10 @@ export default function SalonDetail() {
                           <p className="text-sm text-white/40">{service.duration}</p>
                         </div>
                         <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 mt-2 sm:mt-0 pt-2 sm:pt-0 border-t border-white/[0.04] sm:border-t-0">
-                          <span className="font-bold text-neon-gold">₹{service.price?.toLocaleString()}</span>
+                          <span className="font-bold text-gold">₹{service.price?.toLocaleString()}</span>
                           <button
                             onClick={() => setActiveTab('booking')}
-                            className="text-xs px-4 py-2 rounded-xl bg-neon-gold text-black hover:brightness-110 font-bold transition-all"
+                            className="text-xs px-4 py-2 rounded-xl bg-gold text-black hover:brightness-110 font-bold transition-all"
                           >
                             Book
                           </button>
@@ -217,11 +217,11 @@ export default function SalonDetail() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {salon.stylists?.map((stylist, i) => (
                 <div key={i} className="p-6 bg-white/[0.02] border border-white/[0.05] rounded-2xl text-center hover:border-white/[0.08] transition-colors">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-neon-gold/20 to-neon-amber/20 border border-neon-gold/10 flex items-center justify-center mx-auto mb-4">
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gold/20 to-gold-light/20 border border-gold/10 flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl font-bold text-white font-display">{stylist.name.charAt(0)}</span>
                   </div>
                   <h4 className="font-bold text-white text-lg">{stylist.name}</h4>
-                  <p className="text-sm text-neon-gold font-medium mt-0.5">{stylist.specialization}</p>
+                  <p className="text-sm text-gold font-medium mt-0.5">{stylist.specialization}</p>
                   <p className="text-xs text-white/40 mt-1">{stylist.experience} experience</p>
                 </div>
               ))}
@@ -245,7 +245,7 @@ export default function SalonDetail() {
                     </div>
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, j) => (
-                        <Star key={j} className={`w-3.5 h-3.5 ${j < review.rating ? 'text-neon-gold fill-neon-gold' : 'text-white/10'}`} />
+                        <Star key={j} className={`w-3.5 h-3.5 ${j < review.rating ? 'text-gold fill-gold' : 'text-white/10'}`} />
                       ))}
                     </div>
                   </div>

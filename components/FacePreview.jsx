@@ -421,8 +421,8 @@ Rules:
           id="face-upload-zone"
           className={`relative cursor-pointer rounded-3xl border-2 border-dashed transition-all duration-500 p-6 sm:p-12 text-center ${
             dragOver
-              ? 'border-neon-gold bg-neon-gold/5 scale-[1.02]'
-              : 'border-white/10 hover:border-neon-gold/30 hover:bg-white/[0.02]'
+              ? 'border-gold bg-gold/5 scale-[1.02]'
+              : 'border-ivory/10 hover:border-gold/30 hover:bg-white/[0.02]'
           }`}
         >
           <input
@@ -434,16 +434,16 @@ Rules:
             id="face-file-input"
           />
           <div className="max-w-sm mx-auto">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-neon-gold/10 to-emerald-glow/10 flex items-center justify-center mx-auto mb-6 border border-white/[0.05]">
-              <Camera className="w-10 h-10 text-neon-gold" />
+            <div className="w-20 h-20  bg-gradient-to-br from-gold/10 to-mauve/10 flex items-center justify-center mx-auto mb-6 border border-ivory/[0.05]">
+              <Camera className="w-10 h-10 text-gold" />
             </div>
-            <h3 className="text-xl font-bold font-display text-white mb-2">
+            <h3 className="text-xl font-bold font-display text-ivory mb-2">
               Upload Your Photo
             </h3>
-            <p className="text-sm text-white/35 mb-6">
+            <p className="text-sm text-ivory/35 mb-6">
               Drop an image here or click to browse. Our AI will analyze your appearance and recommend perfect styles, grooming, and colors.
             </p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neon-gold/8 text-neon-gold text-sm font-medium border border-neon-gold/15">
+            <div className="inline-flex items-center gap-2 px-4 py-2  bg-gold/8 text-gold text-sm font-medium border border-gold/15">
               <Upload className="w-4 h-4" />
               Choose Photo
             </div>
@@ -457,13 +457,13 @@ Rules:
             <div className="space-y-4">
               <div 
                 ref={imageContainerRef}
-                className="relative rounded-2xl overflow-hidden shadow-card select-none"
+                className="relative  overflow-hidden shadow-card select-none"
               >
                 <img
                   ref={imgRef}
                   src={image}
                   alt="Your photo"
-                  className="w-full h-auto max-h-[500px] object-contain bg-noir-100"
+                  className="w-full h-auto max-h-[500px] object-contain bg-[#080608]-100"
                 />
                 <canvas
                   ref={canvasRef}
@@ -475,29 +475,29 @@ Rules:
                     {/* Draggable Lips Node */}
                     <div
                       onPointerDown={handlePointerDown('lip')}
-                      className="absolute w-8 h-8 rounded-full border-2 border-white bg-neon-gold/80 shadow-glow cursor-move flex items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none z-30 group"
+                      className="absolute w-8 h-8  border-2 border-ivory bg-gold/80 shadow-glow cursor-move flex items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none z-30 group"
                       style={{ left: `${lipCoords.x}%`, top: `${lipCoords.y}%` }}
                     >
-                      <span className="text-[9px] font-extrabold text-black uppercase">Lip</span>
-                      <div className="absolute top-10 bg-black/85 border border-white/10 px-2 py-0.5 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">💄 Drag to Lips</div>
+                      <span className="text-[9px] font-extrabold text-[#080608] uppercase">Lip</span>
+                      <div className="absolute top-10 bg-black/85 border border-ivory/10 px-2 py-0.5 rounded text-[8px] text-ivory opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">💄 Drag to Lips</div>
                     </div>
                     {/* Draggable Cheek Node */}
                     <div
                       onPointerDown={handlePointerDown('cheek')}
-                      className="absolute w-8 h-8 rounded-full border-2 border-white bg-emerald-glow/80 shadow-glow cursor-move flex items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none z-30 group"
+                      className="absolute w-8 h-8  border-2 border-ivory bg-mauve/80 shadow-glow cursor-move flex items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none z-30 group"
                       style={{ left: `${cheekCoords.x}%`, top: `${cheekCoords.y}%` }}
                     >
-                      <span className="text-[9px] font-extrabold text-black uppercase">Blsh</span>
-                      <div className="absolute top-10 bg-black/85 border border-white/10 px-2 py-0.5 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">🌸 Drag to Cheek</div>
+                      <span className="text-[9px] font-extrabold text-[#080608] uppercase">Blsh</span>
+                      <div className="absolute top-10 bg-black/85 border border-ivory/10 px-2 py-0.5 rounded text-[8px] text-ivory opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">🌸 Drag to Cheek</div>
                     </div>
                     {/* Draggable Hair Node */}
                     <div
                       onPointerDown={handlePointerDown('hair')}
-                      className="absolute w-8 h-8 rounded-full border-2 border-white bg-neon-amber/80 shadow-glow cursor-move flex items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none z-30 group"
+                      className="absolute w-8 h-8  border-2 border-ivory bg-neon-amber/80 shadow-glow cursor-move flex items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none z-30 group"
                       style={{ left: `${hairCoords.x}%`, top: `${hairCoords.y}%` }}
                     >
-                      <span className="text-[9px] font-extrabold text-black uppercase">Hair</span>
-                      <div className="absolute top-10 bg-black/85 border border-white/10 px-2 py-0.5 rounded text-[8px] text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">💇 Drag to Hair</div>
+                      <span className="text-[9px] font-extrabold text-[#080608] uppercase">Hair</span>
+                      <div className="absolute top-10 bg-black/85 border border-ivory/10 px-2 py-0.5 rounded text-[8px] text-ivory opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">💇 Drag to Hair</div>
                     </div>
                   </>
                 )}
@@ -524,7 +524,7 @@ Rules:
                 </button>
                 <button
                   onClick={reset}
-                  className="p-3 rounded-xl border border-white/10 hover:border-neon-gold/30 text-white/40 hover:text-neon-gold transition-all duration-300"
+                  className="p-3  border border-ivory/10 hover:border-gold/30 text-ivory/40 hover:text-gold transition-all duration-300"
                   id="reset-btn"
                 >
                   <RotateCcw className="w-5 h-5" />
@@ -544,10 +544,10 @@ Rules:
                         key={cat.id}
                         onClick={() => setActiveCategory(cat.id)}
                         id={`tab-${cat.id}`}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 snap-start ${
+                        className={`flex items-center gap-2 px-4 py-2  text-sm font-medium whitespace-nowrap transition-all duration-300 snap-start ${
                           activeCategory === cat.id
-                            ? 'bg-neon-gold text-black shadow-glow'
-                            : 'bg-white/[0.03] text-white/50 hover:bg-white/[0.06] border border-white/[0.05]'
+                            ? 'bg-gold text-[#080608] shadow-glow'
+                            : 'bg-white/[0.03] text-ivory/50 hover:bg-white/[0.06] border border-ivory/[0.05]'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -561,25 +561,25 @@ Rules:
                 {activeCategory === 'face' && (
                   <div className="space-y-4 animate-fade-in">
                     <div className="card-glass p-5">
-                      <h4 className="font-bold text-white mb-3 font-display">Style Consultation Profile</h4>
+                      <h4 className="font-bold text-ivory mb-3 font-display">Style Consultation Profile</h4>
                       <div className="space-y-3">
                         {analysis.gender && (
-                          <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-                            <span className="text-sm text-white/50">Client Profile</span>
-                            <span className="text-sm font-bold text-emerald-glow capitalize">{analysis.gender}</span>
+                          <div className="flex justify-between items-center p-3  bg-white/[0.03] border border-ivory/[0.05]">
+                            <span className="text-sm text-ivory/50">Client Profile</span>
+                            <span className="text-sm font-bold text-mauve capitalize">{analysis.gender}</span>
                           </div>
                         )}
-                        <div className="flex justify-between items-center p-3 rounded-xl bg-neon-gold/[0.04] border border-neon-gold/10">
-                          <span className="text-sm text-white/50">Face Shape</span>
-                          <span className="text-sm font-bold text-neon-gold">{analysis.faceShape}</span>
+                        <div className="flex justify-between items-center p-3  bg-gold/[0.04] border border-gold/10">
+                          <span className="text-sm text-ivory/50">Face Shape</span>
+                          <span className="text-sm font-bold text-gold">{analysis.faceShape}</span>
                         </div>
-                        <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.03] border border-white/[0.05]">
-                          <span className="text-sm text-white/50">Skin Tone</span>
-                          <span className="text-sm font-bold text-neon-gold">{analysis.skinTone}</span>
+                        <div className="flex justify-between items-center p-3  bg-white/[0.03] border border-ivory/[0.05]">
+                          <span className="text-sm text-ivory/50">Skin Tone</span>
+                          <span className="text-sm font-bold text-gold">{analysis.skinTone}</span>
                         </div>
-                        <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
-                          <p className="text-xs text-white/25 font-semibold uppercase tracking-wider mb-1">Professional Assessment</p>
-                          <p className="text-sm text-white/45 leading-relaxed">{analysis.features}</p>
+                        <div className="p-3  bg-white/[0.02] border border-ivory/[0.04]">
+                          <p className="text-xs text-ivory/25 font-semibold uppercase tracking-wider mb-1">Professional Assessment</p>
+                          <p className="text-sm text-ivory/45 leading-relaxed">{analysis.features}</p>
                         </div>
                       </div>
                     </div>
@@ -590,15 +590,15 @@ Rules:
                 {activeCategory === 'hairstyle' && analysis.hairstyleRecommendations && (
                   <div className="space-y-3 animate-fade-in">
                     {analysis.hairstyleRecommendations.map((rec, i) => (
-                      <div key={i} className="card-glass p-4 hover:shadow-card-hover hover:border-neon-gold/10 transition-all duration-300">
+                      <div key={i} className="card-glass p-4 hover:shadow-card-hover hover:border-gold/10 transition-all duration-300">
                         <div className="flex items-center justify-between mb-2">
-                          <h5 className="font-bold text-white">{rec.style}</h5>
+                          <h5 className="font-bold text-ivory">{rec.style}</h5>
                           <span className="tag-gold text-xs">{rec.confidence}% match</span>
                         </div>
-                        <p className="text-sm text-white/40">{rec.reason}</p>
-                        <div className="mt-3 w-full bg-white/[0.05] rounded-full h-2">
+                        <p className="text-sm text-ivory/40">{rec.reason}</p>
+                        <div className="mt-3 w-full bg-white/[0.05]  h-2">
                           <div
-                            className="bg-gradient-to-r from-neon-gold to-emerald-glow h-2 rounded-full transition-all duration-1000"
+                            className="bg-gradient-to-r from-gold to-mauve h-2  transition-all duration-1000"
                             style={{ width: `${rec.confidence}%` }}
                           />
                         </div>
@@ -611,9 +611,9 @@ Rules:
                 {activeCategory === 'makeup' && analysis.makeupRecommendations && (
                   <div className="space-y-3 animate-fade-in">
                     {analysis.makeupRecommendations.map((rec, i) => (
-                      <div key={i} className="card-glass p-4 hover:shadow-card-hover hover:border-neon-gold/10 transition-all duration-300">
-                        <h5 className="font-bold text-white mb-1">{rec.look}</h5>
-                        <p className="text-sm text-white/40 mb-3">{rec.reason}</p>
+                      <div key={i} className="card-glass p-4 hover:shadow-card-hover hover:border-gold/10 transition-all duration-300">
+                        <h5 className="font-bold text-ivory mb-1">{rec.look}</h5>
+                        <p className="text-sm text-ivory/40 mb-3">{rec.reason}</p>
                         <div className="flex flex-wrap gap-2">
                           {rec.colors.map((c, j) => (
                             <span key={j} className="tag text-xs">{c}</span>
@@ -628,15 +628,15 @@ Rules:
                 {activeCategory === 'haircolor' && analysis.hairColorRecommendations && (
                   <div className="space-y-3 animate-fade-in">
                     {analysis.hairColorRecommendations.map((rec, i) => (
-                      <div key={i} className="card-glass p-4 hover:shadow-card-hover hover:border-neon-gold/10 transition-all duration-300">
+                      <div key={i} className="card-glass p-4 hover:shadow-card-hover hover:border-gold/10 transition-all duration-300">
                         <div className="flex items-center justify-between mb-2">
-                          <h5 className="font-bold text-white">{rec.color}</h5>
+                          <h5 className="font-bold text-ivory">{rec.color}</h5>
                           <span className="tag-gold text-xs">{rec.suitability}% suitable</span>
                         </div>
-                        <p className="text-sm text-white/40">{rec.reason}</p>
-                        <div className="mt-3 w-full bg-white/[0.05] rounded-full h-2">
+                        <p className="text-sm text-ivory/40">{rec.reason}</p>
+                        <div className="mt-3 w-full bg-white/[0.05]  h-2">
                           <div
-                            className="bg-gradient-to-r from-neon-gold to-neon-amber h-2 rounded-full transition-all duration-1000"
+                            className="bg-gradient-to-r from-gold to-neon-amber h-2  transition-all duration-1000"
                             style={{ width: `${rec.suitability}%` }}
                           />
                         </div>
@@ -647,18 +647,18 @@ Rules:
 
                 {/* Virtual Try-On Controls */}
                 {activeCategory === 'tryon' && (
-                  <div className="space-y-4 animate-fade-in card-glass p-5 border border-white/[0.05]">
+                  <div className="space-y-4 animate-fade-in card-glass p-5 border border-ivory/[0.05]">
                     <div className="flex items-center gap-2 mb-2">
-                      <Sparkles className="w-4 h-4 text-neon-gold" />
-                      <h4 className="font-bold text-white text-sm font-display">Virtual Makeup & Hair Swatches</h4>
+                      <Sparkles className="w-4 h-4 text-gold" />
+                      <h4 className="font-bold text-ivory text-sm font-display">Virtual Makeup & Hair Swatches</h4>
                     </div>
-                    <p className="text-white/40 text-[11px] leading-relaxed font-body">
+                    <p className="text-ivory/40 text-[11px] leading-relaxed font-body">
                       Drag the glowing pointer nodes (<strong>Lip</strong>, <strong>Blsh</strong>, <strong>Hair</strong>) directly on your photo to position the color blends on your face.
                     </p>
 
                     {/* Lipstick Section */}
-                    <div className="space-y-2.5 pt-2 border-t border-white/[0.04]">
-                      <span className="text-[10px] uppercase font-bold text-white/50 tracking-wider font-mono">💄 Lipstick Overlay</span>
+                    <div className="space-y-2.5 pt-2 border-t border-ivory/[0.04]">
+                      <span className="text-[10px] uppercase font-bold text-ivory/50 tracking-wider font-mono">💄 Lipstick Overlay</span>
                       <div className="flex flex-wrap gap-2">
                         {[
                           { name: 'Ruby Red', hex: '#ff003c' },
@@ -671,19 +671,19 @@ Rules:
                             onClick={() => setLipstickColor(sw.hex)}
                             className={`px-2 py-1 rounded-md text-[10px] font-semibold border flex items-center gap-1.5 transition-all font-body ${
                               lipstickColor === sw.hex
-                                ? 'border-neon-gold bg-neon-gold/10 text-neon-gold'
-                                : 'border-white/[0.06] bg-white/[0.02] text-white/40 hover:border-white/10'
+                                ? 'border-gold bg-gold/10 text-gold'
+                                : 'border-ivory/[0.06] bg-white/[0.02] text-ivory/40 hover:border-ivory/10'
                             }`}
                           >
-                            <span className="w-2.5 h-2.5 rounded-full border border-black/20" style={{ backgroundColor: sw.hex }} />
+                            <span className="w-2.5 h-2.5  border border-black/20" style={{ backgroundColor: sw.hex }} />
                             {sw.name}
                           </button>
                         ))}
                       </div>
                       <div className="space-y-1">
-                        <div className="flex justify-between text-[10px] text-white/35 font-body">
+                        <div className="flex justify-between text-[10px] text-ivory/35 font-body">
                           <span>Intensity / Opacity</span>
-                          <span className="text-neon-gold font-bold">{Math.round(lipstickOpacity * 100)}%</span>
+                          <span className="text-gold font-bold">{Math.round(lipstickOpacity * 100)}%</span>
                         </div>
                         <input
                           type="range"
@@ -692,14 +692,14 @@ Rules:
                           step="0.05"
                           value={lipstickOpacity}
                           onChange={(e) => setLipstickOpacity(parseFloat(e.target.value))}
-                          className="w-full accent-neon-gold h-1 bg-white/[0.05] rounded-lg appearance-none cursor-ew-resize"
+                          className="w-full accent-gold h-1 bg-white/[0.05]  appearance-none cursor-ew-resize"
                         />
                       </div>
                     </div>
 
                     {/* Blush Section */}
-                    <div className="space-y-2.5 pt-3 border-t border-white/[0.04]">
-                      <span className="text-[10px] uppercase font-bold text-white/50 tracking-wider font-mono">🌸 Cheek Blush Overlay</span>
+                    <div className="space-y-2.5 pt-3 border-t border-ivory/[0.04]">
+                      <span className="text-[10px] uppercase font-bold text-ivory/50 tracking-wider font-mono">🌸 Cheek Blush Overlay</span>
                       <div className="flex flex-wrap gap-2">
                         {[
                           { name: 'Rose Petal', hex: '#ff6b8b' },
@@ -711,19 +711,19 @@ Rules:
                             onClick={() => setBlushColor(sw.hex)}
                             className={`px-2 py-1 rounded-md text-[10px] font-semibold border flex items-center gap-1.5 transition-all font-body ${
                               blushColor === sw.hex
-                                ? 'border-emerald-glow bg-emerald-glow/10 text-emerald-glow'
-                                : 'border-white/[0.06] bg-white/[0.02] text-white/40 hover:border-white/10'
+                                ? 'border-mauve bg-mauve/10 text-mauve'
+                                : 'border-ivory/[0.06] bg-white/[0.02] text-ivory/40 hover:border-ivory/10'
                             }`}
                           >
-                            <span className="w-2.5 h-2.5 rounded-full border border-black/20" style={{ backgroundColor: sw.hex }} />
+                            <span className="w-2.5 h-2.5  border border-black/20" style={{ backgroundColor: sw.hex }} />
                             {sw.name}
                           </button>
                         ))}
                       </div>
                       <div className="space-y-1">
-                        <div className="flex justify-between text-[10px] text-white/35 font-body">
+                        <div className="flex justify-between text-[10px] text-ivory/35 font-body">
                           <span>Intensity / Opacity</span>
-                          <span className="text-emerald-glow font-bold">{Math.round(blushOpacity * 100)}%</span>
+                          <span className="text-mauve font-bold">{Math.round(blushOpacity * 100)}%</span>
                         </div>
                         <input
                           type="range"
@@ -732,14 +732,14 @@ Rules:
                           step="0.05"
                           value={blushOpacity}
                           onChange={(e) => setBlushOpacity(parseFloat(e.target.value))}
-                          className="w-full accent-emerald-glow h-1 bg-white/[0.05] rounded-lg appearance-none cursor-ew-resize"
+                          className="w-full accent-mauve h-1 bg-white/[0.05]  appearance-none cursor-ew-resize"
                         />
                       </div>
                     </div>
 
                     {/* Hair Streaks Section */}
-                    <div className="space-y-2.5 pt-3 border-t border-white/[0.04]">
-                      <span className="text-[10px] uppercase font-bold text-white/50 tracking-wider font-mono">💇 Hair Highlights / Streaks</span>
+                    <div className="space-y-2.5 pt-3 border-t border-ivory/[0.04]">
+                      <span className="text-[10px] uppercase font-bold text-ivory/50 tracking-wider font-mono">💇 Hair Highlights / Streaks</span>
                       <div className="flex flex-wrap gap-2">
                         {[
                           { name: 'Caramel', hex: '#c68642' },
@@ -753,16 +753,16 @@ Rules:
                             className={`px-2 py-1 rounded-md text-[10px] font-semibold border flex items-center gap-1.5 transition-all font-body ${
                               hairColor === sw.hex
                                 ? 'border-neon-amber bg-neon-amber/10 text-neon-amber'
-                                : 'border-white/[0.06] bg-white/[0.02] text-white/40 hover:border-white/10'
+                                : 'border-ivory/[0.06] bg-white/[0.02] text-ivory/40 hover:border-ivory/10'
                             }`}
                           >
-                            <span className="w-2.5 h-2.5 rounded-full border border-black/20" style={{ backgroundColor: sw.hex }} />
+                            <span className="w-2.5 h-2.5  border border-black/20" style={{ backgroundColor: sw.hex }} />
                             {sw.name}
                           </button>
                         ))}
                       </div>
                       <div className="space-y-1">
-                        <div className="flex justify-between text-[10px] text-white/35 font-body">
+                        <div className="flex justify-between text-[10px] text-ivory/35 font-body">
                           <span>Intensity / Opacity</span>
                           <span className="text-neon-amber font-bold">{Math.round(hairOpacity * 100)}%</span>
                         </div>
@@ -773,7 +773,7 @@ Rules:
                           step="0.05"
                           value={hairOpacity}
                           onChange={(e) => setHairOpacity(parseFloat(e.target.value))}
-                          className="w-full accent-neon-amber h-1 bg-white/[0.05] rounded-lg appearance-none cursor-ew-resize"
+                          className="w-full accent-neon-amber h-1 bg-white/[0.05]  appearance-none cursor-ew-resize"
                         />
                       </div>
                     </div>
@@ -788,12 +788,12 @@ Rules:
             <div className="animate-fade-in-up">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-neon-gold" />
-                  <h3 className="text-lg font-bold font-display text-white">
+                  <Sparkles className="w-5 h-5 text-gold" />
+                  <h3 className="text-lg font-bold font-display text-ivory">
                     {isMale ? 'Top Grooming Salons for You' : 'Salons That Can Create This Look'}
                   </h3>
                 </div>
-                <Link href="/salons" className="text-sm text-neon-gold hover:underline flex items-center gap-1">
+                <Link href="/salons" className="text-sm text-gold hover:underline flex items-center gap-1">
                   View All <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
@@ -804,15 +804,15 @@ Rules:
                     href={`/salons/${salon.id}`}
                     className="card p-4 flex items-center gap-4"
                   >
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-neon-gold/20 to-emerald-glow/20 border border-white/[0.06] flex items-center justify-center shrink-0">
-                      <span className="text-lg font-bold text-neon-gold font-display">{salon.name.charAt(0)}</span>
+                    <div className="w-14 h-14  bg-gradient-to-br from-gold/20 to-mauve/20 border border-ivory/[0.06] flex items-center justify-center shrink-0">
+                      <span className="text-lg font-bold text-gold font-display">{salon.name.charAt(0)}</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-white text-sm truncate">{salon.name}</h4>
-                      <p className="text-xs text-white/40">{salon.area} • <Star className="w-3 h-3 text-neon-gold fill-neon-gold inline" /> {salon.rating}</p>
-                      <p className="text-xs text-white/25">{salon.priceRange}</p>
+                      <h4 className="font-bold text-ivory text-sm truncate">{salon.name}</h4>
+                      <p className="text-xs text-ivory/40">{salon.area} • <Star className="w-3 h-3 text-gold fill-gold inline" /> {salon.rating}</p>
+                      <p className="text-xs text-ivory/25">{salon.priceRange}</p>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-white/15" />
+                    <ChevronRight className="w-5 h-5 text-ivory/15" />
                   </Link>
                 ))}
               </div>
@@ -828,47 +828,47 @@ Rules:
           {!chatOpen && (
             <button
               onClick={() => { setChatOpen(true); setTimeout(() => chatInputRef.current?.focus(), 200); }}
-              className="fixed bottom-6 right-6 z-40 bg-gradient-to-br from-neon-gold to-neon-amber text-black w-14 h-14 rounded-full shadow-glow hover:shadow-glow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center group"
+              className="fixed bottom-6 right-6 z-40 bg-gradient-to-br from-gold to-neon-amber text-[#080608] w-14 h-14  shadow-glow hover:shadow-glow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center group"
               id="style-chat-toggle"
             >
               <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-glow rounded-full border-2 border-noir flex items-center justify-center">
-                <Sparkles className="w-2.5 h-2.5 text-black" />
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-mauve  border-2 border-noir flex items-center justify-center">
+                <Sparkles className="w-2.5 h-2.5 text-[#080608]" />
               </span>
             </button>
           )}
 
           {/* Chat Panel */}
           {chatOpen && (
-            <div className="fixed bottom-4 right-4 z-50 w-[360px] max-w-[calc(100vw-32px)] bg-noir-50 rounded-3xl shadow-2xl border border-white/[0.06] flex flex-col overflow-hidden animate-scale-up" style={{ height: '520px' }}>
+            <div className="fixed bottom-4 right-4 z-50 w-[360px] max-w-[calc(100vw-32px)] bg-[#080608]-50 rounded-3xl shadow-2xl border border-ivory/[0.06] flex flex-col overflow-hidden animate-scale-up" style={{ height: '520px' }}>
               
               {/* Chat Header */}
-              <div className="bg-gradient-to-r from-noir-100 to-noir-200 p-4 flex items-center justify-between shrink-0 border-b border-white/[0.05]">
+              <div className="bg-gradient-to-r from-noir-100 to-noir-200 p-4 flex items-center justify-between shrink-0 border-b border-ivory/[0.05]">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-neon-gold to-emerald-glow flex items-center justify-center">
-                    <Bot className="w-4 h-4 text-black" />
+                  <div className="w-8 h-8  bg-gradient-to-br from-gold to-mauve flex items-center justify-center">
+                    <Bot className="w-4 h-4 text-[#080608]" />
                   </div>
                   <div>
-                    <h4 className="text-white text-sm font-bold font-display">Style Consultant</h4>
-                    <p className="text-white/30 text-[10px]">Ask about your results</p>
+                    <h4 className="text-ivory text-sm font-bold font-display">Style Consultant</h4>
+                    <p className="text-ivory/30 text-[10px]">Ask about your results</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setChatOpen(false)}
-                  className="text-white/30 hover:text-white transition-colors p-1"
+                  className="text-ivory/30 hover:text-ivory transition-colors p-1"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Chat Messages Area */}
-              <div ref={chatScrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-noir/50">
+              <div ref={chatScrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#080608]/50">
                 {/* Welcome Message */}
                 {chatMessages.length === 0 && (
                   <div className="space-y-3 animate-fade-in">
-                    <div className="bg-noir-200 rounded-2xl rounded-tl-sm p-3.5 border border-white/[0.05] max-w-[85%]">
-                      <p className="text-xs text-white/70 leading-relaxed">
-                        Hi! I'm your personal style consultant. I've reviewed your analysis — <strong className="text-neon-gold">{analysis.faceShape}</strong> face shape with <strong className="text-neon-gold">{analysis.skinTone?.split(' ')[0]?.toLowerCase()}</strong> tones. Ask me anything about your recommended styles!
+                    <div className="bg-[#080608]-200  rounded-tl-sm p-3.5 border border-ivory/[0.05] max-w-[85%]">
+                      <p className="text-xs text-ivory/70 leading-relaxed">
+                        Hi! I'm your personal style consultant. I've reviewed your analysis — <strong className="text-gold">{analysis.faceShape}</strong> face shape with <strong className="text-gold">{analysis.skinTone?.split(' ')[0]?.toLowerCase()}</strong> tones. Ask me anything about your recommended styles!
                       </p>
                     </div>
 
@@ -878,7 +878,7 @@ Rules:
                         <button
                           key={i}
                           onClick={() => sendChatMessage(q)}
-                          className="text-[10px] font-semibold text-neon-gold bg-neon-gold/5 hover:bg-neon-gold/10 border border-neon-gold/15 px-2.5 py-1.5 rounded-full transition-all"
+                          className="text-[10px] font-semibold text-gold bg-gold/5 hover:bg-gold/10 border border-gold/15 px-2.5 py-1.5  transition-all"
                         >
                           {q}
                         </button>
@@ -890,10 +890,10 @@ Rules:
                 {/* Message History */}
                 {chatMessages.map((msg, i) => (
                   <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
-                    <div className={`max-w-[85%] rounded-2xl p-3 text-xs leading-relaxed ${
+                    <div className={`max-w-[85%]  p-3 text-xs leading-relaxed ${
                       msg.role === 'user'
-                        ? 'bg-gradient-to-br from-neon-gold to-neon-amber text-black rounded-br-sm'
-                        : 'bg-noir-200 text-white/70 rounded-tl-sm border border-white/[0.05]'
+                        ? 'bg-gradient-to-br from-gold to-neon-amber text-[#080608] rounded-br-sm'
+                        : 'bg-[#080608]-200 text-ivory/70 rounded-tl-sm border border-ivory/[0.05]'
                     }`}>
                       {msg.content}
                     </div>
@@ -903,11 +903,11 @@ Rules:
                 {/* Typing Indicator */}
                 {chatLoading && (
                   <div className="flex justify-start animate-fade-in">
-                    <div className="bg-noir-200 rounded-2xl rounded-tl-sm p-3.5 border border-white/[0.05]">
+                    <div className="bg-[#080608]-200  rounded-tl-sm p-3.5 border border-ivory/[0.05]">
                       <div className="flex items-center gap-1.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-neon-gold animate-bounce" style={{ animationDelay: '0ms' }} />
-                        <div className="w-1.5 h-1.5 rounded-full bg-neon-gold animate-bounce" style={{ animationDelay: '150ms' }} />
-                        <div className="w-1.5 h-1.5 rounded-full bg-neon-gold animate-bounce" style={{ animationDelay: '300ms' }} />
+                        <div className="w-1.5 h-1.5  bg-gold animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <div className="w-1.5 h-1.5  bg-gold animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <div className="w-1.5 h-1.5  bg-gold animate-bounce" style={{ animationDelay: '300ms' }} />
                       </div>
                     </div>
                   </div>
@@ -915,7 +915,7 @@ Rules:
               </div>
 
               {/* Chat Input Bar */}
-              <div className="p-3 border-t border-white/[0.05] bg-noir-100 shrink-0">
+              <div className="p-3 border-t border-ivory/[0.05] bg-[#080608]-100 shrink-0">
                 <div className="flex items-center gap-2">
                   <input
                     ref={chatInputRef}
@@ -924,12 +924,12 @@ Rules:
                     onChange={(e) => setChatInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }}
                     placeholder="Ask about your style results..."
-                    className="flex-1 text-xs bg-noir-300 border border-white/[0.06] rounded-xl px-3.5 py-2.5 outline-none focus:border-neon-gold/30 focus:ring-1 focus:ring-neon-gold/10 transition-all placeholder:text-white/20 text-white"
+                    className="flex-1 text-xs bg-[#080608]-300 border border-ivory/[0.06]  px-3.5 py-2.5 outline-none focus:border-gold/30 focus:ring-1 focus:ring-gold/10 transition-all placeholder:text-ivory/20 text-ivory"
                   />
                   <button
                     onClick={sendChatMessage}
                     disabled={!chatInput.trim() || chatLoading}
-                    className="bg-gradient-to-br from-neon-gold to-neon-amber text-black w-9 h-9 rounded-xl flex items-center justify-center hover:opacity-90 disabled:opacity-40 transition-all shrink-0"
+                    className="bg-gradient-to-br from-gold to-neon-amber text-[#080608] w-9 h-9  flex items-center justify-center hover:opacity-90 disabled:opacity-40 transition-all shrink-0"
                   >
                     <Send className="w-4 h-4" />
                   </button>

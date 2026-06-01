@@ -18,7 +18,7 @@ function ConfettiCanvas() {
     canvas.height = canvas.parentElement.clientHeight || 300;
     
     let particles = [];
-    const colors = ['#FFD700', '#FFBF00', '#FF4500', '#FF8C00', '#FF1493', '#00FF7F', '#00BFFF'];
+    const colors = ['#D4A96A', '#E3C48F', '#9B6B8A', '#B48AA6', '#F2EDE8', '#B08A4E'];
     
     for (let i = 0; i < 80; i++) {
       particles.push({
@@ -66,10 +66,10 @@ function ConfettiCanvas() {
 import salons from '@/data/salons.json';
 
 const suggestions = [
-  { text: "Bridal Makeup for a Telugu wedding", category: "Wedding", icon: Flame },
-  { text: "Premium Hair Spa near Hitech City", category: "Trending", icon: Lightbulb },
-  { text: "Home service for facial and grooming", category: "Convenient", icon: Sparkles },
-  { text: "Trendy haircut at premium Madhapur salon", category: "Style Guide", icon: HelpCircle },
+  { text: "Bridal Makeup for a Telugu wedding" },
+  { text: "Premium Hair Spa near Hitech City" },
+  { text: "Home service for facial and grooming" },
+  { text: "Trendy haircut at premium Madhapur salon" },
 ];
 
 export default function ChatInterface() {
@@ -143,10 +143,10 @@ export default function ChatInterface() {
   };
 
   const getAQIDesc = (aqi) => {
-    if (aqi <= 50) return { label: 'Good', color: 'text-emerald-glow' };
-    if (aqi <= 100) return { label: 'Moderate', color: 'text-neon-gold' };
-    if (aqi <= 150) return { label: 'Unhealthy for Sensitive', color: 'text-orange-400' };
-    return { label: 'Unhealthy', color: 'text-red-500' };
+    if (aqi <= 50) return { label: 'Good', color: 'text-gold' };
+    if (aqi <= 100) return { label: 'Moderate', color: 'text-gold-muted' };
+    if (aqi <= 150) return { label: 'Sensitive', color: 'text-mauve' };
+    return { label: 'Unhealthy', color: 'text-mauve-dark' };
   };
 
   // Initialize Speech Recognition
@@ -402,22 +402,21 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
   };
 
   return (
-    <div className="flex flex-col h-full bg-noir select-none">
+    <div className="flex flex-col h-full bg-[#080608] select-none">
       {/* Top Action Bar */}
-      <div className="px-6 py-4 border-b border-white/[0.04] flex items-center justify-between bg-noir shrink-0">
+      <div className="px-6 py-4 border-b border-gold/[0.06] flex items-center justify-between bg-[#080608] shrink-0">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-neon-gold fill-neon-gold/25" />
-          <span className="font-bold font-display text-white text-sm md:text-base">GlowSpot AI</span>
+          <span className="font-display font-light text-ivory text-sm md:text-base">GlowSpot <span className="text-gold">AI</span></span>
         </div>
 
         {weatherData && (
-          <div className="hidden sm:flex items-center gap-3.5 bg-white/[0.02] border border-white/[0.05] px-3.5 py-1.5 rounded-full text-[10px] text-white/50 animate-fade-in font-medium select-none">
-            <span className="flex items-center gap-1.5 font-body">
-              ☀️ <strong className="text-white">{weatherData.temp}°C</strong> ({getWeatherDesc(weatherData.weatherCode)})
+          <div className="hidden sm:flex items-center gap-3 border border-gold/[0.06] px-3.5 py-1.5 text-[10px] text-ivory/40 animate-fade-in font-light select-none tracking-wider">
+            <span className="font-body">
+              {weatherData.temp}°C, {getWeatherDesc(weatherData.weatherCode)}
             </span>
-            <span className="w-px h-3 bg-white/10" />
-            <span className="flex items-center gap-1.5 font-body">
-              🌫️ AQI: <strong className={getAQIDesc(weatherData.aqi).color}>{weatherData.aqi}</strong> ({getAQIDesc(weatherData.aqi).label})
+            <span className="w-px h-3 bg-gold/10" />
+            <span className="font-body">
+              AQI: <span className={getAQIDesc(weatherData.aqi).color}>{weatherData.aqi}</span>
             </span>
           </div>
         )}
@@ -425,18 +424,18 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
           {messages.length > 0 && (
             <button
               onClick={handleClearChat}
-              className="text-xs px-3 py-1.5 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.05] text-white/50 hover:text-white transition-colors font-semibold"
+              className="text-xs px-3 py-1.5 border border-gold/[0.08] hover:border-gold/20 text-ivory/40 hover:text-gold transition-colors font-light tracking-wider"
             >
-              Clear Chat
+              Clear
             </button>
           )}
           <a
             href="/salons"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs px-3 py-1.5 rounded-xl bg-neon-gold/10 border border-neon-gold/20 hover:bg-neon-gold text-neon-gold hover:text-black transition-all font-semibold flex items-center gap-1 shadow-sm"
+            className="text-xs px-3 py-1.5 border border-gold/20 text-gold hover:bg-gold hover:text-[#080608] transition-all font-light tracking-wider"
           >
-            Salons ↗
+            Salons
           </a>
         </div>
       </div>
@@ -451,18 +450,18 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                 className={`flex gap-3 animate-fade-in ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {msg.role === 'assistant' && (
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-neon-gold to-neon-amber flex items-center justify-center shrink-0 shadow-sm">
-                    <Bot className="w-4 h-4 text-black" />
+                  <div className="w-7 h-7 border border-gold/20 flex items-center justify-center shrink-0">
+                    <Bot className="w-3.5 h-3.5 text-gold" />
                   </div>
                 )}
                 <div
-                  className={msg.role === 'user' ? 'chat-bubble-user shadow-md' : 'chat-bubble-ai'}
+                  className={msg.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}
                 >
-                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed font-light">{msg.content}</p>
                 </div>
                 {msg.role === 'user' && (
-                  <div className="w-8 h-8 rounded-xl bg-white/10 border border-white/25 flex items-center justify-center shrink-0 shadow-sm">
-                    <User className="w-4 h-4 text-white" />
+                  <div className="w-7 h-7 border border-ivory/15 flex items-center justify-center shrink-0">
+                    <User className="w-3.5 h-3.5 text-ivory/50" />
                   </div>
                 )}
               </div>
@@ -470,28 +469,19 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
               {/* Suggestions Cards inline right below the greeting message */}
               {i === 0 && msg.role === 'assistant' && messages.length === 1 && (
                 <div className="pl-11 pr-4 animate-fade-in-up">
-                  <p className="text-[10px] text-white/30 uppercase tracking-wider font-bold mb-3">Quick Suggestions:</p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl">
-                    {suggestions.map((item, index) => {
-                      const Icon = item.icon;
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => handleSend(item.text)}
-                          className="p-4 rounded-xl border border-white/[0.05] bg-white/[0.01] hover:border-neon-gold/20 hover:bg-white/[0.03] transition-all duration-300 text-left flex items-start justify-between group shadow-sm"
-                        >
-                          <div>
-                            <span className="text-[9px] font-bold text-neon-gold uppercase tracking-wider bg-neon-gold/10 border border-neon-gold/20 px-2 py-0.5 rounded-md mb-2 inline-block">
-                              {item.category}
-                            </span>
-                            <span className="text-xs text-white font-semibold leading-snug block">
-                              {item.text}
-                            </span>
-                          </div>
-                          <Icon className="w-4 h-4 text-white/20 group-hover:text-neon-gold transition-colors shrink-0 ml-3" />
-                        </button>
-                      );
-                    })}
+                  <p className="text-[10px] text-ivory/30 uppercase tracking-[0.2em] font-light mb-3">Try asking</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-w-2xl">
+                    {suggestions.map((item, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleSend(item.text)}
+                        className="p-3 border border-gold/[0.06] hover:border-gold/20 transition-all duration-300 text-left group"
+                      >
+                        <span className="text-xs text-ivory/50 font-light leading-snug block group-hover:text-gold transition-colors">
+                          {item.text}
+                        </span>
+                      </button>
+                    ))}
                   </div>
                 </div>
               )}
@@ -515,12 +505,12 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
               {/* Conversational Slot Booking Card */}
               {msg.bookingSalon && msg.bookingState && (
                 <div className="pl-11 mt-4 animate-fade-in-up max-w-2xl w-full">
-                  <div className="card-glass border border-white/[0.08] bg-white/[0.02] p-5 rounded-2xl relative overflow-hidden shadow-xl text-white">
+                  <div className="border border-gold/[0.08] bg-[#0e0c0e] p-5 relative overflow-hidden text-ivory">
                     {msg.bookingState.confirmed ? (
                       <div className="text-center py-6 space-y-4 relative z-20">
                         <ConfettiCanvas />
-                        <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto shadow-md">
-                          <CheckCircle className="w-8 h-8 text-emerald-500" />
+                        <div className="w-14 h-14 border border-gold/30 flex items-center justify-center mx-auto">
+                          <CheckCircle className="w-8 h-8 text-gold" />
                         </div>
                         <div>
                           <h4 className="text-lg font-bold font-display text-white">Appointment Confirmed!</h4>
@@ -534,7 +524,7 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                           </div>
                           <div className="flex justify-between text-xs">
                             <span className="text-white/40">Service</span>
-                            <span className="font-bold text-neon-gold">{msg.bookingState.selectedService?.name}</span>
+                            <span className="font-bold text-gold">{msg.bookingState.selectedService?.name}</span>
                           </div>
                           <div className="flex justify-between text-xs">
                             <span className="text-white/40">Date</span>
@@ -548,7 +538,7 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                           </div>
                           <div className="flex justify-between pt-2 border-t border-white/[0.06] text-xs">
                             <span className="text-white/40 font-semibold">Total Price</span>
-                            <span className="font-bold text-neon-gold">₹{msg.bookingState.selectedService?.price?.toLocaleString()}</span>
+                            <span className="font-bold text-gold">₹{msg.bookingState.selectedService?.price?.toLocaleString()}</span>
                           </div>
                         </div>
                         
@@ -558,11 +548,11 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                       <div className="space-y-4">
                         <div className="flex items-center justify-between border-b border-white/[0.05] pb-3">
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-neon-gold" />
-                            <span className="text-sm font-bold font-display">Book at {msg.bookingSalon.name}</span>
+                            <Calendar className="w-4 h-4 text-gold" />
+                            <span className="text-sm font-display font-light">Book at {msg.bookingSalon.name}</span>
                           </div>
-                          <span className="text-[10px] text-neon-gold bg-neon-gold/10 border border-neon-gold/25 px-2 py-0.5 rounded-md font-bold animate-pulse">
-                            Instant Slot Booking
+                          <span className="text-[10px] text-gold/60 tracking-[0.1em] uppercase font-light">
+                            Instant Booking
                           </span>
                         </div>
 
@@ -574,10 +564,10 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                               <button
                                 key={sIdx}
                                 onClick={() => updateBookingState(i, { selectedService: service, step: 2 })}
-                                className={`p-2.5 rounded-xl text-left border text-xs transition-all duration-300 ${
+                                className={`p-2.5 text-left border text-xs transition-all duration-300 ${
                                   msg.bookingState.selectedService?.name === service.name
-                                    ? 'border-neon-gold bg-neon-gold/10 text-white'
-                                    : 'border-white/[0.06] bg-white/[0.01] hover:border-white/20 text-white/70'
+                                    ? 'border-gold bg-gold/5 text-ivory'
+                                    : 'border-gold/[0.06] hover:border-gold/20 text-ivory/60'
                                 }`}
                               >
                                 <div className="flex justify-between items-center">
@@ -585,7 +575,7 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                                     <p className="font-semibold">{service.name}</p>
                                     <p className="text-[10px] text-white/40">{service.duration}</p>
                                   </div>
-                                  <span className="font-bold text-neon-gold">₹{service.price}</span>
+                                  <span className="font-bold text-gold">₹{service.price}</span>
                                 </div>
                               </button>
                             ))}
@@ -603,10 +593,10 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                                   <button
                                     key={date}
                                     onClick={() => updateBookingState(i, { selectedDate: date, selectedTime: '', step: 3 })}
-                                    className={`px-3 py-2 rounded-xl text-center border text-xs min-w-[70px] shrink-0 transition-all ${
+                                    className={`px-3 py-2 text-center border text-xs min-w-[70px] shrink-0 transition-all ${
                                       msg.bookingState.selectedDate === date
-                                        ? 'border-neon-gold bg-neon-gold text-black font-bold'
-                                        : 'border-white/[0.06] bg-white/[0.01] text-white/70 hover:border-white/20'
+                                        ? 'border-gold bg-gold text-[#080608] font-medium'
+                                        : 'border-gold/[0.06] text-ivory/60 hover:border-gold/20'
                                     }`}
                                   >
                                     <p className="text-[9px] opacity-75">{d.toLocaleDateString('en-IN', { weekday: 'short' })}</p>
@@ -627,10 +617,10 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                                 <button
                                   key={time}
                                   onClick={() => updateBookingState(i, { selectedTime: time, step: 4 })}
-                                  className={`px-3 py-1.5 rounded-lg border text-xs transition-all ${
+                                  className={`px-3 py-1.5 border text-xs transition-all ${
                                     msg.bookingState.selectedTime === time
-                                      ? 'border-neon-gold bg-neon-gold text-black font-bold'
-                                      : 'border-white/[0.06] bg-white/[0.01] text-white/70 hover:border-white/20'
+                                      ? 'border-gold bg-gold text-[#080608] font-medium'
+                                      : 'border-gold/[0.06] text-ivory/60 hover:border-gold/20'
                                   }`}
                                 >
                                   {time}
@@ -650,24 +640,24 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                                 placeholder="Your Name"
                                 value={msg.bookingState.customerName}
                                 onChange={(e) => updateBookingState(i, { customerName: e.target.value })}
-                                className="bg-white/[0.02] border border-white/[0.06] rounded-xl px-3 py-2 text-xs text-white placeholder-white/30 outline-none focus:border-neon-gold animate-fade-in"
+                                className="bg-[#0e0c0e] border border-gold/[0.06] px-3 py-2 text-xs text-ivory placeholder-ivory/30 outline-none focus:border-gold animate-fade-in font-light"
                               />
                               <input
                                 type="tel"
                                 placeholder="Phone Number"
                                 value={msg.bookingState.customerPhone}
                                 onChange={(e) => updateBookingState(i, { customerPhone: e.target.value })}
-                                className="bg-white/[0.02] border border-white/[0.06] rounded-xl px-3 py-2 text-xs text-white placeholder-white/30 outline-none focus:border-neon-gold animate-fade-in"
+                                className="bg-white/[0.02] border border-white/[0.06] rounded-xl px-3 py-2 text-xs text-white placeholder-white/30 outline-none focus:border-gold animate-fade-in"
                               />
                             </div>
 
                             <button
                               disabled={!msg.bookingState.customerName || !msg.bookingState.customerPhone}
                               onClick={() => updateBookingState(i, { confirmed: true })}
-                              className={`w-full mt-3 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                              className={`w-full mt-3 py-2.5 text-xs tracking-[0.1em] uppercase font-light transition-all flex items-center justify-center gap-1.5 ${
                                 msg.bookingState.customerName && msg.bookingState.customerPhone
-                                  ? 'bg-neon-gold text-black hover:brightness-110 shadow-glow'
-                                  : 'bg-white/[0.03] text-white/20 cursor-not-allowed border border-white/[0.05]'
+                                  ? 'bg-gold text-[#080608] hover:brightness-110'
+                                  : 'border border-gold/[0.06] text-ivory/20 cursor-not-allowed'
                               }`}
                             >
                               <Check className="w-4 h-4" />
@@ -685,9 +675,9 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
 
           {/* Typing Indicator */}
           {loading && (
-            <div className="flex items-center gap-2 pl-11 animate-fade-in text-xs text-neon-gold font-semibold">
-              <Sparkles className="w-4 h-4 text-neon-gold animate-spin" />
-              <span>GlowSpot AI is thinking</span>
+            <div className="flex items-center gap-2 pl-11 animate-fade-in text-xs text-gold/60 font-light tracking-wider">
+              <Loader2 className="w-3.5 h-3.5 text-gold animate-spin" />
+              <span>Thinking</span>
               <div className="typing-indicator !p-0 !py-1 flex gap-1">
                 <span></span>
                 <span></span>
@@ -699,63 +689,58 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
       </div>
 
       {/* Centered Floating Input Bar (ChatGPT/Gemini Style) */}
-      <div className="p-4 bg-noir shrink-0">
+      <div className="p-4 bg-[#080608] shrink-0">
         <div className="max-w-3xl mx-auto w-full">
-          <div className="flex gap-3 items-end relative border border-white/[0.06] rounded-3xl bg-white/[0.02] backdrop-blur-md p-2 shadow-lg focus-within:border-neon-gold/40 focus-within:ring-2 focus-within:ring-neon-gold/10 transition-all">
+          <div className="flex gap-3 items-end relative border border-gold/[0.08] bg-[#0e0c0e] p-2 focus-within:border-gold/30 transition-all">
             <textarea
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={voiceActive ? "Listening to your voice..." : "Message GlowSpot AI..."}
+              placeholder={voiceActive ? "Listening..." : "Message GlowSpot AI..."}
               rows={1}
               id="chat-input"
-              className="w-full pl-4 pr-32 py-3 bg-transparent resize-none outline-none text-sm text-white placeholder-white/30"
+              className="w-full pl-4 pr-32 py-3 bg-transparent resize-none outline-none text-sm text-ivory placeholder-ivory/25 font-light"
               style={{ minHeight: '44px', maxHeight: '120px' }}
             />
-            <div className="absolute right-3 bottom-2.5 flex items-center gap-2">
-              {/* Speaker Toggle Button */}
+            <div className="absolute right-3 bottom-2.5 flex items-center gap-1.5">
               <button
                 onClick={toggleSpeak}
-                title={speakActive ? "Mute Voice Responses" : "Unmute Voice Responses"}
-                className={`p-2 rounded-xl transition-all duration-300 ${
+                title={speakActive ? "Mute" : "Unmute"}
+                className={`p-2 transition-all duration-300 ${
                   speakActive
-                    ? 'bg-emerald-glow/10 text-emerald-glow border border-emerald-glow/20'
-                    : 'text-white/30 hover:text-white/60 hover:bg-white/[0.03]'
+                    ? 'text-gold border border-gold/20'
+                    : 'text-ivory/25 hover:text-gold'
                 }`}
               >
-                {speakActive ? <Volume2 className="w-4 h-4 animate-pulse" /> : <VolumeX className="w-4 h-4" />}
+                {speakActive ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
               </button>
-
-              {/* Mic Button */}
               <button
                 onClick={toggleVoice}
-                title={voiceActive ? "Stop Listening" : "Start Voice Consult"}
-                className={`p-2 rounded-xl transition-all duration-300 relative ${
+                title={voiceActive ? "Stop" : "Voice"}
+                className={`p-2 transition-all duration-300 relative ${
                   voiceActive
-                    ? 'bg-neon-gold text-black shadow-glow animate-pulse'
-                    : 'text-white/30 hover:text-white/60 hover:bg-white/[0.03]'
+                    ? 'bg-gold text-[#080608]'
+                    : 'text-ivory/25 hover:text-gold'
                 }`}
               >
                 {voiceActive ? (
                   <>
                     <Mic className="w-4 h-4" />
-                    <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full animate-ping" />
+                    <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-mauve rounded-full animate-ping" />
                   </>
                 ) : (
                   <MicOff className="w-4 h-4" />
                 )}
               </button>
-
-              {/* Send Button */}
               <button
                 onClick={() => handleSend()}
                 disabled={!input.trim() || loading}
                 id="chat-send-btn"
-                className={`p-2 rounded-xl transition-all duration-300 ${
+                className={`p-2 transition-all duration-300 ${
                   input.trim() && !loading
-                    ? 'bg-neon-gold text-black shadow-md hover:brightness-110'
-                    : 'bg-white/[0.03] text-white/20 cursor-not-allowed'
+                    ? 'bg-gold text-[#080608]'
+                    : 'text-ivory/15 cursor-not-allowed'
                 }`}
               >
                 {loading ? (
@@ -766,8 +751,8 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
               </button>
             </div>
           </div>
-          <p className="text-[10px] text-white/30 text-center mt-2 font-body">
-            GlowSpot AI can make mistakes. Consider checking important salon info.
+          <p className="text-[10px] text-ivory/20 text-center mt-2 font-light tracking-wider">
+            GlowSpot AI can make mistakes. Verify salon details.
           </p>
         </div>
       </div>

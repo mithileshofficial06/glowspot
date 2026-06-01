@@ -15,7 +15,7 @@ export default function Planner() {
           {[...Array(8)].map((_, i) => (
             <Heart
               key={i}
-              className="absolute text-neon-gold/5 animate-float"
+              className="absolute text-gold/5 animate-float"
               style={{
                 width: `${16 + Math.random() * 20}px`,
                 height: `${16 + Math.random() * 20}px`,
@@ -28,8 +28,8 @@ export default function Planner() {
           ))}
         </div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neon-gold/10 border border-neon-gold/20 text-neon-gold text-sm font-semibold mb-4">
-            <Sparkles className="w-4 h-4 text-neon-gold" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold/10 border border-gold/20 text-gold text-sm font-semibold mb-4">
+            <Sparkles className="w-4 h-4 text-gold" />
             AI-Powered Wedding Beauty Planning
           </div>
           <h1 className="text-3xl md:text-4xl font-bold font-display text-white mb-3">

@@ -2,7 +2,7 @@
 
 import { useState, useMemo, Suspense, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, Filter, MapPin, Star, Home, X, SlidersHorizontal, Loader2, IndianRupee, ArrowUpDown } from 'lucide-react';
+import { Search, X, Loader2, ArrowUpDown } from 'lucide-react';
 import SalonCard from '@/components/SalonCard';
 import salons from '@/data/salons.json';
 
@@ -13,58 +13,35 @@ function SalonsContent() {
   const router = useRouter();
   const initialArea = searchParams.get('area') || '';
 
-  // Filter States
   const [search, setSearch] = useState('');
   const [selectedArea, setSelectedArea] = useState(initialArea);
-  const [maxPrice, setMaxPrice] = useState(30000); // 30k as absolute upper bound
+  const [maxPrice, setMaxPrice] = useState(30000);
   const [minRating, setMinRating] = useState(0);
   const [homeOnly, setHomeOnly] = useState(false);
   const [sortBy, setSortBy] = useState('rating');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Sync with search params area
   useEffect(() => {
-    if (initialArea) {
-      setSelectedArea(initialArea);
-    }
+    if (initialArea) setSelectedArea(initialArea);
   }, [initialArea]);
 
-  // Handle filtering
   const filtered = useMemo(() => {
     let result = salons.filter((s) => {
-      // 1. Search filter
-      const matchSearch =
-        !search ||
+      const matchSearch = !search ||
         s.name.toLowerCase().includes(search.toLowerCase()) ||
         s.area.toLowerCase().includes(search.toLowerCase()) ||
         s.specializations.some((sp) => sp.toLowerCase().includes(search.toLowerCase()));
-
-      // 2. Area filter
       const matchArea = !selectedArea || s.area === selectedArea;
-
-      // 3. Price filter (if salon minPrice is within the user's limit)
       const matchPrice = s.minPrice <= maxPrice;
-
-      // 4. Rating filter
       const matchRating = s.rating >= minRating;
-
-      // 5. Home Service filter
       const matchHome = !homeOnly || s.homeService;
-
       return matchSearch && matchArea && matchPrice && matchRating && matchHome;
     });
 
-    // Handle Sorting
-    if (sortBy === 'rating') {
-      result.sort((a, b) => b.rating - a.rating);
-    } else if (sortBy === 'price-low') {
-      result.sort((a, b) => a.minPrice - b.minPrice);
-    } else if (sortBy === 'price-high') {
-      result.sort((a, b) => b.maxPrice - a.maxPrice);
-    } else if (sortBy === 'reviews') {
-      result.sort((a, b) => b.reviewCount - a.reviewCount);
-    }
-
+    if (sortBy === 'rating') result.sort((a, b) => b.rating - a.rating);
+    else if (sortBy === 'price-low') result.sort((a, b) => a.minPrice - b.minPrice);
+    else if (sortBy === 'price-high') result.sort((a, b) => b.maxPrice - a.maxPrice);
+    else if (sortBy === 'reviews') result.sort((a, b) => b.reviewCount - a.reviewCount);
     return result;
   }, [search, selectedArea, maxPrice, minRating, homeOnly, sortBy]);
 
@@ -74,58 +51,48 @@ function SalonsContent() {
     setMaxPrice(30000);
     setMinRating(0);
     setHomeOnly(false);
-    // Remove search param
     router.replace('/salons');
   };
 
   const isFiltered = search || selectedArea || maxPrice < 30000 || minRating > 0 || homeOnly;
 
-  // Filter form component (used on both desktop sidebar and mobile drawer)
   const FilterForm = () => (
     <div className="space-y-6">
-      {/* Search Input in Sidebar */}
+      {/* Search */}
       <div>
-        <label className="text-xs font-semibold text-white/40 block mb-2 tracking-wider uppercase">Search</label>
+        <label className="text-xs text-ivory/40 block mb-2 tracking-[0.15em] uppercase font-light">Search</label>
         <div className="relative">
-          <Search className="absolute left-3 top-3 w-4 h-4 text-white/30" />
+          <Search className="absolute left-3 top-3 w-4 h-4 text-ivory/25" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Salon, service, area..."
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] text-sm text-white placeholder-white/25 focus:outline-none focus:ring-1 focus:ring-neon-gold/30"
+            className="w-full pl-9 pr-4 py-2.5 bg-noir-50 border border-gold/[0.06] text-sm text-ivory placeholder-ivory/25 focus:outline-none focus:border-gold/30 font-light"
           />
         </div>
       </div>
 
-      {/* Area Selector */}
+      {/* Area */}
       <div>
-        <label className="text-xs font-semibold text-white/40 block mb-2 tracking-wider uppercase">
-          <MapPin className="w-3.5 h-3.5 inline mr-1 text-neon-gold" />
-          Neighborhood
-        </label>
+        <label className="text-xs text-ivory/40 block mb-2 tracking-[0.15em] uppercase font-light">Neighborhood</label>
         <select
           value={selectedArea}
           onChange={(e) => setSelectedArea(e.target.value)}
-          className="w-full px-3 py-2.5 rounded-xl bg-noir-100 border border-white/[0.06] text-sm text-white/80 focus:outline-none focus:ring-1 focus:ring-neon-gold/30"
+          className="w-full px-3 py-2.5 bg-noir-100 border border-gold/[0.06] text-sm text-ivory/70 focus:outline-none focus:border-gold/30 font-light"
         >
-          <option value="">All Hyderabad Areas</option>
+          <option value="">All Areas</option>
           {allAreas.map((area) => (
-            <option key={area} value={area}>
-              {area}
-            </option>
+            <option key={area} value={area}>{area}</option>
           ))}
         </select>
       </div>
 
-      {/* Price Limit Filter */}
+      {/* Price */}
       <div>
         <div className="flex justify-between items-center mb-2">
-          <label className="text-xs font-semibold text-white/40 tracking-wider uppercase">
-            <IndianRupee className="w-3.5 h-3.5 inline mr-1 text-neon-gold" />
-            Max Starting Price
-          </label>
-          <span className="text-xs font-bold text-neon-gold">₹{maxPrice.toLocaleString('en-IN')}</span>
+          <label className="text-xs text-ivory/40 tracking-[0.15em] uppercase font-light">Max Price</label>
+          <span className="text-xs text-gold font-display">{maxPrice.toLocaleString('en-IN')}</span>
         </div>
         <input
           type="range"
@@ -134,110 +101,100 @@ function SalonsContent() {
           step="200"
           value={maxPrice}
           onChange={(e) => setMaxPrice(parseInt(e.target.value))}
-          className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-neon-gold"
+          className="w-full h-[1px] bg-gold/20 appearance-none cursor-pointer accent-[#D4A96A]"
         />
-        <div className="flex justify-between text-[10px] text-white/20 mt-1">
-          <span>₹100</span>
-          <span>₹15,000</span>
-          <span>₹30,000+</span>
+        <div className="flex justify-between text-[10px] text-ivory/20 mt-1 font-light">
+          <span>100</span>
+          <span>15,000</span>
+          <span>30,000+</span>
         </div>
       </div>
 
-      {/* Rating Filter */}
+      {/* Rating */}
       <div>
-        <label className="text-xs font-semibold text-white/40 block mb-2 tracking-wider uppercase">
-          <Star className="w-3.5 h-3.5 inline mr-1 text-neon-gold" />
-          Minimum Rating
-        </label>
-        <div className="grid grid-cols-5 gap-1.5">
+        <label className="text-xs text-ivory/40 block mb-2 tracking-[0.15em] uppercase font-light">Min Rating</label>
+        <div className="grid grid-cols-5 gap-1">
           {[0, 4.0, 4.3, 4.5, 4.7].map((val) => (
             <button
               key={val}
               onClick={() => setMinRating(val)}
-              className={`py-2 rounded-xl text-xs font-semibold border transition-all ${
+              className={`py-2 text-xs font-light border transition-all ${
                 minRating === val
-                  ? 'bg-neon-gold text-black border-neon-gold shadow-glow font-bold'
-                  : 'bg-white/[0.02] border-white/[0.05] text-white/60 hover:border-white/15'
+                  ? 'bg-gold text-[#080608] border-gold'
+                  : 'border-gold/[0.06] text-ivory/50 hover:border-gold/20'
               }`}
             >
-              {val === 0 ? 'Any' : `${val}★`}
+              {val === 0 ? 'Any' : val}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Home Service Toggle */}
+      {/* Home Service */}
       <div>
-        <label className="text-xs font-semibold text-white/40 block mb-2 tracking-wider uppercase">
-          <Home className="w-3.5 h-3.5 inline mr-1 text-neon-gold" />
-          Service Type
-        </label>
+        <label className="text-xs text-ivory/40 block mb-2 tracking-[0.15em] uppercase font-light">Service Type</label>
         <button
           onClick={() => setHomeOnly(!homeOnly)}
-          className={`w-full py-3 rounded-xl text-xs font-bold transition-all border ${
+          className={`w-full py-3 text-xs font-light transition-all border ${
             homeOnly
-              ? 'bg-emerald-glow text-black border-emerald-glow shadow-md'
-              : 'bg-white/[0.02] border-white/[0.05] text-white/60 hover:bg-white/[0.04]'
+              ? 'bg-gold text-[#080608] border-gold'
+              : 'border-gold/[0.06] text-ivory/50 hover:border-gold/20'
           }`}
         >
-          {homeOnly ? '✓ Home Service Only' : 'Show All Services'}
+          {homeOnly ? 'Home Service Only' : 'All Services'}
         </button>
       </div>
 
-      {/* Clear Filters Button */}
+      {/* Clear */}
       {isFiltered && (
         <button
           onClick={clearFilters}
-          className="w-full py-2.5 rounded-xl border border-neon-gold/20 hover:border-neon-gold/40 text-neon-gold text-xs font-semibold transition-all hover:bg-neon-gold/[0.02] flex items-center justify-center gap-1.5"
+          className="w-full py-2.5 border border-gold/15 hover:border-gold/30 text-gold text-xs font-light transition-all flex items-center justify-center gap-1.5 tracking-[0.1em] uppercase"
         >
           <X className="w-3.5 h-3.5" />
-          Clear All Filters
+          Clear Filters
         </button>
       )}
     </div>
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Top Banner / Heading */}
-      <div className="mb-8 animate-fade-in">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold font-display text-white mb-2">
-          Discover <span className="gradient-text">Hyderabad Salons</span>
+    <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-8">
+      {/* Heading */}
+      <div className="mb-10 animate-fade-in">
+        <p className="text-xs tracking-[0.3em] uppercase text-gold/50 font-light mb-3">Directory</p>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-light text-ivory mb-2">
+          Hyderabad Salons
         </h1>
-        <p className="text-sm text-white/40 max-w-2xl">
-          Browse through {salons.length} curated, top-rated professional styling, makeup, and wellness partners across the city.
+        <p className="text-sm text-ivory/30 max-w-2xl font-light">
+          Browse {salons.length} curated salons across the city.
         </p>
       </div>
 
-      {/* Action / Sort Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/[0.05] mb-8">
-        <div className="text-sm text-white/60">
-          We found <span className="font-bold text-neon-gold">{filtered.length}</span> matching salon{filtered.length !== 1 ? 's' : ''}
+      {/* Sort Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-gold/[0.06] mb-8">
+        <div className="text-sm text-ivory/40 font-light">
+          <span className="text-gold font-display">{filtered.length}</span> salons found
         </div>
 
         <div className="flex items-center gap-3">
-          {/* Mobile Filter Toggle */}
           <button
             onClick={() => setShowMobileFilters(true)}
-            className="lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-white/80 hover:text-white"
+            className="lg:hidden flex items-center gap-2 px-4 py-2 border border-gold/[0.08] text-xs text-ivory/50 hover:text-gold hover:border-gold/20 transition-all font-light tracking-wider"
           >
-            <SlidersHorizontal className="w-3.5 h-3.5 text-neon-gold" />
             Filters
-            {isFiltered && (
-              <span className="w-2 h-2 rounded-full bg-neon-gold animate-pulse" />
-            )}
+            {isFiltered && <span className="w-1.5 h-1.5 rounded-full bg-gold" />}
           </button>
 
-          {/* Sort Dropdown */}
           <div className="flex items-center gap-2">
-            <ArrowUpDown className="w-3.5 h-3.5 text-white/30 hidden sm:block" />
+            <ArrowUpDown className="w-3.5 h-3.5 text-ivory/25 hidden sm:block" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-2.5 rounded-xl bg-noir-100 border border-white/[0.06] text-xs text-white/80 focus:outline-none focus:ring-1 focus:ring-neon-gold/30"
+              className="px-3 py-2 bg-noir-100 border border-gold/[0.06] text-xs text-ivory/60 focus:outline-none focus:border-gold/30 font-light"
             >
-              <option value="rating">Sort: Highest Rated</option>
-              <option value="reviews">Sort: Most Reviews</option>
+              <option value="rating">Highest Rated</option>
+              <option value="reviews">Most Reviews</option>
               <option value="price-low">Price: Low to High</option>
               <option value="price-high">Price: High to Low</option>
             </select>
@@ -245,14 +202,14 @@ function SalonsContent() {
         </div>
       </div>
 
-      {/* 2-Column Responsive Layout */}
-      <div className="lg:grid lg:grid-cols-4 lg:gap-8 items-start">
-        {/* Desktop Filter Sidebar */}
-        <div className="hidden lg:block lg:col-span-1 p-6 rounded-2xl bg-white/[0.01] border border-white/[0.04] backdrop-blur-sm sticky top-24">
-          <div className="flex items-center justify-between mb-6 pb-3 border-b border-white/[0.06]">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">Filters</h3>
+      {/* Layout */}
+      <div className="lg:grid lg:grid-cols-4 lg:gap-10 items-start">
+        {/* Desktop Sidebar */}
+        <div className="hidden lg:block lg:col-span-1 p-6 border border-gold/[0.04] sticky top-24">
+          <div className="flex items-center justify-between mb-6 pb-3 border-b border-gold/[0.06]">
+            <h3 className="text-xs text-ivory/50 uppercase tracking-[0.2em] font-light">Filters</h3>
             {isFiltered && (
-              <button onClick={clearFilters} className="text-xs text-white/40 hover:text-neon-gold transition-colors font-medium">
+              <button onClick={clearFilters} className="text-xs text-ivory/30 hover:text-gold transition-colors font-light">
                 Reset
               </button>
             )}
@@ -260,22 +217,20 @@ function SalonsContent() {
           <FilterForm />
         </div>
 
-        {/* Mobile Filter Drawer / Slider Panel */}
+        {/* Mobile Filter Drawer */}
         {showMobileFilters && (
           <div className="fixed inset-0 z-50 lg:hidden flex justify-end animate-fade-in">
-            {/* Backdrop */}
             <div
-              className="absolute inset-0 bg-black/70 backdrop-blur-xs transition-opacity duration-300"
+              className="absolute inset-0 bg-black/70 transition-opacity duration-300"
               onClick={() => setShowMobileFilters(false)}
             />
-            {/* Drawer container */}
-            <div className="relative w-80 max-w-full h-full bg-noir-50 border-l border-white/[0.05] p-6 overflow-y-auto flex flex-col justify-between shadow-2xl animate-slide-left">
+            <div className="relative w-80 max-w-full h-full bg-[#0e0c0e] border-l border-gold/[0.06] p-6 overflow-y-auto flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between mb-6 pb-3 border-b border-white/[0.06]">
-                  <h3 className="text-base font-bold text-white uppercase tracking-wider">Filters</h3>
+                <div className="flex items-center justify-between mb-6 pb-3 border-b border-gold/[0.06]">
+                  <h3 className="text-xs text-ivory/50 uppercase tracking-[0.2em] font-light">Filters</h3>
                   <button
                     onClick={() => setShowMobileFilters(false)}
-                    className="p-1 rounded-lg hover:bg-white/[0.04] text-white/40 hover:text-white"
+                    className="p-1 text-ivory/30 hover:text-gold"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -284,15 +239,15 @@ function SalonsContent() {
               </div>
               <button
                 onClick={() => setShowMobileFilters(false)}
-                className="btn-primary w-full py-3 mt-8 font-bold text-xs"
+                className="btn-primary w-full py-3 mt-8 text-xs"
               >
-                Apply Filters
+                Apply
               </button>
             </div>
           </div>
         )}
 
-        {/* Salons Card Grid */}
+        {/* Cards Grid */}
         <div className="lg:col-span-3">
           {filtered.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 animate-fade-in-up">
@@ -301,16 +256,16 @@ function SalonsContent() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-24 rounded-2xl bg-white/[0.01] border border-white/[0.04] p-8 animate-fade-in">
-              <div className="w-16 h-16 rounded-full bg-white/[0.02] border border-white/[0.05] flex items-center justify-center mx-auto mb-6">
-                <Search className="w-6 h-6 text-white/20" />
+            <div className="text-center py-24 border border-gold/[0.04] p-8 animate-fade-in">
+              <div className="w-16 h-16 border border-gold/10 flex items-center justify-center mx-auto mb-6">
+                <Search className="w-6 h-6 text-ivory/20" />
               </div>
-              <h3 className="text-lg font-bold font-display text-white mb-2">No salons matched your filters</h3>
-              <p className="text-sm text-white/40 mb-6 max-w-sm mx-auto">
-                Try widening your price range, choosing another area, or clearing some options.
+              <h3 className="text-lg font-display font-light text-ivory mb-2">No salons matched</h3>
+              <p className="text-sm text-ivory/30 mb-6 max-w-sm mx-auto font-light">
+                Try widening your filters or choosing another area.
               </p>
-              <button onClick={clearFilters} className="btn-secondary px-6 py-2.5 text-xs font-semibold">
-                Reset All Filters
+              <button onClick={clearFilters} className="btn-secondary px-6 py-2.5 text-xs">
+                Reset Filters
               </button>
             </div>
           )}
@@ -322,11 +277,11 @@ function SalonsContent() {
 
 export default function Salons() {
   return (
-    <div className="min-h-screen pt-24 bg-noir text-white/90 relative z-10">
+    <div className="min-h-screen pt-24 bg-[#080608] text-ivory relative z-10">
       <Suspense
         fallback={
           <div className="flex items-center justify-center py-32 min-h-[50vh]">
-            <Loader2 className="w-8 h-8 animate-spin text-neon-gold" />
+            <Loader2 className="w-6 h-6 animate-spin text-gold" />
           </div>
         }
       >

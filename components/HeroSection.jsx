@@ -1,132 +1,159 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Sparkles, Eye, Calendar, MessageCircle, Star, ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
-const features = [
-  {
-    icon: MessageCircle,
-    title: 'AI Style Advisor',
-    desc: 'Describe your occasion and get personalized style recommendations from AI',
-    href: '/advisor',
-    color: 'from-neon-gold to-neon-amber',
-  },
-  {
-    icon: Eye,
-    title: 'Face Style Preview',
-    desc: 'Upload a selfie and see how hairstyles and makeup look on your face',
-    href: '/preview',
-    color: 'from-violet-500 to-purple-600',
-  },
-  {
-    icon: Calendar,
-    title: 'Wedding Planner',
-    desc: 'AI builds your complete bridal beauty schedule day by day',
-    href: '/planner',
-    color: 'from-emerald-glow to-green-500',
-  },
-  {
-    icon: Sparkles,
-    title: 'Smart Booking',
-    desc: 'Just type what you need — AI finds and books the right salon instantly',
-    href: '/advisor',
-    color: 'from-cyan-400 to-blue-500',
-  },
-];
+const headlineWords = ['Discover', 'the', 'Art', 'of', 'Beauty', 'in', 'Hyderabad'];
 
-const heroWords = [];
-
-// ═══ React Component ═══
 export default function HeroSection() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [visibleWords, setVisibleWords] = useState(0);
+  const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
+    // Sequential word reveal
+    const wordTimer = setInterval(() => {
+      setVisibleWords((prev) => {
+        if (prev >= headlineWords.length) {
+          clearInterval(wordTimer);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, 140);
+
+    // Show sub-content after headline completes
+    const contentTimer = setTimeout(() => {
+      setShowContent(true);
+    }, headlineWords.length * 140 + 400);
+
+    return () => {
+      clearInterval(wordTimer);
+      clearTimeout(contentTimer);
+    };
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Mesh Gradient Background */}
-      <div className="mesh-gradient-bg" />
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Subtle ambient gradient */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#080608] via-[#0e0c0e] to-[#080608]" />
+        <div
+          className="absolute top-0 right-0 w-1/2 h-full opacity-[0.03]"
+          style={{
+            background: 'radial-gradient(ellipse at 70% 40%, rgba(212,169,106,1) 0%, transparent 60%)',
+          }}
+        />
+      </div>
 
-
-
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-        <div className={`text-center transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-          {/* Headline */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-display text-white leading-tight mb-6 max-w-4xl mx-auto">
-            Discover Your <span className="bg-gradient-to-r from-neon-gold via-neon-amber to-emerald-glow bg-clip-text text-transparent">Perfect Look</span> in Hyderabad
-          </h1>
-
-          {/* Subheadline */}
-          <p className="text-lg sm:text-xl text-white/40 max-w-2xl mx-auto mb-10 font-body leading-relaxed">
-            Describe your look. Preview it on your face. Book the perfect Hyderabad salon.
-            <br className="hidden sm:block" />
-            Powered by AI that understands your style.
-          </p>
-
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-            <Link
-              href="/advisor"
-              id="hero-cta-advisor"
-              className="group btn-primary text-lg px-8 py-4 flex items-center gap-3"
+      {/* Two-Column Layout */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-32 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Left Column — Text */}
+          <div>
+            {/* Overline */}
+            <div
+              className={`mb-8 transition-all duration-700 ${
+                showContent ? 'opacity-100' : 'opacity-0'
+              }`}
             >
-              <MessageCircle className="w-5 h-5" />
-              Start Your Beauty Journey
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="/preview"
-              id="hero-cta-preview"
-              className="group px-8 py-4 rounded-xl text-lg font-semibold text-white border-2 border-white/10 hover:border-neon-gold/30 hover:bg-white/[0.03] transition-all duration-300 flex items-center gap-3"
-            >
-              <Eye className="w-5 h-5" />
-              Preview Your Look
-            </Link>
-          </div>
-
-          {/* Feature Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
-            {features.map((feature, i) => {
-              const Icon = feature.icon;
-              return (
-                <Link
-                  key={i}
-                  href={feature.href}
-                  id={`hero-feature-${i}`}
-                  className="group p-5 rounded-2xl bg-white/[0.03] border border-white/[0.05] hover:border-neon-gold/20 hover:bg-white/[0.05] transition-all duration-300 text-left"
-                  style={{ animationDelay: `${i * 100}ms` }}
-                >
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="text-sm font-semibold text-white mb-1">{feature.title}</h3>
-                  <p className="text-xs text-white/35 leading-relaxed">{feature.desc}</p>
-                  <ChevronRight className="w-4 h-4 text-white/15 mt-2 group-hover:text-neon-gold group-hover:translate-x-1 transition-all" />
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Trust Indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mt-12 text-white/25 text-sm">
-            <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 text-neon-gold fill-neon-gold" />
-              <span>25+ Verified Salons</span>
+              <span className="text-xs tracking-[0.3em] uppercase text-gold/60 font-body font-light">
+                AI-Powered Beauty Platform
+              </span>
             </div>
-            <div className="w-1 h-1 rounded-full bg-white/10" />
-            <div>10 Hyderabad Neighborhoods</div>
-            <div className="w-1 h-1 rounded-full bg-white/10" />
-            <div>5 AI-Powered Features</div>
+
+            {/* Headline with word-by-word reveal */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-light leading-[1.1] mb-8">
+              {headlineWords.map((word, i) => (
+                <span
+                  key={i}
+                  className={`inline-block mr-[0.3em] transition-all duration-500 ${
+                    i < visibleWords
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-2'
+                  } ${
+                    word === 'Art' || word === 'Beauty'
+                      ? 'text-gold italic'
+                      : 'text-ivory'
+                  }`}
+                >
+                  {word}
+                </span>
+              ))}
+            </h1>
+
+            {/* Gold divider */}
+            <div
+              className={`gold-line mb-8 transition-all duration-700 delay-100 ${
+                showContent ? 'opacity-100 w-12' : 'opacity-0 w-0'
+              }`}
+            />
+
+            {/* Subheadline */}
+            <p
+              className={`text-lg text-ivory/40 font-light leading-relaxed max-w-md mb-10 transition-all duration-700 delay-200 ${
+                showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+              }`}
+            >
+              Describe your look, preview it on your face, and book the perfect salon.
+              Powered by AI that understands Indian beauty.
+            </p>
+
+            {/* CTAs */}
+            <div
+              className={`flex flex-col sm:flex-row items-start gap-4 transition-all duration-700 delay-300 ${
+                showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
+              }`}
+            >
+              <Link href="/salons" id="hero-cta-salons" className="btn-primary">
+                Explore Salons
+              </Link>
+              <Link
+                href="/advisor"
+                id="hero-cta-advisor"
+                className="group flex items-center gap-2 px-4 py-3 text-sm tracking-[0.1em] uppercase text-ivory/40 hover:text-gold transition-colors duration-300 font-light"
+              >
+                Consult AI Advisor
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column — Editorial Image */}
+          <div
+            className={`hidden lg:block transition-all duration-1000 delay-500 ${
+              showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            }`}
+          >
+            <div className="relative aspect-[3/4] overflow-hidden">
+              <img
+                src="/hero-editorial.png"
+                alt="Premium salon interior"
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
+              {/* Subtle overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#080608] via-transparent to-[#080608]/30" />
+              {/* Border frame */}
+              <div className="absolute inset-3 border border-gold/10 pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom subtle line */}
+        <div
+          className={`mt-20 transition-all duration-700 delay-700 ${
+            showContent ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div className="gold-line-wide" />
+          <div className="flex items-center justify-between mt-4 text-xs text-ivory/20 font-light tracking-wider">
+            <span>25+ Verified Salons</span>
+            <span>10 Neighborhoods</span>
+            <span className="hidden sm:inline">5 AI Features</span>
           </div>
         </div>
       </div>
-
-      {/* Bottom Gradient Fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-noir to-transparent" />
     </section>
   );
 }

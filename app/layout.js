@@ -22,12 +22,11 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Jost:wght@300;400;500&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-noir">
-        {/* Shimmery silk fabric background */}
+      <body className="min-h-screen flex flex-col bg-[#080608]">
         <SilkBackground />
         <Navbar />
         <main className="flex-1 relative z-20">{children}</main>

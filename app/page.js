@@ -1,154 +1,96 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import HeroSection from '@/components/HeroSection';
 import SalonCarousel from '@/components/SalonCarousel';
 import salons from '@/data/salons.json';
 import Link from 'next/link';
-import { Sparkles, MessageCircle, Eye, Calendar, Star, MapPin, ArrowRight, Zap, Shield, Clock } from 'lucide-react';
-
-/* ─── Animated Counter Component ─── */
-function AnimatedCounter({ target, suffix = '', duration = 2000 }) {
-  const [count, setCount] = useState(0);
-  const [hasStarted, setHasStarted] = useState(false);
-  const ref = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasStarted) {
-          setHasStarted(true);
-        }
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [hasStarted]);
-
-  useEffect(() => {
-    if (!hasStarted) return;
-    const numericTarget = parseInt(target, 10);
-    const startTime = performance.now();
-
-    function step(now) {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      // Ease-out cubic
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(eased * numericTarget));
-      if (progress < 1) requestAnimationFrame(step);
-    }
-
-    requestAnimationFrame(step);
-  }, [hasStarted, target, duration]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {count}{suffix}
-    </span>
-  );
-}
-
-
+import { ArrowRight } from 'lucide-react';
 
 const howItWorks = [
-  { step: '01', title: 'Describe Your Look', desc: 'Tell our AI what you need — occasion, style, budget, area', icon: MessageCircle, color: 'from-neon-gold to-neon-amber' },
-  { step: '02', title: 'Preview on Your Face', desc: 'Upload a selfie and see AI-recommended styles visualized', icon: Eye, color: 'from-violet-500 to-purple-600' },
-  { step: '03', title: 'Get Matched', desc: 'AI finds the perfect Hyderabad salon for your specific look', icon: Sparkles, color: 'from-emerald-glow to-green-500' },
-  { step: '04', title: 'Book Instantly', desc: 'Confirm your appointment in one tap with available time slots', icon: Calendar, color: 'from-emerald-500 to-teal-500' },
+  { step: '01', title: 'Describe Your Look', desc: 'Tell our AI what you need -- occasion, style, budget, preferred area' },
+  { step: '02', title: 'Preview on Your Face', desc: 'Upload a selfie and see AI-recommended styles visualized on you' },
+  { step: '03', title: 'Get Matched', desc: 'AI finds the perfect Hyderabad salon for your specific requirements' },
+  { step: '04', title: 'Book Instantly', desc: 'Confirm your appointment with available time slots in one step' },
+];
+
+const aiFeatures = [
+  { title: 'AI Style Advisor', desc: 'Conversational AI that understands your occasion, style, and budget to recommend the perfect look and salon.', href: '/advisor' },
+  { title: 'Face Style Preview', desc: 'Vision AI analyzes your face shape, skin tone, and features to recommend hairstyles, makeup, and colors.', href: '/preview' },
+  { title: 'Wedding Planner', desc: 'AI generates a complete day-by-day beauty schedule for your wedding with salon recommendations.', href: '/planner' },
+  { title: 'Smart Booking', desc: 'Type in natural language and AI handles the rest -- finding salons, checking availability, confirming slots.', href: '/advisor' },
+  { title: 'Review Intelligence', desc: 'AI reads all reviews and gives you a concise verdict -- what customers love and what to know.', href: '/salons' },
 ];
 
 const neighborhoods = [
-  { name: 'Banjara Hills', tagline: 'Luxury & Bridal', count: 3 },
-  { name: 'Jubilee Hills', tagline: 'Celebrity Style', count: 3 },
-  { name: 'Hitech City', tagline: 'Quick & Professional', count: 3 },
-  { name: 'Madhapur', tagline: 'Affordable Quality', count: 3 },
-  { name: 'Gachibowli', tagline: 'Modern & Trendy', count: 2 },
-  { name: 'Kukatpally', tagline: 'Budget & Home Service', count: 3 },
-  { name: 'Secunderabad', tagline: 'Heritage Mix', count: 2 },
-  { name: 'Begumpet', tagline: 'Bridal Specialists', count: 2 },
-  { name: 'Ameerpet', tagline: 'Student Friendly', count: 2 },
-  { name: 'Kondapur', tagline: 'Family & Home Spa', count: 2 },
+  'Banjara Hills', 'Jubilee Hills', 'Hitech City', 'Madhapur', 'Gachibowli',
+  'Kukatpally', 'Secunderabad', 'Begumpet', 'Ameerpet', 'Kondapur',
 ];
 
 export default function Home() {
   const topSalons = [...salons].sort((a, b) => b.rating - a.rating).slice(0, 8);
 
   useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -80px 0px', // Trigger slightly before screen entry
-      threshold: 0.05,
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.05, rootMargin: '0px 0px -60px 0px' }
+    );
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target); // Reveal only once for performance
-        }
-      });
-    }, observerOptions);
-
-    const animatedElements = document.querySelectorAll('.scroll-reveal');
-    animatedElements.forEach((el) => observer.observe(el));
-
-    return () => {
-      animatedElements.forEach((el) => observer.unobserve(el));
-    };
+    const els = document.querySelectorAll('.scroll-reveal');
+    els.forEach((el) => observer.observe(el));
+    return () => els.forEach((el) => observer.unobserve(el));
   }, []);
 
   return (
     <div>
-      {/* Hero Section */}
+      {/* Hero */}
       <HeroSection />
 
       {/* How It Works */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="how-it-works">
-        <div className="text-center mb-14 scroll-reveal">
-          <span className="tag-gold mb-4 inline-block">How It Works</span>
-          <h2 className="section-heading gradient-text">Your Beauty Journey in 4 Steps</h2>
-          <p className="section-subheading">From first thought to booked appointment — AI handles everything.</p>
+      <section className="py-24 px-6 sm:px-8 lg:px-12 max-w-7xl mx-auto" id="how-it-works">
+        <div className="text-center mb-16 scroll-reveal">
+          <p className="text-xs tracking-[0.3em] uppercase text-gold/50 font-light mb-4">Process</p>
+          <h2 className="section-heading">Your Beauty Journey</h2>
+          <div className="gold-line mx-auto mt-6" />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {howItWorks.map((item, i) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={i}
-                className="relative card-glow p-6 text-center group scroll-reveal"
-              >
-                {i < 3 && (
-                  <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-30">
-                    <ArrowRight className="w-6 h-6 text-white/10" />
-                  </div>
-                )}
-                <div className="relative z-10">
-                  <div className="text-xs font-bold text-neon-gold/40 mb-4 font-mono">{item.step}</div>
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className="w-7 h-7 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold font-display text-white mb-2">{item.title}</h3>
-                  <p className="text-sm text-white/35">{item.desc}</p>
-                </div>
-              </div>
-            );
-          })}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          {howItWorks.map((item, i) => (
+            <div
+              key={i}
+              className="text-center scroll-reveal"
+              style={{ transitionDelay: `${i * 100}ms` }}
+            >
+              <span className="text-5xl font-display font-light text-gold/20 block mb-4">
+                {item.step}
+              </span>
+              <h3 className="text-lg font-display font-light text-ivory mb-2">
+                {item.title}
+              </h3>
+              <p className="text-sm text-ivory/30 font-light leading-relaxed">
+                {item.desc}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Featured Salons */}
-      <section className="py-20 scroll-reveal" id="featured-salons">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+      <section className="py-24 scroll-reveal" id="featured-salons">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 mb-8">
           <div className="flex items-end justify-between">
             <div>
-              <span className="tag mb-3 inline-block">Top Rated</span>
-              <h2 className="section-heading gradient-text text-left">Featured Salons</h2>
-              <p className="text-white/35 mt-2">Highest-rated beauty destinations in Hyderabad</p>
+              <p className="text-xs tracking-[0.3em] uppercase text-gold/50 font-light mb-3">Curated</p>
+              <h2 className="section-heading text-left">Featured Salons</h2>
             </div>
-            <Link href="/salons" className="btn-secondary hidden sm:flex items-center gap-2">
+            <Link href="/salons" className="hidden sm:flex items-center gap-2 text-sm text-ivory/30 hover:text-gold tracking-[0.1em] uppercase font-light transition-colors duration-300">
               View All <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -156,139 +98,116 @@ export default function Home() {
 
         <SalonCarousel salons={topSalons} />
 
-        <div className="mt-8 text-center sm:hidden px-4">
+        <div className="mt-8 text-center sm:hidden px-6">
           <Link href="/salons" className="btn-secondary inline-flex items-center gap-2">
             View All Salons <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>
 
-      {/* AI Features Showcase */}
-      <section className="py-20 relative overflow-hidden scroll-reveal" id="ai-features">
-        <div className="absolute inset-0 bg-gradient-to-br from-noir-50 via-noir-100 to-noir-200 border-y border-white/[0.04]" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-white/80 text-sm font-medium mb-4">
-              <Zap className="w-4 h-4 text-neon-gold" />
+      {/* AI Features */}
+      <section className="py-24 relative" id="ai-features">
+        <div className="absolute inset-0 border-y border-gold/[0.04]" />
+        <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="text-center mb-16 scroll-reveal">
+            <p className="text-xs tracking-[0.3em] uppercase text-mauve/60 font-light mb-4">
               Powered by NVIDIA NIM
-            </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-display text-white mb-4">
-              5 AI Features. One Platform.
-            </h2>
-            <p className="text-lg text-white/50 max-w-2xl mx-auto">
-              Every feature is powered by Llama 3.3 70B and Llama 3.2 90B Vision — making your beauty journey smarter than ever.
             </p>
+            <h2 className="section-heading">
+              Five AI Features. One Platform.
+            </h2>
+            <p className="section-subheading mt-4">
+              Every feature is powered by Llama 3.3 70B and Llama 3.2 90B Vision.
+            </p>
+            <div className="gold-line mx-auto mt-6" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { title: 'AI Style Advisor', desc: 'Conversational AI that understands your occasion, style, and budget to recommend the perfect look and salon.', Icon: MessageCircle, href: '/advisor', gradient: 'from-neon-gold to-neon-amber' },
-              { title: 'Face Style Preview', desc: 'Vision AI analyzes your face shape, skin tone, and features to recommend hairstyles, makeup, and colors.', Icon: Eye, href: '/preview', gradient: 'from-violet-500 to-purple-600' },
-              { title: 'Wedding Planner', desc: 'AI generates a complete day-by-day beauty schedule for your wedding with salon recommendations.', Icon: Calendar, href: '/planner', gradient: 'from-emerald-glow to-green-500' },
-              { title: 'Smart Booking', desc: 'Type in natural language — "Book hair spa Sunday morning in Madhapur" — and AI handles the rest.', Icon: Zap, href: '/advisor', gradient: 'from-cyan-400 to-blue-500' },
-              { title: 'Review Summarizer', desc: 'AI reads all reviews and gives you a 2-line verdict — what customers love and what to know before booking.', Icon: Sparkles, href: '/salons', gradient: 'from-neon-gold to-emerald-glow' },
-            ].map((f, i) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-gold/[0.04]">
+            {aiFeatures.map((f, i) => (
               <Link
                 key={i}
                 href={f.href}
-                className="group card-glow p-6"
+                className="group bg-[#080608] p-8 hover:bg-noir-50 transition-colors duration-500 scroll-reveal"
+                style={{ transitionDelay: `${i * 80}ms` }}
               >
-                <div className="relative z-10">
-                  <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${f.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <f.Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2 font-display">{f.title}</h3>
-                  <p className="text-sm text-white/50 leading-relaxed">{f.desc}</p>
-                  <span className="inline-flex items-center gap-1 mt-4 text-sm text-neon-gold font-medium group-hover:gap-2 transition-all">
-                    Try it <ArrowRight className="w-4 h-4" />
-                  </span>
-                </div>
+                <span className="text-3xl font-display font-light text-gold/15 block mb-4">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 className="text-lg font-display font-light text-ivory mb-3 group-hover:text-gold transition-colors duration-300">
+                  {f.title}
+                </h3>
+                <p className="text-sm text-ivory/30 font-light leading-relaxed mb-4">
+                  {f.desc}
+                </p>
+                <span className="text-xs text-gold/40 tracking-[0.1em] uppercase font-light group-hover:text-gold transition-colors duration-300 flex items-center gap-1">
+                  Explore <ArrowRight className="w-3.5 h-3.5" />
+                </span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Neighborhood Explorer */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" id="neighborhoods">
-        <div className="text-center mb-14 scroll-reveal">
-          <span className="tag mb-3 inline-block">
-            <MapPin className="w-3 h-3 inline mr-1" />
-            Explore
-          </span>
-          <h2 className="section-heading gradient-text">Salons Across Hyderabad</h2>
-          <p className="section-subheading">10 neighborhoods. 25 verified salons. One city we love.</p>
+      {/* Neighborhoods */}
+      <section className="py-24 px-6 sm:px-8 lg:px-12 max-w-7xl mx-auto" id="neighborhoods">
+        <div className="text-center mb-12 scroll-reveal">
+          <p className="text-xs tracking-[0.3em] uppercase text-gold/50 font-light mb-3">Explore</p>
+          <h2 className="section-heading">Across Hyderabad</h2>
+          <div className="gold-line mx-auto mt-6" />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 scroll-reveal">
           {neighborhoods.map((n, i) => (
             <Link
               key={i}
-              href={`/salons?area=${encodeURIComponent(n.name)}`}
-              className="card-glow p-4 text-center group scroll-reveal"
+              href={`/salons?area=${encodeURIComponent(n)}`}
+              className="text-sm text-ivory/30 hover:text-gold transition-colors duration-300 font-light tracking-wide"
             >
-              <div className="relative z-10">
-                <div className="w-10 h-10 rounded-xl bg-neon-gold/5 border border-white/[0.05] flex items-center justify-center mx-auto mb-3 group-hover:bg-neon-gold/10 transition-colors">
-                  <MapPin className="w-5 h-5 text-neon-gold" />
-                </div>
-                <h4 className="text-sm font-bold text-white mb-1">{n.name}</h4>
-                <p className="text-xs text-white/30">{n.tagline}</p>
-                <p className="text-xs text-neon-gold mt-1 font-medium font-mono">{n.count} salons</p>
-              </div>
+              {n}
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Stats Banner */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-noir-100 via-noir-200 to-noir-100 border-y border-white/[0.04]" />
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute w-80 h-80 rounded-full bg-neon-gold/[0.03] blur-3xl top-0 left-1/4 animate-float" />
-          <div className="absolute w-64 h-64 rounded-full bg-emerald-glow/[0.02] blur-3xl bottom-0 right-1/4 animate-float" style={{ animationDelay: '3s' }} />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      {/* Stats — Inline Text */}
+      <section className="py-16 border-y border-gold/[0.04]">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-16 text-center">
             {[
-              { value: '25', suffix: '+', label: 'Verified Salons' },
-              { value: '10', suffix: '', label: 'Neighborhoods' },
-              { value: '5', suffix: '', label: 'AI Features' },
-              { value: '200', suffix: '+', label: 'Services Listed' },
+              { value: '25+', label: 'Verified Salons' },
+              { value: '10', label: 'Neighborhoods' },
+              { value: '5', label: 'AI Features' },
+              { value: '200+', label: 'Services' },
             ].map((s, i) => (
-              <div key={i} className="group">
-                <p className="text-4xl md:text-5xl lg:text-6xl font-bold gradient-text font-mono tracking-tight">
-                  <AnimatedCounter target={s.value} suffix={s.suffix} duration={2000 + i * 300} />
+              <div key={i}>
+                <p className="text-3xl sm:text-4xl font-display font-light text-gold">
+                  {s.value}
                 </p>
-                <p className="text-sm text-white/40 mt-2 font-medium tracking-wide uppercase">{s.label}</p>
+                <p className="text-xs text-ivory/25 mt-1 tracking-[0.15em] uppercase font-light">
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Banner */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-reveal">
-        <div className="relative rounded-3xl overflow-hidden p-12 md:p-16 text-center bg-gradient-to-br from-noir-100 via-noir-200 to-noir-300 border border-white/[0.05]">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute w-64 h-64 rounded-full bg-neon-gold/5 blur-3xl -top-10 -right-10 animate-float" />
-            <div className="absolute w-48 h-48 rounded-full bg-emerald-glow/5 blur-3xl bottom-10 -left-10 animate-float" style={{ animationDelay: '3s' }} />
-          </div>
-          <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold font-display text-white mb-4">
-              Ready to Find Your Perfect Look?
-            </h2>
-            <p className="text-lg text-white/60 max-w-xl mx-auto mb-8">
-              Don&apos;t just book a salon — see your look before you go, and let AI plan your entire beauty journey.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/advisor" className="btn-gold px-8 py-4 text-lg flex items-center gap-2">
-                <Sparkles className="w-5 h-5" />
-                Start with AI Advisor
-              </Link>
-              <Link href="/salons" className="px-8 py-4 rounded-xl text-lg font-semibold text-white border-2 border-white/20 hover:border-white/40 transition-all">
-                Browse Salons
-              </Link>
-            </div>
+      {/* CTA */}
+      <section className="py-24 px-6 sm:px-8 lg:px-12 max-w-7xl mx-auto scroll-reveal">
+        <div className="text-center max-w-2xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-display font-light text-ivory mb-4">
+            Ready to Find Your Perfect Look?
+          </h2>
+          <p className="text-base text-ivory/30 font-light mb-10 leading-relaxed">
+            See your look before you go. Let AI plan your entire beauty journey across Hyderabad.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/advisor" className="btn-primary">
+              Start with AI Advisor
+            </Link>
+            <Link href="/salons" className="btn-secondary">
+              Browse Salons
+            </Link>
           </div>
         </div>
       </section>

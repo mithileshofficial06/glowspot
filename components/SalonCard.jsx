@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Star, MapPin, Clock, Home, Sparkles, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
 const SALON_PHOTO_IDS = [
@@ -26,21 +26,6 @@ export default function SalonCard({ salon, onBook }) {
   const [imgError, setImgError] = useState(false);
   const imageUrl = getSalonImageUrl(salon.id);
 
-  const renderStars = (rating) => {
-    return [...Array(5)].map((_, i) => (
-      <Star
-        key={i}
-        className={`w-3.5 h-3.5 ${
-          i < Math.floor(rating) 
-            ? 'text-neon-gold fill-neon-gold' 
-            : i < rating 
-              ? 'text-neon-gold fill-neon-gold/50' 
-              : 'text-white/15'
-        }`}
-      />
-    ));
-  };
-
   return (
     <Link
       href={`/salons/${salon.id}`}
@@ -50,11 +35,11 @@ export default function SalonCard({ salon, onBook }) {
       {/* Image */}
       <div className="relative h-48 overflow-hidden bg-noir-100">
         {imgError ? (
-          <div className="absolute inset-0 bg-gradient-to-br from-noir-50 via-noir-100 to-noir-200 flex flex-col items-center justify-center p-4 border border-white/[0.04] transition-all duration-300">
-            <span className="text-lg font-bold text-neon-gold font-display text-center drop-shadow-md">
+          <div className="absolute inset-0 bg-noir-50 flex flex-col items-center justify-center p-4">
+            <span className="text-lg font-display font-light text-gold text-center">
               {salon.name}
             </span>
-            <span className="text-[10px] text-white/35 tracking-wider uppercase font-semibold mt-1.5">
+            <span className="text-[10px] text-ivory/30 tracking-[0.2em] uppercase mt-1.5 font-light">
               {salon.area}
             </span>
           </div>
@@ -63,78 +48,45 @@ export default function SalonCard({ salon, onBook }) {
             src={imageUrl}
             alt={salon.name}
             onError={() => setImgError(true)}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             loading="lazy"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-wrap gap-2">
-          {salon.homeService && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-glow/90 text-black text-xs font-semibold backdrop-blur-sm shadow-md">
-              <Home className="w-3 h-3" />
-              Home Service
-            </span>
-          )}
-        </div>
-
-        <div className="absolute top-3 right-3">
-          <span className="px-2 py-1 rounded-lg bg-black/60 border border-white/5 backdrop-blur-sm text-white/80 text-xs font-medium">
-            {salon.priceRange}
-          </span>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080608] via-[#080608]/20 to-transparent" />
       </div>
 
       {/* Content */}
       <div className="p-5">
         {/* Name & Rating */}
         <div className="flex items-start justify-between mb-2">
-          <h3 className="text-lg font-bold font-display text-white group-hover:text-neon-gold transition-colors duration-300">
+          <h3 className="text-lg font-display font-light text-ivory group-hover:text-gold transition-colors duration-300">
             {salon.name}
           </h3>
-          <div className="flex items-center gap-1 shrink-0 ml-2">
-            <Star className="w-4 h-4 text-neon-gold fill-neon-gold" />
-            <span className="text-sm font-bold text-white">{salon.rating}</span>
-          </div>
+          <span className="text-sm text-gold font-display shrink-0 ml-2">
+            {salon.rating}
+          </span>
         </div>
 
         {/* Location */}
-        <div className="flex items-center gap-1 text-white/40 text-sm mb-3">
-          <MapPin className="w-3.5 h-3.5" />
-          <span>{salon.area}, Hyderabad</span>
-          <span className="mx-1">•</span>
-          <span className="text-xs text-white/30">({salon.reviewCount} reviews)</span>
-        </div>
+        <p className="text-sm text-ivory/30 font-light mb-3">
+          {salon.area}, Hyderabad
+          <span className="mx-2 text-ivory/15">|</span>
+          <span className="text-xs text-ivory/25">{salon.reviewCount} reviews</span>
+        </p>
 
-        {/* Specialization Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        {/* Specializations */}
+        <div className="flex flex-wrap gap-2 mb-4">
           {salon.specializations.slice(0, 3).map((spec, i) => (
-            <span key={i} className="px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.06] text-white/40 text-xs font-medium">
+            <span key={i} className="text-xs text-ivory/30 font-light">
+              {i > 0 && <span className="mr-2 text-gold/20">/</span>}
               {spec}
             </span>
           ))}
         </div>
 
-        {/* AI Review Summary Snippet */}
-        {salon.reviews && salon.reviews.length > 0 && (
-          <div className="p-3 rounded-xl bg-neon-gold/[0.04] border border-neon-gold/[0.08] mb-3">
-            <div className="flex items-center gap-1.5 mb-1">
-              <Sparkles className="w-3 h-3 text-neon-gold" />
-              <span className="text-xs font-semibold text-neon-gold">AI Insight</span>
-            </div>
-            <p className="text-xs text-white/40 leading-relaxed line-clamp-2">
-              {salon.reviews[0].text.substring(0, 100)}...
-            </p>
-          </div>
-        )}
-
         {/* Footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-white/[0.06]">
-          <div className="flex items-center gap-1 text-xs text-white/30">
-            <Clock className="w-3 h-3" />
-            <span>{salon.openHours}</span>
-          </div>
+        <div className="flex items-center justify-between pt-3 border-t border-gold/[0.06]">
+          <span className="text-xs text-ivory/25 font-light">{salon.openHours}</span>
           {onBook ? (
             <button
               onClick={(e) => {
@@ -142,14 +94,14 @@ export default function SalonCard({ salon, onBook }) {
                 e.stopPropagation();
                 onBook(salon);
               }}
-              className="px-3 py-1.5 bg-neon-gold hover:bg-neon-gold/90 text-black text-xs font-bold rounded-xl transition-all shadow-md select-none shrink-0"
+              className="px-4 py-1.5 border border-gold text-gold text-xs tracking-[0.1em] uppercase font-light hover:bg-gold hover:text-[#080608] transition-all duration-300 shrink-0"
             >
-              Book Instantly
+              Book
             </button>
           ) : (
-            <span className="text-neon-gold text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
-              View Details
-              <ChevronRight className="w-4 h-4" />
+            <span className="text-gold/60 text-xs tracking-[0.1em] uppercase font-light flex items-center gap-1 group-hover:text-gold group-hover:gap-2 transition-all duration-300">
+              View
+              <ChevronRight className="w-3.5 h-3.5" />
             </span>
           )}
         </div>

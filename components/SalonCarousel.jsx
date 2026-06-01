@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
-import { Star, MapPin, Home, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 const SALON_PHOTO_IDS = [
   'photo-1560066984-138dadb4c035',
@@ -29,16 +29,16 @@ function CarouselCard({ salon }) {
   return (
     <Link
       href={`/salons/${salon.id}`}
-      className="block rounded-2xl overflow-hidden border border-white/[0.06] bg-[#111113] hover:border-neon-gold/30 transition-all duration-400 group shadow-lg hover:shadow-neon-gold/5 hover:shadow-2xl"
+      className="block overflow-hidden border border-gold/[0.06] bg-[#111011] hover:border-gold/20 transition-all duration-500 group"
     >
       {/* Image */}
       <div className="relative h-44 overflow-hidden bg-noir-100">
         {imgError ? (
-          <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460] flex flex-col items-center justify-center p-4">
-            <span className="text-lg font-bold text-neon-gold font-display text-center drop-shadow-md">
+          <div className="absolute inset-0 bg-noir-50 flex flex-col items-center justify-center p-4">
+            <span className="text-base font-display font-light text-gold text-center">
               {salon.name}
             </span>
-            <span className="text-[10px] text-white/40 tracking-wider uppercase font-semibold mt-1.5">
+            <span className="text-[10px] text-ivory/30 tracking-[0.2em] uppercase mt-1.5 font-light">
               {salon.area}
             </span>
           </div>
@@ -51,61 +51,41 @@ function CarouselCard({ salon }) {
             loading="lazy"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex gap-1.5">
-          {salon.homeService && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-glow/90 text-black text-[10px] font-semibold backdrop-blur-sm shadow-md">
-              <Home className="w-3 h-3" />
-              Home
-            </span>
-          )}
-        </div>
-        <div className="absolute top-3 right-3">
-          <span className="px-2 py-0.5 rounded-md bg-black/50 border border-white/10 backdrop-blur-sm text-white/90 text-[10px] font-medium">
-            {salon.priceRange}
-          </span>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080608]/80 via-[#080608]/20 to-transparent" />
       </div>
 
       {/* Content */}
       <div className="p-4">
         <div className="flex items-start justify-between mb-1.5 gap-2">
-          <h3 className="text-sm font-bold font-display text-white group-hover:text-neon-gold transition-colors duration-300 leading-tight line-clamp-1">
+          <h3 className="text-sm font-display font-light text-ivory group-hover:text-gold transition-colors duration-300 leading-tight line-clamp-1">
             {salon.name}
           </h3>
-          <div className="flex items-center gap-0.5 shrink-0">
-            <Star className="w-3.5 h-3.5 text-neon-gold fill-neon-gold" />
-            <span className="text-xs font-bold text-white">{salon.rating}</span>
-          </div>
+          <span className="text-xs text-gold font-display shrink-0">{salon.rating}</span>
         </div>
 
-        <div className="flex items-center gap-1 text-white/40 text-xs mb-3">
-          <MapPin className="w-3 h-3 shrink-0" />
-          <span className="truncate">{salon.area}</span>
-          <span className="mx-0.5">·</span>
-          <span className="text-white/30 shrink-0">{salon.reviewCount}</span>
-        </div>
+        <p className="text-xs text-ivory/30 mb-3 font-light">
+          {salon.area}
+        </p>
 
         {/* Specializations */}
         <div className="flex flex-wrap gap-1 mb-3">
           {salon.specializations.slice(0, 2).map((spec, j) => (
             <span
               key={j}
-              className="px-2 py-0.5 rounded-md bg-white/[0.04] border border-white/[0.06] text-white/45 text-[10px] font-medium"
+              className="text-[10px] text-ivory/25 font-light"
             >
+              {j > 0 && <span className="mr-1.5 text-gold/15">/</span>}
               {spec}
             </span>
           ))}
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-2.5 border-t border-white/[0.06]">
-          <span className="text-[11px] text-white/30 truncate">{salon.openHours}</span>
-          <span className="text-neon-gold text-xs font-medium flex items-center gap-0.5 group-hover:gap-1.5 transition-all duration-300 shrink-0">
+        <div className="flex items-center justify-between pt-2.5 border-t border-gold/[0.06]">
+          <span className="text-[11px] text-ivory/20 font-light truncate">{salon.openHours}</span>
+          <span className="text-gold/50 text-[11px] tracking-[0.1em] uppercase font-light flex items-center gap-0.5 group-hover:text-gold group-hover:gap-1.5 transition-all duration-300 shrink-0">
             View
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="w-3 h-3" />
           </span>
         </div>
       </div>
@@ -117,16 +97,12 @@ export default function SalonCarousel({ salons }) {
   const trackRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
 
-  // Duplicate the salon list to create seamless loop
   const duplicated = [...salons, ...salons];
 
   const CARD_WIDTH = 280;
   const GAP = 20;
-  // Total width of one full set
   const setWidth = salons.length * (CARD_WIDTH + GAP);
-
-  // Duration: controls speed. Lower = faster.
-  const duration = salons.length * 4; // ~4s per card
+  const duration = salons.length * 4;
 
   return (
     <div
@@ -134,14 +110,14 @@ export default function SalonCarousel({ salons }) {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Edge fade gradients */}
+      {/* Edge fades */}
       <div
         className="absolute left-0 top-0 bottom-0 w-20 sm:w-32 z-20 pointer-events-none"
-        style={{ background: 'linear-gradient(to right, #0a0a0a, transparent)' }}
+        style={{ background: 'linear-gradient(to right, #080608, transparent)' }}
       />
       <div
         className="absolute right-0 top-0 bottom-0 w-20 sm:w-32 z-20 pointer-events-none"
-        style={{ background: 'linear-gradient(to left, #0a0a0a, transparent)' }}
+        style={{ background: 'linear-gradient(to left, #080608, transparent)' }}
       />
 
       {/* Scrolling track */}
@@ -166,15 +142,10 @@ export default function SalonCarousel({ salons }) {
         ))}
       </div>
 
-      {/* Keyframes */}
       <style jsx>{`
         @keyframes marquee-scroll {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-${setWidth}px);
-          }
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-${setWidth}px); }
         }
       `}</style>
     </div>

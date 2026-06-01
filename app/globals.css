@@ -3,24 +3,21 @@
 @tailwind utilities;
 
 /* ========================================
-   GlowSpot Hyderabad — Dark Luxury Theme
+   GlowSpot Hyderabad — Dark Luxury Editorial
    ======================================== */
 
 :root {
-  --color-noir: #0a0a0a;
-  --color-noir-50: #141414;
-  --color-noir-100: #1a1a1a;
-  --color-noir-200: #222222;
-  --color-noir-300: #2a2a2a;
-  --color-neon-gold: #FFD700;
-  --color-neon-amber: #FFBF00;
-  --color-emerald-glow: #00E676;
-  --color-white-soft: rgba(255, 255, 255, 0.85);
-  --gradient-primary: linear-gradient(135deg, #FFD700 0%, #00E676 100%);
-  --gradient-hero: linear-gradient(135deg, #0a0a0a 0%, #141414 40%, #1a1a1a 100%);
-  --gradient-card: linear-gradient(135deg, rgba(255,215,0,0.04) 0%, rgba(0,230,118,0.06) 100%);
-  --shadow-glow: 0 0 30px rgba(255,215,0,0.15);
-  --shadow-card: 0 4px 20px rgba(0,0,0,0.4);
+  --color-bg: #080608;
+  --color-bg-elevated: #0e0c0e;
+  --color-bg-card: #111011;
+  --color-gold: #D4A96A;
+  --color-gold-dim: #A8895A;
+  --color-mauve: #9B6B8A;
+  --color-ivory: #F2EDE8;
+  --color-ivory-dim: #C8C3BE;
+  --color-ivory-muted: #8A8580;
+  --color-border: rgba(212, 169, 106, 0.08);
+  --color-border-hover: rgba(212, 169, 106, 0.2);
 }
 
 /* ========================================
@@ -40,256 +37,129 @@ html {
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--color-noir);
-  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Jost', system-ui, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-ivory);
   overflow-x: hidden;
-  line-height: 1.6;
+  line-height: 1.7;
+  font-weight: 300;
+  letter-spacing: 0.01em;
 }
 
-/* Custom Scrollbar — Dark Luxury */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333333;
-  border-radius: 3px;
+  background: rgba(212, 169, 106, 0.2);
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #FFD700;
+  background: rgba(212, 169, 106, 0.4);
 }
-
-/* ========================================
-   Silk Fabric Background
-   ======================================== */
-
-/* Silk background layers removed — replaced by lightweight static canvas in SilkBackground.jsx */
-/* Grain overlay removed — the missing @keyframes grain caused constant paint thrashing */
 
 /* ========================================
    Utility Classes
    ======================================== */
 
 @layer components {
-  /* Glassmorphism — Dark (no backdrop-filter to avoid GPU compositing overhead) */
-  .glass {
-    background: rgba(20, 20, 20, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .glass-dark {
-    background: rgba(10, 10, 10, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-  }
-
-  /* Gradient Text — Gold */
+  /* Gold gradient text */
   .gradient-text {
-    background: linear-gradient(135deg, #FFD700 0%, #FFBF00 50%, #FFD700 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--color-gold);
   }
 
-  .gradient-text-emerald {
-    background: linear-gradient(135deg, #00E676 0%, #FFD700 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Premium Buttons */
+  /* Buttons — Editorial */
   .btn-primary {
-    @apply px-6 py-3 rounded-xl font-semibold text-black transition-all duration-300;
-    background: linear-gradient(135deg, #FFD700 0%, #FFBF00 50%, #FFE44D 100%);
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.25);
+    @apply px-7 py-3 rounded-none font-body text-sm tracking-widest uppercase transition-all duration-300;
+    background: transparent;
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    letter-spacing: 0.15em;
+    font-weight: 400;
   }
 
   .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(255, 215, 0, 0.4);
-    filter: brightness(1.1);
-  }
-
-  .btn-primary:active {
-    transform: translateY(0);
+    background: var(--color-gold);
+    color: var(--color-bg);
   }
 
   .btn-secondary {
-    @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300;
+    @apply px-7 py-3 rounded-none font-body text-sm tracking-widest uppercase transition-all duration-300;
     background: transparent;
-    border: 1.5px solid rgba(255, 215, 0, 0.3);
-    color: #FFD700;
+    border: 1px solid rgba(242, 237, 232, 0.15);
+    color: var(--color-ivory-dim);
+    letter-spacing: 0.15em;
+    font-weight: 300;
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 215, 0, 0.08);
-    border-color: #FFD700;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.15);
+    border-color: var(--color-gold);
+    color: var(--color-gold);
   }
 
-  .btn-gold {
-    @apply px-6 py-3 rounded-xl font-semibold text-black transition-all duration-300;
-    background: linear-gradient(135deg, #FFD700 0%, #FFE44D 50%, #FFD700 100%);
-    background-size: 200% 200%;
-    animation: shimmerGold 3s ease-in-out infinite;
-  }
-
-  @keyframes shimmerGold {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  /* Cards — Dark Glass */
+  /* Cards — Dark Editorial Glass */
   .card {
-    @apply rounded-2xl overflow-hidden transition-all duration-300;
-    background: rgba(20, 20, 20, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: var(--shadow-card);
+    @apply overflow-hidden transition-all duration-500;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
   }
 
   .card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255, 215, 0, 0.12);
-    box-shadow: 0 12px 40px rgba(255, 215, 0, 0.08);
+    border-color: var(--color-border-hover);
+    box-shadow: 0 4px 20px rgba(212, 169, 106, 0.04);
   }
 
-  .card-glass {
-    @apply rounded-2xl overflow-hidden transition-all duration-300;
-    background: rgba(26, 26, 26, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: var(--shadow-card);
+  .card-glow {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    transition: border-color 0.5s ease, box-shadow 0.5s ease;
   }
 
-  /* Tags / Badges */
-  .tag {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-    background: rgba(255, 215, 0, 0.08);
-    color: #FFD700;
-  }
-
-  .tag-gold {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
-    background: rgba(0, 230, 118, 0.08);
-    color: #00E676;
+  .card-glow:hover {
+    border-color: var(--color-border-hover);
+    box-shadow: 0 4px 20px rgba(212, 169, 106, 0.04);
   }
 
   /* Section Styling */
   .section-heading {
-    @apply text-3xl md:text-4xl lg:text-5xl font-bold mb-4;
-    font-family: 'Outfit', 'Inter', system-ui, sans-serif;
-    color: white;
+    @apply text-3xl md:text-4xl lg:text-5xl font-light mb-4;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--color-ivory);
+    letter-spacing: -0.01em;
   }
 
   .section-subheading {
-    @apply text-lg md:text-xl max-w-2xl mx-auto;
-    color: rgba(255, 255, 255, 0.45);
+    @apply text-base md:text-lg max-w-2xl mx-auto font-light;
+    color: var(--color-ivory-muted);
+    letter-spacing: 0.02em;
   }
 
   /* Input Styling */
   .input-styled {
-    @apply w-full px-4 py-3 rounded-xl border transition-all duration-300 outline-none;
-    border-color: rgba(255, 255, 255, 0.08);
-    background: rgba(20, 20, 20, 0.6);
-    color: white;
+    @apply w-full px-4 py-3 border transition-all duration-300 outline-none;
+    border-color: var(--color-border);
+    background: var(--color-bg-elevated);
+    color: var(--color-ivory);
+    font-family: 'Jost', system-ui, sans-serif;
+    font-weight: 300;
   }
 
   .input-styled:focus {
-    border-color: rgba(255, 215, 0, 0.4);
-    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.08);
+    border-color: var(--color-gold);
   }
 
   .input-styled::placeholder {
-    color: rgba(255, 255, 255, 0.25);
+    color: var(--color-ivory-muted);
+    font-weight: 300;
   }
-
-  /* Shimmer Loading */
-  .shimmer {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 215, 0, 0.03) 0%,
-      rgba(255, 215, 0, 0.08) 50%,
-      rgba(255, 215, 0, 0.03) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 2s linear infinite;
-  }
-
-  /* Floating Particles Background */
-  .particles-bg {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .particles-bg::before,
-  .particles-bg::after {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.08;
-    animation: float 8s ease-in-out infinite;
-  }
-
-  .particles-bg::before {
-    width: 300px;
-    height: 300px;
-    background: #FFD700;
-    top: -100px;
-    right: -100px;
-    animation-delay: 0s;
-  }
-
-  .particles-bg::after {
-    width: 200px;
-    height: 200px;
-    background: #00E676;
-    bottom: -60px;
-    left: -60px;
-    animation-delay: 3s;
-  }
-}
-
-/* ========================================
-   Animation Keyframes
-   ======================================== */
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-15px) rotate(1deg); }
-  66% { transform: translateY(-8px) rotate(-1deg); }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-@keyframes pulse-ring {
-  0% { transform: scale(0.95); opacity: 0.7; }
-  50% { transform: scale(1.05); opacity: 0.3; }
-  100% { transform: scale(0.95); opacity: 0.7; }
 }
 
 /* ========================================
@@ -297,31 +167,33 @@ body {
    ======================================== */
 
 .chat-bubble-user {
-  @apply px-4 py-3 rounded-2xl rounded-br-md max-w-[85%] ml-auto;
-  background: linear-gradient(135deg, #FFD700 0%, #FFBF00 100%);
-  color: #0a0a0a;
+  @apply px-5 py-3 max-w-[85%] ml-auto;
+  background: transparent;
+  border: 1px solid rgba(212, 169, 106, 0.3);
+  color: var(--color-ivory);
+  border-radius: 2px;
 }
 
 .chat-bubble-ai {
-  @apply px-4 py-3 rounded-2xl rounded-bl-md max-w-[85%];
-  background: rgba(26, 26, 26, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  @apply px-5 py-3 max-w-[85%];
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  color: var(--color-ivory);
+  border-radius: 2px;
 }
 
 /* Typing Indicator */
 .typing-indicator {
   display: inline-flex;
-  gap: 4px;
+  gap: 6px;
   padding: 12px 16px;
 }
 
 .typing-indicator span {
-  width: 8px;
-  height: 8px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: #FFD700;
+  background: var(--color-gold);
   opacity: 0.4;
   animation: typingBounce 1.4s infinite;
 }
@@ -330,33 +202,42 @@ body {
 .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
 @keyframes typingBounce {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-  30% { transform: translateY(-8px); opacity: 1; }
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+  30% { transform: translateY(-6px); opacity: 0.8; }
 }
 
 /* ========================================
-   Responsive & Accessibility Adjustments
+   Scroll Reveal Animations
+   ======================================== */
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.scroll-reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   Responsive
    ======================================== */
 
 @layer utilities {
-  /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 
 @media (max-width: 768px) {
   .section-heading {
     @apply text-2xl md:text-3xl;
-  }
-
-  .section-subheading {
-    @apply text-sm md:text-base;
   }
 
   body {
@@ -369,61 +250,19 @@ body {
   }
 }
 
-/* Star Rating */
-.star-rating {
-  color: #FFD700;
-}
-
-/* Scroll Reveal Animations */
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform, opacity;
-}
-
-.scroll-reveal.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* ========================================
-   Mesh Gradient Hero — Static (no animation)
+   Editorial Dividers
    ======================================== */
 
-.mesh-gradient-bg {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: 0;
+.gold-line {
+  width: 48px;
+  height: 1px;
+  background: var(--color-gold);
+  opacity: 0.4;
 }
 
-.mesh-gradient-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(ellipse 600px 400px at 20% 30%, rgba(255, 215, 0, 0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 500px 350px at 75% 20%, rgba(0, 230, 118, 0.06) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 500px at 50% 70%, rgba(139, 92, 246, 0.05) 0%, transparent 70%),
-    radial-gradient(ellipse 600px 300px at 80% 80%, rgba(255, 191, 0, 0.04) 0%, transparent 70%);
-}
-
-/* ========================================
-   Glassmorphic Glow Border Cards — Lightweight
-   ======================================== */
-
-.card-glow {
-  position: relative;
-  border-radius: 1rem;
-  overflow: hidden;
-  background: rgba(20, 20, 20, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-glow:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 215, 0, 0.2);
-  box-shadow: 0 8px 30px rgba(255, 215, 0, 0.06);
+.gold-line-wide {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,169,106,0.2), transparent);
 }

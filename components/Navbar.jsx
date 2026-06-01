@@ -3,14 +3,14 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Sparkles, Menu, X, Scissors, Eye, Calendar, MessageCircle, MapPin } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const navLinks = [
-  { href: '/', label: 'Home', icon: Sparkles },
-  { href: '/advisor', label: 'AI Advisor', icon: MessageCircle },
-  { href: '/preview', label: 'Style Preview', icon: Eye },
-  { href: '/planner', label: 'Wedding Planner', icon: Calendar },
-  { href: '/salons', label: 'Salons', icon: MapPin },
+  { href: '/', label: 'Home' },
+  { href: '/advisor', label: 'Advisor' },
+  { href: '/preview', label: 'Preview' },
+  { href: '/planner', label: 'Planner' },
+  { href: '/salons', label: 'Salons' },
 ];
 
 export default function Navbar() {
@@ -28,55 +28,51 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'glass shadow-lg py-2'
-          : 'bg-transparent py-4'
+          ? 'bg-[#080608]/90 border-b border-gold/[0.06] py-3'
+          : 'bg-transparent py-5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 group" id="nav-logo">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-gold to-emerald-glow flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-glow">
-              <Scissors className="w-5 h-5 text-black" />
-            </div>
-            <div>
-              <span className="text-xl font-bold font-display gradient-text">GlowSpot</span>
-              <span className="hidden sm:inline text-xs text-white/30 ml-1.5 font-body">Hyderabad</span>
-            </div>
+          {/* Logo — Text Only */}
+          <Link href="/" className="group" id="nav-logo">
+            <span className="text-2xl font-display font-light tracking-wide text-ivory">
+              Glow<span className="text-gold">Spot</span>
+            </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop Navigation — Minimal Text Links */}
+          <div className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
-              const Icon = link.icon;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  id={`nav-${link.label.toLowerCase().replace(/\s/g, '-')}`}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
+                  id={`nav-${link.label.toLowerCase()}`}
+                  className={`relative text-sm tracking-[0.12em] uppercase font-body font-light transition-colors duration-300 ${
                     isActive
-                      ? 'bg-neon-gold/10 text-neon-gold'
-                      : 'text-white/50 hover:text-neon-gold hover:bg-white/[0.03]'
+                      ? 'text-gold'
+                      : 'text-ivory/40 hover:text-gold'
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
                   {link.label}
+                  {isActive && (
+                    <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-gold/40" />
+                  )}
                 </Link>
               );
             })}
           </div>
 
-
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-xl text-white/50 hover:text-neon-gold hover:bg-white/[0.03] transition-all duration-300"
+            className="md:hidden p-2 text-ivory/40 hover:text-gold transition-colors duration-300"
             id="nav-mobile-toggle"
             aria-label="Toggle menu"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
@@ -89,7 +85,7 @@ export default function Navbar() {
       >
         {/* Backdrop */}
         <div
-          className={`absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-500 ${
+          className={`absolute inset-0 bg-black/70 transition-opacity duration-500 ${
             isOpen ? 'opacity-100' : 'opacity-0'
           }`}
           onClick={() => setIsOpen(false)}
@@ -97,59 +93,54 @@ export default function Navbar() {
 
         {/* Drawer */}
         <div
-          className={`absolute right-0 top-0 h-full w-72 bg-noir-50 border-l border-white/[0.05] shadow-2xl transition-transform duration-500 ${
+          className={`absolute right-0 top-0 h-full w-72 bg-[#0e0c0e] border-l border-gold/[0.06] shadow-2xl transition-transform duration-500 ${
             isOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
-          <div className="p-6">
-            {/* Close Button */}
+          <div className="p-8">
+            {/* Close */}
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-xl text-white/30 hover:text-neon-gold transition-colors"
+              className="absolute top-5 right-5 p-2 text-ivory/30 hover:text-gold transition-colors"
               aria-label="Close menu"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </button>
 
             {/* Logo */}
-            <div className="flex items-center gap-2 mb-8 mt-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neon-gold to-emerald-glow flex items-center justify-center shadow-glow">
-                <Scissors className="w-5 h-5 text-black" />
-              </div>
-              <span className="text-xl font-bold font-display gradient-text">GlowSpot</span>
+            <div className="mb-10 mt-2">
+              <span className="text-2xl font-display font-light text-ivory">
+                Glow<span className="text-gold">Spot</span>
+              </span>
             </div>
 
             {/* Links */}
-            <div className="space-y-2">
-              {navLinks.map((link, index) => {
+            <div className="space-y-1">
+              {navLinks.map((link) => {
                 const isActive = pathname === link.href;
-                const Icon = link.icon;
                 return (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                    className={`block px-3 py-3 text-sm tracking-[0.12em] uppercase font-body font-light transition-all duration-300 border-l-2 ${
                       isActive
-                        ? 'bg-neon-gold/10 text-neon-gold'
-                        : 'text-white/50 hover:text-neon-gold hover:bg-white/[0.03]'
+                        ? 'text-gold border-gold/40'
+                        : 'text-ivory/40 hover:text-gold border-transparent hover:border-gold/20'
                     }`}
-                    style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    <Icon className="w-5 h-5" />
                     {link.label}
                   </Link>
                 );
               })}
             </div>
 
-
-            {/* Bottom Info */}
-            <div className="absolute bottom-8 left-6 right-6">
-              <div className="text-xs text-white/20 flex items-center gap-1">
-                <MapPin className="w-3 h-3" />
-                Serving Hyderabad
-              </div>
+            {/* Bottom */}
+            <div className="absolute bottom-8 left-8 right-8">
+              <div className="gold-line-wide mb-4" />
+              <p className="text-xs text-ivory/20 font-light tracking-wider">
+                Hyderabad
+              </p>
             </div>
           </div>
         </div>
