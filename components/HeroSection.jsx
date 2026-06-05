@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import HeroBackgroundAnimation from './HeroBackgroundAnimation';
 
 const headlineWords = ['Discover', 'the', 'Art', 'of', 'Beauty', 'in', 'Hyderabad'];
 
@@ -35,16 +36,8 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Subtle ambient gradient */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#080608] via-[#0e0c0e] to-[#080608]" />
-        <div
-          className="absolute top-0 right-0 w-1/2 h-full opacity-[0.03]"
-          style={{
-            background: 'radial-gradient(ellipse at 70% 40%, rgba(212,169,106,1) 0%, transparent 60%)',
-          }}
-        />
-      </div>
+      {/* Dynamic Animated Canvas Background */}
+      <HeroBackgroundAnimation />
 
       {/* Two-Column Layout */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-32 w-full">
