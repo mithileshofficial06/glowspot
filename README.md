@@ -1,167 +1,135 @@
-# GlowSpot Hyderabad
+# 🌟 GlowSpot Hyderabad
 
-AI-Powered Beauty Salon Marketplace for Hyderabad
+> **AI-Powered Luxury Beauty Salon Marketplace & Virtual Styling Platform**
+> 
+> *A premium, dark-obsidian themed web application tailored for Hyderabad, India. Combining generative AI, real-time weather feeds, virtual try-ons, and dynamic wedding planning to deliver a state-of-the-art beauty experience.*
 
-## 🚀 Quick Start
-
-### First Time Setup
-
-```bash
-npm install
-npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000)
-
-### If Styles Are Not Loading
-
-This is the most common issue. Run:
-
-```bash
-npm run fresh
-```
-
-Or on Windows PowerShell:
-
-```powershell
-.\start-fresh.ps1
-```
-
-This will:
-- Kill any processes on port 3000
-- Clean the build cache
-- Start a fresh dev server
-
-## 📦 Available Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run clean` | Clean build cache (.next folder) |
-| `npm run fresh` | Clean cache + start dev server |
-
-## 🛠️ Troubleshooting
-
-### Styles Not Loading (White Page)
-
-**Problem:** The page shows unstyled HTML with no colors or layout.
-
-**Solution:**
-```bash
-npm run fresh
-```
-
-Then hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R).
-
-### Port 3000 Already in Use
-
-**Windows:**
-```powershell
-netstat -ano | findstr :3000
-Stop-Process -Id <PID> -Force
-```
-
-Or use the PowerShell script:
-```powershell
-.\start-fresh.ps1
-```
-
-**Mac/Linux:**
-```bash
-lsof -ti:3000 | xargs kill -9
-npm run dev
-```
-
-### Slow Performance / Laggy Scrolling
-
-The app includes optimized canvas animations. If experiencing lag:
-
-1. Close browser dev tools (they slow animations significantly)
-2. Check that hardware acceleration is enabled in browser settings
-3. If still slow, you can reduce particle count in `components/HeroBackgroundAnimation.jsx` (line 38: change `particleCount` from 30 to 15)
-
-### Changes Not Reflecting
-
-1. Make sure you saved the file
-2. Check the terminal for compilation errors
-3. Hard refresh browser (Ctrl+Shift+R)
-4. If still not working: `npm run fresh`
-
-## 🏗️ Project Structure
-
-```
-glowspot-hyderabad/
-├── app/                    # Next.js App Router pages
-│   ├── advisor/           # AI Style Advisor
-│   ├── preview/           # Face Preview (Vision AI)
-│   ├── planner/           # Wedding Planner
-│   ├── salons/            # Salon listing & details
-│   └── api/               # API routes
-├── components/            # React components
-├── data/                  # JSON data files
-├── public/                # Static assets
-├── clean-build.js         # Build cache cleaner script
-├── start-fresh.ps1        # Windows helper script
-└── TROUBLESHOOTING.md     # Detailed troubleshooting guide
-```
-
-## 🎨 Tech Stack
-
-- **Framework:** Next.js 14 (App Router)
-- **Styling:** Tailwind CSS
-- **Animations:** Framer Motion, Canvas API
-- **Icons:** Lucide React
-- **State:** Zustand
-
-## 🔧 Configuration
-
-### Next.js Config
-
-The project is configured to:
-- Disable webpack cache in development (prevents stale CSS issues)
-- Enable React strict mode
-- Optimize for faster refresh
-
-### Tailwind Config
-
-Includes custom:
-- Colors: noir, gold, mauve, ivory palettes
-- Animations: float, sparkle, bounce-gentle, glow-pulse
-- Fonts: Cormorant Garamond (display), Jost (body)
-
-## 🎯 Features
-
-1. **AI Style Advisor** - Conversational AI for style recommendations
-2. **Face Preview** - Vision AI analyzes face shape and suggests styles
-3. **Wedding Planner** - Multi-day beauty planning with AI
-4. **Salon Directory** - 25+ verified salons across Hyderabad
-5. **Smart Booking** - Natural language booking system
-
-## 📝 Development Notes
-
-### Performance Optimizations Applied
-
-- Canvas animations optimized (reduced particle count, optimized draw loops)
-- Scroll performance improved (RAF throttling, better IntersectionObserver)
-- CSS optimized (faster transitions, hardware acceleration hints)
-- Build cache disabled in dev to prevent style issues
-
-### Known Issues
-
-- **Styles disappearing:** This happens when Next.js cache gets corrupted. Always use `npm run fresh` to fix.
-- **Port conflicts:** Multiple dev servers can start on different ports. Use the helper scripts to ensure clean starts.
-
-## 🔗 Links
-
-- **Troubleshooting Guide:** See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
-- **AI Powered By:** NVIDIA NIM (Llama 3.3 70B & Llama 3.2 90B Vision)
-
-## 📄 License
-
-Private Project
+[![Next.js 14](https://img.shields.io/badge/Next.js-14.2.35-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![Zustand v5](https://img.shields.io/badge/Zustand-5.0.14-orange?style=for-the-badge)](https://github.com/pmndrs/zustand)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4.14-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-12.40.0-black?style=for-the-badge&logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![NVIDIA NIM](https://img.shields.io/badge/NVIDIA-NIM_AI-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://build.nvidia.com/)
 
 ---
 
-**Need Help?** Check [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for detailed solutions.
+## 📸 Key Features
+
+### 1. 🤖 AI Chat Advisor (`/advisor`)
+*   **SSE Streaming Output**: Live-token streaming powered by Server-Sent Events (SSE). Experience instantaneous response rendering.
+*   **Weather-Driven Skincare**: Calls the **Open-Meteo API** to fetch Hyderabad's real-time temperature, humidity, and Air Quality Index (US AQI/PM2.5) to suggest weather-adapted products and skincare rituals.
+*   **Voice Control & Speech Synthesis**: Talk to the advisor hands-free via the browser's `webkitSpeechRecognition`. AI replies out loud with premium localized Indian voices.
+*   **Zustand Persisted Store**: Connects to the user's face shape profile so the AI advisor knows facial properties before the conversation starts.
+
+### 2. 💄 Face Preview & Virtual Try-On (`/preview`)
+*   **Vision Face Analyzer**: Uses `meta/llama-3.2-90b-vision-instruct` to extract face shape, undertone, and recommended styling parameters from a user-uploaded portrait.
+*   **HTML5 Canvas Overlays**: Move interactive nodes (`Lip`, `Blsh`, `Hair`) to try on styles in real time:
+    *   *Lipstick*: Ruby Red, Nude Pink, Plum Wine, Peach Satin (with opacity adjusters).
+    *   *Blush*: Symmetrical dual-point gradients (Rose Petal, Peach Glow, Golden Hue).
+    *   *Highlights*: Radial gradient-mapped color rings (Caramel, Burgundy, Honey Blonde, Ash Silver).
+*   **Consultation Sidebar**: Dedicated chatbot answering questions about your specific analyzed facial contours and styles.
+
+### 3. 📅 AI Wedding Beauty Planner (`/planner`)
+*   **Cultural Style Presets**: Custom configurations for **Classic Telugu Bride** (temple gold, jasmine braids), **Royal Deccani Bride** (vintage khada dupatta, emeralds), **North Indian Heritage**, **Contemporary Minimalist**, and **Indie Groom Fusion**.
+*   **Dynamic Budget Rebalancer**: Set a wedding budget limit (₹10,000 to ₹1,50,000). Adjust individual milestone pricing, and the AI automatically replaces recommended salons to match your target limit.
+*   **Entourage Planning**: Plan and coordinate side-by-side treatments for bridesmaids, the Mother of the Bride, and the Groom.
+*   **Selfie Integration & Logistics**: Includes on-venue travel surcharges and shapes beauty regimens around your uploaded selfie.
+
+### 4. 💇 Salon Directory & Smart Booking (`/salons`, `/booking`)
+*   **25 Salons across 10 Neighborhoods**: Hand-curated coverage of Banjara Hills, Jubilee Hills, Hitech City, Madhapur, Gachibowli, Kukatpally, Secunderabad, Begumpet, Ameerpet, and Kondapur.
+*   **NIM Review Summarization**: Consolidates multiple client reviews into 2-sentence summaries highlighting pros and practical tips.
+*   **Similar Salons Matcher**: Recommends alternative beauty stops based on area proximity and specialization overlap.
+*   **1-Click .ics Calendar Sync**: Downloads standard calendar events (`.ics` files) compatible with Google Calendar, Outlook, and Apple Calendar directly upon checkout.
+
+---
+
+## 🛠️ Tech Stack & Design System
+
+*   **Next.js 14 App Router** (Zero-hydration mismatching, dynamically loaded modules).
+*   **Zustand v5** (Persistent local storage state mapping).
+*   **TailwindCSS** (Custom dark luxury layout theme: **Noir** background, **Gold** highlights, **Ivory** text, and **Mauve** accents).
+*   **Framer Motion v12** (Smooth page transitions, spring-animated toast alerts).
+*   **HTML5 Canvas API** (Liquid silk waves background, mouse spotlight tracking, vector checkmarks, and confetti bursts).
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+Ensure you have [Node.js (v18+)](https://nodejs.org/) installed.
+
+### 2. Installation
+Clone and install dependencies:
+```bash
+git clone https://github.com/mithileshofficial06/glowspot.git
+cd glowspot
+npm install
+```
+
+### 3. Set Up Environment Variables
+Create a `.env.local` file in the root directory and add your NVIDIA API credentials:
+```env
+NVIDIA_API_KEY=your_nvidia_nim_api_key_here
+```
+
+### 4. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 📦 Script Directory
+
+| Command | Action |
+|---------|--------|
+| `npm run dev` | Starts Next.js hot-reloading development server on port 3000 |
+| `npm run build` | Compiles and optimizes the project for production deployment |
+| `npm run start` | Boots the compiled production server |
+| `npm run clean` | Clears local `.next` and development build cache |
+| `npm run fresh` | Cleans cache and instantly spins up a fresh dev server |
+
+### 🛠️ Troubleshooting Windows Styles (White Screen)
+If styling cache gets corrupted in Next.js development mode, run:
+```powershell
+.\start-fresh.ps1
+```
+This PowerShell script automatically releases port 3000, clears caching directories, and restarts the environment.
+
+---
+
+## 📂 Project Architecture
+
+```
+glowspot-hyderabad/
+├── app/
+│   ├── api/
+│   │   ├── chat/route.js        # SSE Streaming Chat API
+│   │   ├── planner/route.js     # Structured AI planner response
+│   │   ├── preview/route.js     # Face Analysis & Llama Vision API
+│   │   └── summarize/route.js   # NIM Review Summarizer API
+│   ├── advisor/                 # Conversational Advisor Page
+│   ├── booking/                 # Checkout and Confirmation Page
+│   ├── planner/                 # Wedding Planner Page
+│   ├── preview/                 # Visual Try-on Page
+│   ├── salons/                  # Directory & Detail Page
+│   ├── layout.js                # Shell container with Navbar, BottomNav & Toasts
+│   └── globals.css              # Custom scrollbars, glass designs & shimmers
+├── components/
+│   ├── BookingConfirmation.jsx  # SVG checkmark & canvas particles
+│   ├── BookingForm.jsx          # Booking panel, slots, & .ics downloader
+│   ├── ChatInterface.jsx        # Conversational SSE panel
+│   ├── FacePreview.jsx          # Live makeup canvas & vision analysis
+│   ├── HeroBackgroundAnimation.jsx # Silk wave overlay with cursor tracking
+│   ├── PageTransition.jsx       # Framer Motion route wrapper
+│   ├── ScrollProgress.jsx       # Gold scroll indicator
+│   └── ToastProvider.jsx        # Float notification system
+├── store/
+│   └── useProfileStore.js       # Zustand persisted profile data store
+└── tailwind.config.js           # Theme palette & animations configuration
+```
+
+---
+
+## 📄 License
+Private Project. Owned by [mithileshofficial06](https://github.com/mithileshofficial06).
