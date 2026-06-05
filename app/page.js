@@ -40,12 +40,12 @@ export default function Home() {
           }
         });
       },
-      { threshold: 0.05, rootMargin: '0px 0px -60px 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
     );
 
     const els = document.querySelectorAll('.scroll-reveal');
     els.forEach((el) => observer.observe(el));
-    return () => els.forEach((el) => observer.unobserve(el));
+    return () => observer.disconnect();
   }, []);
 
   return (

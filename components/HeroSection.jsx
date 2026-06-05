@@ -12,7 +12,7 @@ export default function HeroSection() {
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
-    // Sequential word reveal
+    // Sequential word reveal with reduced frequency
     const wordTimer = setInterval(() => {
       setVisibleWords((prev) => {
         if (prev >= headlineWords.length) {
@@ -21,12 +21,12 @@ export default function HeroSection() {
         }
         return prev + 1;
       });
-    }, 140);
+    }, 120);
 
     // Show sub-content after headline completes
     const contentTimer = setTimeout(() => {
       setShowContent(true);
-    }, headlineWords.length * 140 + 400);
+    }, headlineWords.length * 120 + 300);
 
     return () => {
       clearInterval(wordTimer);
@@ -114,7 +114,7 @@ export default function HeroSection() {
 
           {/* Right Column — Editorial Image */}
           <div
-            className={`hidden lg:block transition-all duration-1000 delay-500 ${
+            className={`hidden lg:block transition-all duration-700 delay-500 ${
               showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
           >
@@ -124,6 +124,8 @@ export default function HeroSection() {
                 alt="Premium salon interior"
                 className="w-full h-full object-cover"
                 loading="eager"
+                decoding="async"
+                fetchPriority="high"
               />
               {/* Subtle overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#080608] via-transparent to-[#080608]/30" />

@@ -10,7 +10,9 @@ export default function HeroBackgroundAnimation() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
+    
     let animationFrameId;
     let time = 0;
 
@@ -29,17 +31,27 @@ export default function HeroBackgroundAnimation() {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
 
-    // Resize handler
+    // Resize handler with DPR support
     const resizeCanvas = () => {
       const rect = canvas.parentNode.getBoundingClientRect();
-      canvas.width = rect.width;
-      canvas.height = rect.height;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.scale(dpr, dpr);
     };
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    
+    let resizeTimer;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resizeCanvas, 250);
+    };
+    window.addEventListener('resize', debouncedResize);
 
-    // Initialize particles
-    const particleCount = 45;
+    // Initialize particles with reduced count
+    const particleCount = 30;
     const particles = [];
 
     const createParticle = (yOffset = null) => {
@@ -65,11 +77,12 @@ export default function HeroBackgroundAnimation() {
       particles.push(createParticle());
     }
 
-    // Animation loop
+    // Animation loop with performance optimizations
     const animate = () => {
       time += 0.005;
-      const width = canvas.width;
-      const height = canvas.height;
+      const dpr = window.devicePixelRatio || 1;
+      const width = canvas.width / dpr;
+      const height = canvas.height / dpr;
 
       // Clear with subtle dark background color to prevent trailing
       ctx.fillStyle = '#080608';
@@ -101,11 +114,10 @@ export default function HeroBackgroundAnimation() {
       ctx.fillStyle = radialGlow;
       ctx.fillRect(0, 0, width, height);
 
-      // 2. Draw Moving Silk Waves
+      // 2. Draw Moving Silk Waves (optimized)
       const drawMovingWave = (yOffset, amplitude, wavelength, opacity, colorStr, speedMultiplier) => {
         ctx.beginPath();
-        for (let x = 0; x <= width; x += 6) {
-          // Double sine superposition for organic ribbon look
+        for (let x = 0; x <= width; x += 10) {
           const sinTerm = Math.sin(x / wavelength + time * speedMultiplier);
           const cosTerm = Math.cos(x / (wavelength * 0.6) - time * speedMultiplier * 0.8) * 0.35;
           const y = yOffset + (sinTerm + cosTerm) * amplitude;
@@ -188,7 +200,8 @@ export default function HeroBackgroundAnimation() {
     // Cleanup listeners and animation frame on unmount
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('resize', resizeCanvas);
+      clearTimeout(resizeTimer);
+      window.removeEventListener('resize', debouncedResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
     };

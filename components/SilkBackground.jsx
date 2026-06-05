@@ -9,15 +9,23 @@ export default function SilkBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
+    if (!ctx) return;
 
     const draw = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      
+      ctx.scale(dpr, dpr);
 
       const drawStaticWave = (yOffset, amplitude, wavelength, opacity, color) => {
         ctx.beginPath();
-        for (let x = 0; x <= canvas.width; x += 4) {
+        for (let x = 0; x <= rect.width; x += 8) {
           const y =
             yOffset +
             Math.sin(x / wavelength) * amplitude +
@@ -25,8 +33,8 @@ export default function SilkBackground() {
           if (x === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        ctx.lineTo(canvas.width, canvas.height);
-        ctx.lineTo(0, canvas.height);
+        ctx.lineTo(rect.width, rect.height);
+        ctx.lineTo(0, rect.height);
         ctx.closePath();
 
         const gradient = ctx.createLinearGradient(0, yOffset - amplitude, 0, yOffset + amplitude * 2);
@@ -37,14 +45,12 @@ export default function SilkBackground() {
         ctx.fill();
       };
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#080608';
+      ctx.fillRect(0, 0, rect.width, rect.height);
 
-      // Warm gold wave
-      drawStaticWave(canvas.height * 0.35, 40, 420, 0.03, '212, 169, 106');
-      // Mauve wave
-      drawStaticWave(canvas.height * 0.55, 35, 350, 0.025, '155, 107, 138');
-      // Subtle ivory wave
-      drawStaticWave(canvas.height * 0.75, 30, 380, 0.02, '242, 237, 232');
+      drawStaticWave(rect.height * 0.35, 40, 420, 0.03, '212, 169, 106');
+      drawStaticWave(rect.height * 0.55, 35, 350, 0.025, '155, 107, 138');
+      drawStaticWave(rect.height * 0.75, 30, 380, 0.02, '242, 237, 232');
     };
 
     draw();
@@ -52,7 +58,7 @@ export default function SilkBackground() {
     let resizeTimer;
     const handleResize = () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(draw, 200);
+      resizeTimer = setTimeout(draw, 250);
     };
     window.addEventListener('resize', handleResize);
 
@@ -66,7 +72,6 @@ export default function SilkBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 z-0 pointer-events-none"
-      style={{ width: '100%', height: '100%' }}
       aria-hidden="true"
     />
   );
