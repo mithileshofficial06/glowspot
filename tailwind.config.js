@@ -48,6 +48,10 @@ module.exports = {
         'fade-in-up': 'fadeInUp 0.7s ease-out forwards',
         'slide-up': 'slideUp 0.6s ease-out forwards',
         'word-reveal': 'wordReveal 0.6s ease-out forwards',
+        'float': 'float 6s ease-in-out infinite',
+        'sparkle': 'sparkle 3s ease-in-out infinite',
+        'bounce-gentle': 'bounceGentle 2s ease-in-out infinite',
+        'glow-pulse': 'glowPulse 2s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -66,12 +70,28 @@ module.exports = {
           '0%': { opacity: '0', transform: 'translateY(8px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px) scale(1)' },
+          '50%': { transform: 'translateY(-20px) scale(1.05)' },
+        },
+        sparkle: {
+          '0%, 100%': { opacity: '0.2', transform: 'scale(0.8)' },
+          '50%': { opacity: '1', transform: 'scale(1.2)' },
+        },
+        bounceGentle: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-10px)' },
+        },
+        glowPulse: {
+          '0%, 100%': { opacity: '0.5', boxShadow: '0 0 5px currentColor' },
+          '50%': { opacity: '1', boxShadow: '0 0 20px currentColor' },
+        },
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
       boxShadow: {
-        'glow': '0 0 30px rgba(212,169,106,0.1)',
+        'glow': '0 0 30px rgba(212,169,106,0.15), 0 0 60px rgba(212,169,106,0.08)',
         'glow-lg': '0 0 60px rgba(212,169,106,0.15)',
         'card': '0 2px 12px rgba(0,0,0,0.3)',
         'card-hover': '0 6px 24px rgba(212,169,106,0.08)',
