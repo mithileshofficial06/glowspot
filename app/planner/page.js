@@ -2,7 +2,7 @@ import WeddingPlanner from '@/components/WeddingPlanner';
 import { Calendar, Sparkles, Heart } from 'lucide-react';
 
 export const metadata = {
-  title: 'AI Wedding Planner — GlowSpot Hyderabad',
+  title: 'Wedding Beauty Planner — GlowSpot Hyderabad',
   description: 'Let AI create your complete wedding beauty schedule. From pre-bridal skincare to the big day — day-by-day plan with Hyderabad salon recommendations.',
 };
 

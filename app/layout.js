@@ -8,11 +8,11 @@ import PageTransition from '@/components/PageTransition';
 import { ToastProvider } from '@/components/ToastProvider';
 
 export const metadata = {
-  title: 'GlowSpot Hyderabad — AI-Powered Beauty Salon Marketplace',
+  title: 'GlowSpot Hyderabad — AI Beauty Marketplace',
   description: 'Describe your look, preview it on your face, and book the perfect Hyderabad salon. AI-powered style advisor, face preview, wedding planner, and conversational booking.',
   keywords: 'beauty salon, Hyderabad, AI, bridal makeup, hair styling, wedding planner, salon booking, face preview',
   openGraph: {
-    title: 'GlowSpot Hyderabad — AI-Powered Beauty Salon Marketplace',
+    title: 'GlowSpot Hyderabad — AI Beauty Marketplace',
     description: 'Describe your look, preview it on your face, and book the perfect Hyderabad salon.',
     type: 'website',
     locale: 'en_IN',

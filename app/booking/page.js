@@ -3,8 +3,73 @@
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { Check, PartyPopper, Calendar, Clock, MapPin, ArrowRight, Home } from 'lucide-react';
+import { Check, Calendar, Clock, MapPin, Home } from 'lucide-react';
 import salons from '@/data/salons.json';
+import dynamic from 'next/dynamic';
+
+const BookingConfirmation = dynamic(() => import('@/components/BookingConfirmation'), {
+  ssr: false,
+});
+
+function downloadICS(salonName, serviceName, dateStr, timeStr, address) {
+  let startDate = new Date();
+  if (dateStr) {
+    const parsedDate = new Date(dateStr);
+    if (!isNaN(parsedDate.getTime())) {
+      startDate = parsedDate;
+    }
+  }
+  
+  let hours = 12;
+  let minutes = 0;
+  if (timeStr) {
+    const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (match) {
+      hours = parseInt(match[1]);
+      minutes = parseInt(match[2]);
+      const ampm = match[3].toUpperCase();
+      if (ampm === 'PM' && hours < 12) hours += 12;
+      if (ampm === 'AM' && hours === 12) hours = 0;
+    }
+  }
+  
+  startDate.setHours(hours, minutes, 0, 0);
+  
+  const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+  
+  const formatDateForICS = (date) => {
+    return date.toISOString().replace(/-|:|\.\d\d\d/g, '');
+  };
+  
+  const startICS = formatDateForICS(startDate);
+  const endICS = formatDateForICS(endDate);
+  
+  const icsContent = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//GlowSpot Hyderabad//NONSGML Event//EN',
+    'BEGIN:VEVENT',
+    `UID:${Date.now()}@glowspothyderabad.com`,
+    `DTSTAMP:${formatDateForICS(new Date())}`,
+    `DTSTART:${startICS}`,
+    `DTEND:${endICS}`,
+    `SUMMARY:Beauty Appointment - ${serviceName || 'Service'} at ${salonName}`,
+    `DESCRIPTION:Your beauty appointment at ${salonName} for ${serviceName || 'services'}.`,
+    `LOCATION:${address || 'Hyderabad, India'}`,
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+  
+  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `appointment-${salonName.toLowerCase().replace(/\s+/g, '-')}.ics`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
 
 function BookingContent() {
   const searchParams = useSearchParams();
@@ -17,36 +82,11 @@ function BookingContent() {
 
   return (
     <div className="max-w-lg w-full text-center animate-fade-in py-16">
-      {/* Success Animation */}
-      <div className="relative mb-8">
-        <div className="w-24 h-24 rounded-full bg-mauve/10 border border-mauve/20 flex items-center justify-center mx-auto animate-bounce-gentle">
-          <PartyPopper className="w-12 h-12 text-mauve" />
-        </div>
-        {[...Array(12)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-2 h-2 rounded-full animate-sparkle"
-            style={{
-              top: `${20 + Math.random() * 60}%`,
-              left: `${20 + Math.random() * 60}%`,
-              backgroundColor: ['#FFD700', '#00E676', '#FFBF00', '#FFFFFF'][i % 4],
-              animationDelay: `${Math.random() * 2}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <h1 className="text-3xl md:text-4xl font-bold font-display text-white mb-3">
-        Booking Confirmed
-      </h1>
-      <p className="text-white/40 mb-8">
-        {salon
-          ? `Your appointment at ${salon.name} has been confirmed.`
-          : 'Your salon appointment has been confirmed.'}
-      </p>
+      {/* Gold animated checkmark and burst */}
+      <BookingConfirmation salonName={salon?.name || 'the salon'} />
 
       {salon && (
-        <div className="bg-white/[0.02] border border-white/[0.05] p-6 text-left space-y-4 mb-8 rounded-2xl">
+        <div className="bg-white/[0.02] border border-white/[0.05] p-6 text-left space-y-4 mb-8 mt-6 rounded-2xl">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gold/20 to-gold-light/20 border border-gold/15 flex items-center justify-center">
               <span className="text-lg font-bold text-white font-display">{salon.name.charAt(0)}</span>
@@ -90,11 +130,20 @@ function BookingContent() {
       )}
 
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        {salon && (
+          <button
+            onClick={() => downloadICS(salon.name, serviceParam, dateParam, timeParam, salon.address)}
+            className="btn-secondary flex items-center justify-center gap-2"
+          >
+            <Calendar className="w-4 h-4 text-gold" />
+            Add to Calendar
+          </button>
+        )}
         <Link href="/salons" className="btn-secondary flex items-center justify-center gap-2">
           Browse More Salons
         </Link>
         <Link href="/" className="btn-primary flex items-center justify-center gap-2">
-          <Home className="w-4 h-4 animate-pulse" />
+          <Home className="w-4 h-4" />
           Back to Home
         </Link>
       </div>

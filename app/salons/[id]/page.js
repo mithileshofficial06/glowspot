@@ -7,6 +7,7 @@ import { Star, MapPin, Clock, Phone, Home, ChevronLeft, Scissors, Users, Message
 import salons from '@/data/salons.json';
 import BookingForm from '@/components/BookingForm';
 import ReviewSummary from '@/components/ReviewSummary';
+import SalonCard from '@/components/SalonCard';
 
 const SALON_PHOTO_IDS = [
   'photo-1560066984-138dadb4c035',
@@ -26,8 +27,44 @@ function getSalonImageUrl(salonId) {
   return `https://images.unsplash.com/${SALON_PHOTO_IDS[index]}?w=1000&auto=format&fit=crop&q=80`;
 }
 
+function getSalonGalleryUrls(salonId) {
+  const GALLERY_POOL = [
+    'photo-1560066984-138dadb4c035',
+    'photo-1522337360788-8b13dee7a37e',
+    'photo-1521590832167-7bcbfaa6381f',
+    'photo-1487412947147-5cebf100ffc2',
+    'photo-1570172619644-dfd03ed5d881',
+    'photo-1607604276583-eef5d076aa5f',
+    'photo-1596178065887-1198b6148b2b',
+    'photo-1512290923902-8a9f81dc236c',
+    'photo-1600948836101-f9ffda59d250',
+    'photo-1516975080664-ed2fc6a32937'
+  ];
+  
+  let hash = 0;
+  if (salonId) {
+    for (let i = 0; i < salonId.length; i++) {
+      hash = ((hash << 5) - hash + salonId.charCodeAt(i)) | 0;
+    }
+  }
+  
+  const images = [];
+  const usedIndices = new Set();
+  let shift = 0;
+  while (images.length < 5) {
+    const index = Math.abs(hash + shift) % GALLERY_POOL.length;
+    if (!usedIndices.has(index)) {
+      images.push(`https://images.unsplash.com/${GALLERY_POOL[index]}?w=600&auto=format&fit=crop&q=80`);
+      usedIndices.add(index);
+    }
+    shift++;
+  }
+  return images;
+}
+
 const tabs = [
   { id: 'services', label: 'Services', icon: Scissors },
+  { id: 'gallery', label: 'Gallery', icon: Camera },
   { id: 'stylists', label: 'Stylists', icon: Users },
   { id: 'reviews', label: 'Reviews', icon: MessageSquare },
   { id: 'booking', label: 'Book Now', icon: Clock },
@@ -52,6 +89,20 @@ export default function SalonDetail() {
 
   const imageUrl = getSalonImageUrl(salon.id);
   const serviceCategories = [...new Set(salon.services?.map((s) => s.category))];
+
+  // Find similar salons (excluding current)
+  const similarSalons = salons
+    .filter((s) => s.id !== salon.id)
+    .map((s) => {
+      let score = 0;
+      if (s.area === salon.area) score += 10;
+      const overlap = s.specializations.filter(val => salon.specializations?.includes(val)).length;
+      score += overlap * 2;
+      return { salon: s, score };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(item => item.salon);
 
   return (
     <div className="min-h-screen pt-20 bg-noir text-white/90">
@@ -212,6 +263,26 @@ export default function SalonDetail() {
             </div>
           )}
 
+          {/* Gallery Tab */}
+          {activeTab === 'gallery' && (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {getSalonGalleryUrls(salon.id).map((url, i) => (
+                <div
+                  key={i}
+                  className={`overflow-hidden rounded-2xl border border-white/5 group hover:border-gold/30 transition-all duration-300 relative ${
+                    i === 0 ? 'col-span-2 md:row-span-2 md:col-span-2 h-[300px] md:h-[400px]' : 'h-[142px] md:h-[192px]'
+                  }`}
+                >
+                  <img
+                    src={url}
+                    alt={`${salon.name} Gallery ${i + 1}`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Stylists Tab */}
           {activeTab === 'stylists' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -261,6 +332,16 @@ export default function SalonDetail() {
               <BookingForm salon={salon} />
             </div>
           )}
+        </div>
+
+        {/* Similar Salons Section */}
+        <div className="mt-16 pt-10 border-t border-white/[0.06] mb-12">
+          <h2 className="text-2xl font-bold font-display text-white mb-6">You May Also Like</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {similarSalons.map((similarSalon) => (
+              <SalonCard key={similarSalon.id} salon={similarSalon} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
