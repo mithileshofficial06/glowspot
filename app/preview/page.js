@@ -104,8 +104,8 @@ export default function Preview() {
                     Discovered by AI
                   </span>
                 </h1>
-                <p className="text-base md:text-lg text-white/35 leading-relaxed max-w-lg">
-                  Upload a photo and our Vision AI analyzes your unique features to recommend hairstyles, grooming, and colors tailored <em className="text-white/50 not-italic">specifically</em> to you.
+                <p className="text-base md:text-lg text-white/70 leading-relaxed max-w-lg">
+                  Upload a photo and our Vision AI analyzes your unique features to recommend hairstyles, grooming, and colors tailored <em className="text-white/90 not-italic">specifically</em> to you.
                 </p>
               </div>
 
@@ -118,7 +118,7 @@ export default function Preview() {
                 ].map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div key={i} className="flex items-center gap-2 text-white/30">
+                    <div key={i} className="flex items-center gap-2 text-white/60">
                       <div className="w-7 h-7 rounded-lg bg-white/[0.03] border border-white/[0.05] flex items-center justify-center">
                         <Icon className={`w-3.5 h-3.5 ${item.color}`} />
                       </div>
@@ -143,7 +143,7 @@ export default function Preview() {
                       </div>
                       <div>
                         <h3 className="text-white text-sm font-bold font-display">AI Vision Analysis</h3>
-                        <p className="text-white/30 text-[11px]">What our AI detects in your photo</p>
+                        <p className="text-white/60 text-[11px]">What our AI detects in your photo</p>
                       </div>
                     </div>
 
@@ -165,7 +165,7 @@ export default function Preview() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-white text-xs font-semibold">{feature.label}</p>
-                            <p className="text-white/25 text-[10px]">{feature.desc}</p>
+                            <p className="text-white/60 text-[10px]">{feature.desc}</p>
                           </div>
                           <div className="w-2 h-2 rounded-full bg-mauve/50 animate-glow-pulse shrink-0" />
                         </div>
@@ -182,7 +182,7 @@ export default function Preview() {
                     </div>
                     <div>
                       <p className="text-gold text-[11px] font-bold font-display">90B Vision</p>
-                      <p className="text-white/25 text-[9px]">Parameters</p>
+                      <p className="text-white/60 text-[9px]">Parameters</p>
                     </div>
                   </div>
                 </div>
@@ -193,8 +193,8 @@ export default function Preview() {
           {/* Scroll indicator */}
           <div className={`flex justify-center mt-10 transition-all duration-1000 delay-700 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
             <div className="flex flex-col items-center gap-1.5 animate-bounce-gentle">
-              <span className="text-[10px] text-white/15 tracking-widest uppercase font-medium">Upload below</span>
-              <ChevronDown className="w-4 h-4 text-white/10" />
+              <span className="text-[10px] text-white/50 tracking-widest uppercase font-medium">Upload below</span>
+              <ChevronDown className="w-4 h-4 text-white/30" />
             </div>
           </div>
         </div>
