@@ -455,114 +455,113 @@ export default function WeddingPlanner() {
           {/* Step 1: Role & Style Preset */}
           <div className="card-glass p-6 space-y-6">
             <div>
-              <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
-                <Users className="w-5 h-5 text-rose-gold" />
+              <h3 className="text-lg font-bold font-display text-ivory mb-1 flex items-center gap-2">
+                <Users className="w-5 h-5 text-gold" />
                 Step 1: Your Role in the Wedding
               </h3>
-              <p className="text-xs text-gray-500 mb-3">Choose your role to customize milestones</p>
+              <p className="text-xs text-ivory/60 mb-3">Choose your role to customize milestones</p>
               <div className="flex flex-wrap gap-2">
                 {roles.map((role) => (
                   <button
                     key={role}
                     onClick={() => { setFormData({ ...formData, role }); setStep(Math.max(step, 2)); }}
                     id={`role-${role.toLowerCase().replace(/\s/g, '-')}`}
-                    className={`px-4 py-2  text-xs font-semibold transition-all duration-300 ${
+                    className={`px-4 py-2 text-xs font-semibold transition-all duration-300 ${
                       formData.role === role
-                        ? 'bg-rose-gold text-ivory shadow-glow'
-                        : 'bg-white border border-gray-100 text-gray-600 hover:border-rose-gold/50 shadow-sm'
+                        ? 'bg-gold text-noir shadow-glow'
+                        : 'bg-noir-100 border border-ivory/10 text-ivory/70 hover:border-gold/30 shadow-sm'
                     }`}
                   >
                     {role}
                   </button>
                 ))}
               </div>
-            </div>
-
-            <hr className="border-gray-100" />
+             <hr className="border-ivory/10" />
 
             <div>
-              <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
-                <Palette className="w-5 h-5 text-rose-gold" />
+              <h3 className="text-lg font-bold font-display text-ivory mb-1 flex items-center gap-2">
+                <Palette className="w-5 h-5 text-gold" />
                 Select Bridal/Styling Aesthetic
               </h3>
-              <p className="text-xs text-gray-500 mb-4">Choose a preset look to guide makeup and product recommendations</p>
+              <p className="text-xs text-ivory/60 mb-4">Choose a preset look to guide makeup and product recommendations</p>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {stylePresets.map((preset) => (
                   <button
                     key={preset.id}
                     onClick={() => setFormData({ ...formData, stylePreset: preset.id })}
-                    className={`p-4  text-left border transition-all duration-300 flex flex-col justify-between ${
+                    className={`p-4 text-left border transition-all duration-300 flex flex-col justify-between ${
                       formData.stylePreset === preset.id
-                        ? 'border-rose-gold bg-rose-blush/20 shadow-md ring-1 ring-rose-gold/50'
-                        : 'border-gray-100 bg-white hover:border-gray-200'
+                        ? 'border-gold bg-gold/10 shadow-glow ring-1 ring-gold/20'
+                        : 'border-ivory/10 bg-noir-100 text-ivory/80 hover:border-gold/30'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-bold text-xs text-gray-800 font-display">{preset.label}</span>
-                        {formData.stylePreset === preset.id && <Check className="w-4 h-4 text-rose-gold" />}
+                        <span className="font-bold text-xs text-ivory font-display">{preset.label}</span>
+                        {formData.stylePreset === preset.id && <Check className="w-4 h-4 text-gold" />}
                       </div>
-                      <p className="text-[11px] text-gray-500 leading-relaxed mb-3">{preset.desc}</p>
+                      <p className="text-[11px] text-ivory/60 leading-relaxed mb-3">{preset.desc}</p>
                     </div>
                     <div className="flex gap-1.5 mt-auto">
                       {preset.colors.map((c, i) => (
-                        <div key={i} className={`w-4 h-4  ${c} border border-gray-100 shadow-sm`} />
+                        <div key={i} className={`w-4 h-4 ${c} border border-ivory/20 shadow-sm`} />
                       ))}
                     </div>
                   </button>
                 ))}
               </div>
             </div>
+            </div>
           </div>
 
           {/* Step 2: Shared Family & Entourage Panel */}
           <div className={`card-glass p-6 space-y-6 transition-all duration-500 ${step >= 2 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
-            <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
-              <Users className="w-5 h-5 text-rose-gold" />
+            <h3 className="text-lg font-bold font-display text-ivory mb-1 flex items-center gap-2">
+              <Users className="w-5 h-5 text-gold" />
               Step 2: Shared Family & Entourage Planner (Co-bookings)
             </h3>
-            <p className="text-xs text-gray-500">Coordinate and bundle styling packages for bridesmaids, mothers, and groom alongside the main booking.</p>
+            <p className="text-xs text-ivory/60">Coordinate and bundle styling packages for bridesmaids, mothers, and groom alongside the main booking.</p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-rose-gold/5 p-4  border border-rose-gold/10">
-              <div className="bg-white p-3  shadow-sm border border-gray-100">
-                <label className="text-xs font-semibold text-gray-700 block mb-1">Bridesmaids Styling ({formData.entourage.bridesmaids} Pax)</label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gold/5 p-4 border border-gold/10">
+              <div className="bg-noir-100 p-3 shadow-sm border border-ivory/10">
+                <label className="text-xs font-semibold text-ivory block mb-1">Bridesmaids Styling ({formData.entourage.bridesmaids} Pax)</label>
                 <input 
                   type="range"
                   min="0"
                   max="6"
                   value={formData.entourage.bridesmaids}
                   onChange={(e) => updateEntourage('bridesmaids', parseInt(e.target.value))}
-                  className="w-full accent-rose-gold h-1.5 bg-gray-100  appearance-none cursor-pointer"
+                  className="w-full accent-gold h-1.5 bg-noir-300 appearance-none cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+                <div className="flex justify-between text-[10px] text-ivory/45 mt-1">
                   <span>0</span>
                   <span>6 Max</span>
                 </div>
               </div>
 
-              <div className="bg-white p-3  shadow-sm border border-gray-100 flex items-center justify-between">
+              <div className="bg-noir-100 p-3 shadow-sm border border-ivory/10 flex items-center justify-between">
                 <div>
-                  <span className="text-xs font-semibold text-gray-700 block">Mother of the Bride</span>
-                  <span className="text-[10px] text-gray-400">Pre-bridal facial & sari draping</span>
+                  <span className="text-xs font-semibold text-ivory block">Mother of the Bride</span>
+                  <span className="text-[10px] text-ivory/50">Pre-bridal facial & sari draping</span>
                 </div>
                 <input 
                   type="checkbox"
                   checked={formData.entourage.mother}
                   onChange={(e) => updateEntourage('mother', e.target.checked)}
-                  className="w-4 h-4 rounded text-rose-gold accent-rose-gold cursor-pointer"
+                  className="w-4 h-4 rounded text-gold accent-gold cursor-pointer"
                 />
               </div>
 
-              <div className="bg-white p-3  shadow-sm border border-gray-100 flex items-center justify-between">
+              <div className="bg-noir-100 p-3 shadow-sm border border-ivory/10 flex items-center justify-between">
                 <div>
-                  <span className="text-xs font-semibold text-gray-700 block">Groom Grooming Package</span>
-                  <span className="text-[10px] text-gray-400">Beard trimming & face charcoal treatment</span>
+                  <span className="text-xs font-semibold text-ivory block">Groom Grooming Package</span>
+                  <span className="text-[10px] text-ivory/50">Beard trimming & face charcoal treatment</span>
                 </div>
                 <input 
                   type="checkbox"
                   checked={formData.entourage.groom}
                   onChange={(e) => updateEntourage('groom', e.target.checked)}
-                  className="w-4 h-4 rounded text-rose-gold accent-rose-gold cursor-pointer"
+                  className="w-4 h-4 rounded text-gold accent-gold cursor-pointer"
                 />
               </div>
             </div>
@@ -570,22 +569,22 @@ export default function WeddingPlanner() {
 
           {/* Optional Selfie upload and face vision analysis */}
           <div className={`card-glass p-6 space-y-6 transition-all duration-500 ${step >= 2 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
-            <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
-              <Camera className="w-5 h-5 text-rose-gold" />
-              <Sparkles className="w-4 h-4 text-rose-gold" />
+            <h3 className="text-lg font-bold font-display text-ivory mb-1 flex items-center gap-2">
+              <Camera className="w-5 h-5 text-gold" />
+              <Sparkles className="w-4 h-4 text-gold" />
               Optional: Integrate AI Selfie Analysis
             </h3>
-            <p className="text-xs text-gray-500">Upload your picture to let the AI analyze skin-tones and face structures, fine-tuning your beauty calendar.</p>
+            <p className="text-xs text-ivory/60">Upload your picture to let the AI analyze skin-tones and face structures, fine-tuning your beauty calendar.</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {!selfieImage ? (
                 <div 
                   onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-gray-200 hover:border-rose-gold/60 bg-white hover:bg-rose-blush/10  p-6 text-center cursor-pointer transition-all"
+                  className="border-2 border-dashed border-ivory/10 hover:border-gold/50 bg-noir-100 hover:bg-noir-200 p-6 text-center cursor-pointer transition-all"
                 >
-                  <Upload className="w-8 h-8 text-rose-gold mx-auto mb-2" />
-                  <span className="text-xs font-bold text-gray-700 block">Drag & Drop or Click to Upload</span>
-                  <span className="text-[10px] text-gray-400">PNG or JPG Selfie</span>
+                  <Upload className="w-8 h-8 text-gold mx-auto mb-2" />
+                  <span className="text-xs font-bold text-ivory block">Drag & Drop or Click to Upload</span>
+                  <span className="text-[10px] text-ivory/50">PNG or JPG Selfie</span>
                   <input 
                     ref={fileInputRef}
                     type="file"
@@ -595,18 +594,18 @@ export default function WeddingPlanner() {
                   />
                 </div>
               ) : (
-                <div className="relative  overflow-hidden shadow-sm bg-gray-50 border border-gray-100 flex items-center justify-center p-2">
+                <div className="relative overflow-hidden shadow-sm bg-noir border border-ivory/10 flex items-center justify-center p-2">
                   <img src={selfieImage} className="w-full h-32 object-cover " alt="selfie" />
                   <button 
                     onClick={() => { setSelfieImage(null); setFaceAnalysis(null); }}
-                    className="absolute top-4 right-4 bg-white/95 p-1.5  shadow-md text-gray-500 hover:text-red-500 transition-all"
+                    className="absolute top-4 right-4 bg-noir-200 p-1.5 shadow-md text-ivory/70 hover:text-red-500 transition-all"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               )}
 
-              <div className="bg-white p-4  border border-gray-100 flex flex-col justify-center">
+              <div className="bg-noir-100 p-4 border border-ivory/10 flex flex-col justify-center">
                 {selfieImage && !faceAnalysis && (
                   <button
                     onClick={runFaceAnalysis}
@@ -629,19 +628,19 @@ export default function WeddingPlanner() {
 
                 {faceAnalysis ? (
                   <div className="space-y-2 animate-fade-in">
-                    <div className="flex items-center gap-2 text-xs bg-emerald-50 text-emerald-800 p-2  font-semibold">
+                    <div className="flex items-center gap-2 text-xs bg-emerald-950/30 text-emerald-400 border border-emerald-900/40 p-2 font-semibold">
                       <CheckCircle className="w-4 h-4 shrink-0" />
                       Face Analysis Integrated
                     </div>
-                    <div className="text-[11px] text-gray-600 space-y-1">
+                    <div className="text-[11px] text-ivory/80 space-y-1">
                       <p><strong>Face Shape:</strong> {faceAnalysis.faceShape}</p>
                       <p><strong>Skin Tone:</strong> {faceAnalysis.skinTone}</p>
                       <p className="truncate"><strong>Traits:</strong> {faceAnalysis.features}</p>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center text-xs text-gray-400">
-                    <Info className="w-4 h-4 mx-auto mb-1 text-gray-300" />
+                  <div className="text-center text-xs text-ivory/50">
+                    <Info className="w-4 h-4 mx-auto mb-1 text-ivory/30" />
                     Upload selfie to trigger personalized visual makeup swatches inside plan.
                   </div>
                 )}
@@ -651,14 +650,14 @@ export default function WeddingPlanner() {
 
           {/* Step 3: Date, Budget & Home Service */}
           <div className={`card-glass p-6 space-y-6 transition-all duration-500 ${step >= 2 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
-            <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-rose-gold" />
+            <h3 className="text-lg font-bold font-display text-ivory mb-1 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-gold" />
               Step 3: Logistics & Wedding Date
             </h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="text-xs font-semibold text-gray-700 block mb-1">Target Wedding Date</label>
+                <label className="text-xs font-semibold text-ivory block mb-1">Target Wedding Date</label>
                 <input
                   type="date"
                   value={formData.weddingDate}
@@ -670,8 +669,8 @@ export default function WeddingPlanner() {
               </div>
               
               <div>
-                <label className="text-xs font-semibold text-gray-700 block mb-1">
-                  Target Budget limit: <span className="text-rose-gold font-bold">₹{formData.budget.toLocaleString()}</span>
+                <label className="text-xs font-semibold text-ivory block mb-1">
+                  Target Budget limit: <span className="text-gold font-bold">₹{formData.budget.toLocaleString()}</span>
                 </label>
                 <input
                   type="range"
@@ -681,23 +680,23 @@ export default function WeddingPlanner() {
                   value={formData.budget}
                   onChange={(e) => setFormData({ ...formData, budget: parseInt(e.target.value) })}
                   id="budget-slider"
-                  className="w-full accent-rose-gold h-1.5 bg-gray-100  appearance-none cursor-pointer"
+                  className="w-full accent-gold h-1.5 bg-noir-300 appearance-none cursor-pointer"
                 />
-                <div className="flex justify-between text-[10px] text-gray-400 mt-1">
+                <div className="flex justify-between text-[10px] text-ivory/45 mt-1">
                   <span>₹10,000</span>
                   <span>₹1,50,000</span>
                 </div>
               </div>
             </div>
 
-            <hr className="border-gray-100" />
+            <hr className="border-ivory/10" />
 
-            <div className="flex items-center justify-between bg-rose-blush/10 p-4  border border-rose-gold/10">
+            <div className="flex items-center justify-between bg-gold/5 p-4 border border-gold/10">
               <div className="flex items-start gap-3">
-                <Home className="w-5 h-5 text-rose-gold mt-0.5" />
+                <Home className="w-5 h-5 text-gold mt-0.5" />
                 <div>
-                  <span className="text-xs font-bold text-gray-800 block">Elite Home-Service / On-Venue Stylists</span>
-                  <span className="text-[10px] text-gray-500">Salons dispatch artists directly to your residence. Elite surcharge calculated.</span>
+                  <span className="text-xs font-bold text-ivory block">Elite Home-Service / On-Venue Stylists</span>
+                  <span className="text-[10px] text-ivory/60">Salons dispatch artists directly to your residence. Elite surcharge calculated.</span>
                 </div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -707,27 +706,27 @@ export default function WeddingPlanner() {
                   onChange={(e) => setFormData({ ...formData, homeService: e.target.checked })} 
                   className="sr-only peer"
                 />
-                <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none  peer peer-checked:after:translate-x-full peer-checked:after:border-ivory after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after: after:h-4 after:w-4 after:transition-all peer-checked:bg-rose-gold"></div>
+                <div className="w-9 h-5 bg-gray-700 peer-focus:outline-none peer peer-checked:after:translate-x-full peer-checked:after:border-ivory after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:h-4 after:w-4 after:transition-all peer-checked:bg-gold"></div>
               </label>
             </div>
           </div>
 
           {/* Step 4: Preferred Areas */}
           <div className={`card-glass p-6 space-y-4 transition-all duration-500 ${step >= 3 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
-            <h3 className="text-lg font-bold font-display text-gray-800 mb-1 flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-rose-gold" />
+            <h3 className="text-lg font-bold font-display text-ivory mb-1 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-gold" />
               Step 4: Hyderabad Areas Filter
             </h3>
-            <p className="text-xs text-gray-500">Highlight your preferred neighborhoods for localized salon matching</p>
+            <p className="text-xs text-ivory/60">Highlight your preferred neighborhoods for localized salon matching</p>
             <div className="flex flex-wrap gap-1.5">
               {areas.map((area) => (
                 <button
                   key={area}
                   onClick={() => toggleArea(area)}
-                  className={`px-3 py-1.5  text-[11px] font-semibold transition-all duration-300 ${
+                  className={`px-3 py-1.5 text-[11px] font-semibold transition-all duration-300 ${
                     formData.areas.includes(area)
-                      ? 'bg-plum text-ivory shadow-sm'
-                      : 'bg-white border border-gray-100 text-gray-600 hover:border-plum/30'
+                      ? 'bg-mauve text-ivory shadow-sm'
+                      : 'bg-noir-100 border border-ivory/10 text-ivory/70 hover:border-mauve/30'
                   }`}
                 >
                   {formData.areas.includes(area) && <Check className="w-3 h-3 inline mr-1" />}
@@ -739,7 +738,7 @@ export default function WeddingPlanner() {
 
           {/* Notes area */}
           <div className={`card-glass p-6 transition-all duration-500 ${step >= 3 ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
-            <label className="text-xs font-semibold text-gray-700 block mb-1">Additional Notes / Custom Styling Details</label>
+            <label className="text-xs font-semibold text-ivory block mb-1">Additional Notes / Custom Styling Details</label>
             <textarea
               value={formData.notes}
               onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
@@ -753,10 +752,10 @@ export default function WeddingPlanner() {
           <button
             onClick={generatePlan}
             disabled={!formData.role || !formData.weddingDate || loading}
-            className={`w-full py-3.5  text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all ${
+            className={`w-full py-3.5 text-sm font-bold flex items-center justify-center gap-2 shadow-md transition-all ${
               formData.role && formData.weddingDate && !loading
                 ? 'btn-primary'
-                : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
+                : 'bg-noir-300 text-ivory/30 cursor-not-allowed border border-ivory/10'
             }`}
           >
             {loading ? (
@@ -773,21 +772,21 @@ export default function WeddingPlanner() {
           </button>
         </div>
       ) : (
-        <div className="space-y-6 animate-fade-in pb-12">
+         <div className="space-y-6 animate-fade-in pb-12">
           {/* Plan Header */}
           <div className="text-center mb-8 relative">
-            <div className="inline-flex items-center gap-2 px-3 py-1  bg-rose-gold/10 text-rose-gold text-xs font-semibold mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 text-gold text-xs font-semibold mb-3">
               <Sparkles className="w-3.5 h-3.5" />
               AI Premium Wedding Portfolio
             </div>
-            <h2 className="text-2xl md:text-3xl font-bold font-display text-gray-800">
+            <h2 className="text-2xl md:text-3xl font-bold font-display text-ivory">
               Your Complete Beauty Timeline
             </h2>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-ivory/60 mt-1">
               Occasion: {new Date(formData.weddingDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </p>
             {formData.homeService && (
-              <div className="inline-flex items-center gap-1 mt-2 text-[10px] font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5  border border-amber-100">
+              <div className="inline-flex items-center gap-1 mt-2 text-[10px] font-bold text-gold bg-gold/10 px-2.5 py-0.5 border border-gold/20">
                 <Home className="w-3 h-3" />
                 Premium Home Services Enabled
               </div>
@@ -796,23 +795,23 @@ export default function WeddingPlanner() {
 
           {/* Visual AI Lookbook card at top if face analysis exists */}
           {faceAnalysis && (
-            <div className="card-glass p-5 border border-rose-gold/20 bg-gradient-to-r from-rose-blush/10 to-champagne-light/10 relative overflow-hidden">
-              <div className="absolute right-0 top-0 w-24 h-24 bg-rose-gold/5  filter blur-xl" />
+            <div className="card-glass p-5 border border-gold/20 bg-gradient-to-r from-gold/5 to-mauve/5 relative overflow-hidden">
+              <div className="absolute right-0 top-0 w-24 h-24 bg-gold/5 filter blur-xl" />
               <div className="flex gap-4">
                 {selfieImage && (
-                  <img src={selfieImage} className="w-16 h-16  object-cover border border-rose-gold/20" alt="Selfie" />
+                  <img src={selfieImage} className="w-16 h-16 object-cover border border-gold/20" alt="Selfie" />
                 )}
                 <div>
-                  <h4 className="font-bold text-xs text-gray-800 font-display flex items-center gap-1.5">
+                  <h4 className="font-bold text-xs text-ivory font-display flex items-center gap-1.5">
                     <Sparkles className="w-4 h-4 text-gold" />
                     AI Face-Matching Lookbook Profile
                   </h4>
-                  <p className="text-[10px] text-gray-500 mt-0.5">Custom styling mapped to your oval structure and warm skin tone.</p>
+                  <p className="text-[10px] text-ivory/60 mt-0.5">Custom styling mapped to your {faceAnalysis.faceShape?.toLowerCase()} structure and warm skin tone.</p>
                   
                   <div className="flex flex-wrap gap-2 mt-3">
-                    <span className="px-2 py-0.5 rounded-md bg-white border border-gray-100 text-[9px] font-bold text-gray-700">Shape: {faceAnalysis.faceShape}</span>
-                    <span className="px-2 py-0.5 rounded-md bg-white border border-gray-100 text-[9px] font-bold text-gray-700">Tone: {faceAnalysis.skinTone}</span>
-                    <span className="px-2 py-0.5 rounded-md bg-white border border-gray-100 text-[9px] font-bold text-rose-gold">Look: {formData.stylePreset ? stylePresets.find(p => p.id === formData.stylePreset)?.label : 'Telugu Glam'}</span>
+                    <span className="px-2 py-0.5 rounded-md bg-noir-100 border border-ivory/10 text-[9px] font-bold text-ivory/80">Shape: {faceAnalysis.faceShape}</span>
+                    <span className="px-2 py-0.5 rounded-md bg-noir-100 border border-ivory/10 text-[9px] font-bold text-ivory/80">Tone: {faceAnalysis.skinTone}</span>
+                    <span className="px-2 py-0.5 rounded-md bg-noir-100 border border-gold/20 text-[9px] font-bold text-gold">Look: {formData.stylePreset ? stylePresets.find(p => p.id === formData.stylePreset)?.label : 'Telugu Glam'}</span>
                   </div>
                 </div>
               </div>
@@ -822,7 +821,7 @@ export default function WeddingPlanner() {
           {/* Timeline Milestones */}
           <div className="relative">
             {/* Vertical timeline connector */}
-            <div className="absolute left-6 md:left-8 top-4 bottom-4 w-[2px] bg-gradient-to-b from-rose-gold via-gold to-plum" />
+            <div className="absolute left-6 md:left-8 top-4 bottom-4 w-[2px] bg-gradient-to-b from-gold via-gold/50 to-mauve" />
 
             <div className="space-y-8">
               {timelineItems.map((item, idx) => {
@@ -853,13 +852,13 @@ export default function WeddingPlanner() {
                 return (
                   <div key={idx} className="relative flex gap-4 md:gap-6 animate-fade-in-up" style={{ animationDelay: `${idx * 80}ms` }}>
                     {/* Timeline Date Circle Indicator */}
-                    <div className="relative z-10 w-12 h-12 md:w-16 md:h-16  bg-gradient-to-br from-rose-gold to-gold flex flex-col items-center justify-center shrink-0 shadow-md border-2 border-ivory">
-                      <span className="text-[9px] md:text-[10px] font-bold text-ivory uppercase tracking-wider leading-none mb-0.5">{monthVal}</span>
-                      <span className="text-sm md:text-lg font-extrabold text-ivory leading-none">{dayVal}</span>
+                    <div className="relative z-10 w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-gold to-gold-dark flex flex-col items-center justify-center shrink-0 shadow-md border-2 border-noir-100">
+                      <span className="text-[9px] md:text-[10px] font-bold text-noir uppercase tracking-wider leading-none mb-0.5">{monthVal}</span>
+                      <span className="text-sm md:text-lg font-extrabold text-noir leading-none">{dayVal}</span>
                     </div>
 
                     {/* Timeline Card - Sleek grid-based multi-column layout */}
-                    <div className="flex-1 card p-0 overflow-hidden relative border border-gray-100 shadow-sm bg-white hover:shadow-md transition-all duration-300 rounded-3xl">
+                    <div className="flex-1 card p-0 overflow-hidden relative border border-ivory/10 hover:border-gold/20 transition-all duration-300">
                       <div className="grid grid-cols-1 lg:grid-cols-5">
                         
                         {/* LEFT COLUMN: Milestone Details (60% width on desktop) */}
@@ -868,55 +867,55 @@ export default function WeddingPlanner() {
                             {/* Badges and Cart Selector */}
                             <div className="flex items-center justify-between mb-3">
                               <div className="flex flex-wrap gap-1">
-                                <span className="text-[9px] font-bold text-rose-gold bg-rose-gold/10 px-2.5 py-0.5  uppercase tracking-wider">
+                                <span className="text-[9px] font-bold text-gold bg-gold/10 px-2.5 py-0.5 uppercase tracking-wider">
                                   {item.daysLeft}
                                 </span>
                                 {item.homeService && (
-                                  <span className="text-[9px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5  flex items-center gap-0.5 border border-amber-100">
+                                  <span className="text-[9px] font-bold text-gold bg-gold/10 px-2 py-0.5 flex items-center gap-0.5 border border-gold/20">
                                     <Home className="w-2.5 h-2.5" />
                                     Home Service
                                   </span>
                                 )}
-                                <span className="text-[9px] font-bold text-gray-500 bg-gray-50 px-2.5 py-0.5 ">
+                                <span className="text-[9px] font-bold text-ivory/70 bg-noir-200 border border-ivory/10 px-2.5 py-0.5">
                                   {item.forWho || 'Bride'}
                                 </span>
                               </div>
 
                               <label className="flex items-center gap-1.5 cursor-pointer scale-90">
-                                <span className="text-[10px] text-gray-400 font-bold select-none uppercase tracking-wider">Add to Cart</span>
+                                <span className="text-[10px] text-ivory/50 font-bold select-none uppercase tracking-wider">Add to Cart</span>
                                 <input
                                   type="checkbox"
                                   checked={!!selectedItems[idx]}
                                   onChange={(e) => setSelectedItems({ ...selectedItems, [idx]: e.target.checked })}
-                                  className="w-4 h-4 rounded text-rose-gold accent-rose-gold border-gray-200"
+                                  className="w-4 h-4 rounded text-gold accent-gold border-ivory/10 bg-noir-200"
                                 />
                               </label>
                             </div>
 
-                            <h4 className="font-extrabold text-gray-800 text-base md:text-lg font-display mb-2">{item.title}</h4>
-                            <p className="text-[11px] sm:text-xs text-gray-500 leading-relaxed font-medium">{item.desc}</p>
+                            <h4 className="font-extrabold text-ivory text-base md:text-lg font-display mb-2">{item.title}</h4>
+                            <p className="text-[11px] sm:text-xs text-ivory/60 leading-relaxed font-light">{item.desc}</p>
                           </div>
 
                           {/* Elegant, clean visual tip at the bottom of text */}
                           {item.styleTip && (
-                            <div className="text-[10px] text-gray-600 bg-champagne-light/20 border-l-2 border-gold p-2.5 rounded-r-xl flex gap-1.5 items-start mt-2">
+                            <div className="text-[10px] text-ivory/70 bg-gold/5 border-l-2 border-gold p-2.5 flex gap-1.5 items-start mt-2">
                               <Sparkles className="w-3.5 h-3.5 text-gold shrink-0 mt-0.5" />
-                              <p className="leading-relaxed"><strong className="text-gray-700">Aesthetic Tip:</strong> {item.styleTip}</p>
+                              <p className="leading-relaxed"><strong className="text-gold">Aesthetic Tip:</strong> {item.styleTip}</p>
                             </div>
                           )}
                         </div>
 
                         {/* RIGHT COLUMN: Control Panel & Pricing Dashboard (40% width on desktop) */}
-                        <div className="lg:col-span-2 bg-gray-50/50 p-6 border-t lg:border-t-0 lg:border-l border-gray-100 flex flex-col justify-between space-y-4">
+                        <div className="lg:col-span-2 bg-noir-200/50 p-6 border-t lg:border-t-0 lg:border-l border-ivory/10 flex flex-col justify-between space-y-4">
                           
                           {/* Cost Adjuster Slider */}
                           <div className="space-y-2">
                             <div className="flex justify-between items-center">
-                              <span className="text-[9px] text-gray-400 font-extrabold uppercase tracking-wider flex items-center gap-0.5">
-                                <DollarSign className="w-3 h-3 text-gray-400" />
+                              <span className="text-[9px] text-ivory/50 font-extrabold uppercase tracking-wider flex items-center gap-0.5">
+                                <DollarSign className="w-3 h-3 text-gold" />
                                 Custom Cost Allocator
                               </span>
-                              <span className="text-sm font-extrabold text-rose-gold bg-white border border-rose-gold/20 px-2 py-0.5  shadow-sm">
+                              <span className="text-sm font-extrabold text-gold bg-noir-100 border border-gold/20 px-2 py-0.5 shadow-sm">
                                 ₹{item.cost?.toLocaleString()}
                               </span>
                             </div>
@@ -927,9 +926,9 @@ export default function WeddingPlanner() {
                               step="500"
                               value={item.cost || 1000}
                               onChange={(e) => rebalanceSalon(idx, parseInt(e.target.value))}
-                              className="w-full accent-rose-gold h-1.5 cursor-ew-resize bg-gray-200  appearance-none"
+                              className="w-full accent-gold h-1.5 cursor-ew-resize bg-noir-300 appearance-none"
                             />
-                            <div className="flex justify-between text-[8px] font-bold text-gray-300">
+                            <div className="flex justify-between text-[8px] font-bold text-ivory/30">
                               <span>₹1,000</span>
                               <span>₹25,000</span>
                             </div>
@@ -937,27 +936,27 @@ export default function WeddingPlanner() {
 
                           {/* Entourage Slot Panel if active */}
                           {item.entourageService && (
-                            <div className="p-3 bg-plum/5  border border-plum/10 flex items-center justify-between text-[11px] animate-fade-in shadow-inner">
+                            <div className="p-3 bg-mauve/10 border border-mauve/20 flex items-center justify-between text-[11px] animate-fade-in shadow-inner">
                               <div className="min-w-0 pr-2">
-                                <span className="font-extrabold text-plum block text-[9px] uppercase tracking-wider">Entourage Slots</span>
-                                <span className="text-gray-500 text-[10px] font-medium block truncate">{item.entourageService}</span>
+                                <span className="font-extrabold text-mauve block text-[9px] uppercase tracking-wider">Entourage Slots</span>
+                                <span className="text-ivory/70 text-[10px] font-medium block truncate">{item.entourageService}</span>
                               </div>
-                              <span className="font-bold text-plum bg-white/80 px-2 py-0.5  border border-plum/10 shrink-0">
+                              <span className="font-bold text-mauve bg-noir-100 border border-mauve/25 px-2 py-0.5 shrink-0">
                                 +₹{item.entourageCost?.toLocaleString()}
                               </span>
                             </div>
                           )}
 
                           {/* Recommended Salon Details */}
-                          <div className="pt-4 border-t border-gray-200/80 flex items-center justify-between">
+                          <div className="pt-4 border-t border-ivory/10 flex items-center justify-between">
                             <div className="min-w-0">
-                              <span className="text-[8px] text-gray-400 uppercase tracking-wider font-extrabold block">Fulfillment Location</span>
-                              <span className="text-xs font-extrabold text-gray-800 truncate block">{item.salon || 'Elite Salon partners'}</span>
-                              {item.area && <span className="text-[9px] text-gray-400 font-bold block">{item.area}</span>}
+                              <span className="text-[8px] text-ivory/40 uppercase tracking-wider font-extrabold block">Fulfillment Location</span>
+                              <span className="text-xs font-extrabold text-ivory truncate block">{item.salon || 'Elite Salon partners'}</span>
+                              {item.area && <span className="text-[9px] text-ivory/40 font-bold block">{item.area}</span>}
                             </div>
                             <Link
                               href="/salons"
-                              className="text-[10px] text-rose-gold font-extrabold flex items-center gap-0.5 hover:underline shrink-0 ml-2"
+                              className="text-[10px] text-gold font-extrabold flex items-center gap-0.5 hover:underline shrink-0 ml-2"
                             >
                               Explore <ChevronRight className="w-3.5 h-3.5" />
                             </Link>
@@ -974,17 +973,17 @@ export default function WeddingPlanner() {
           </div>
 
           {/* Unified dynamic Bridal booking tracker */}
-          <div className="card-glass p-6 border border-rose-gold/30 bg-gradient-to-br from-rose-blush/10 via-white to-champagne-light/10 shadow-glow space-y-6">
+          <div className="card-glass p-6 border border-gold/30 bg-gradient-to-br from-gold/5 via-noir-100 to-mauve/5 shadow-glow space-y-6">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
-                <span className="text-xs text-gray-400 font-semibold block">Consolidated Estimated Total</span>
+                <span className="text-xs text-ivory/50 font-semibold block">Consolidated Estimated Total</span>
                 <p className="text-3xl font-extrabold font-display gradient-text">₹{totalCost.toLocaleString()}</p>
               </div>
 
               <div className="text-right">
-                <span className="text-xs text-gray-400 font-semibold block">Your Limit Budget</span>
-                <p className="text-base font-bold text-gray-700">₹{formData.budget.toLocaleString()}</p>
-                <span className={`text-xs font-bold ${totalCost <= formData.budget ? 'text-emerald-500' : 'text-amber-500'}`}>
+                <span className="text-xs text-ivory/50 font-semibold block">Your Limit Budget</span>
+                <p className="text-base font-bold text-ivory/80">₹{formData.budget.toLocaleString()}</p>
+                <span className={`text-xs font-bold ${totalCost <= formData.budget ? 'text-emerald-400' : 'text-gold'}`}>
                   {totalCost <= formData.budget ? '✓ Total within target budget limits' : '⚠ Plan has exceeded target by ₹' + (totalCost - formData.budget).toLocaleString()}
                 </span>
               </div>
@@ -1001,7 +1000,7 @@ export default function WeddingPlanner() {
 
               <button
                 onClick={() => setShowMoodBoard(true)}
-                className="px-5 py-3 border border-rose-gold/30 bg-rose-blush/5 hover:bg-rose-blush/10 text-rose-gold  text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+                className="px-5 py-3 border border-gold/30 bg-gold/5 hover:bg-gold/10 text-gold text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
               >
                 <Sparkles className="w-4 h-4" />
                 View Mood Board
@@ -1009,7 +1008,7 @@ export default function WeddingPlanner() {
               
               <button
                 onClick={() => { setPlan(null); setStep(1); }}
-                className="px-5 py-3 border border-gray-200 text-gray-600 hover:bg-gray-50  text-xs font-bold transition-all"
+                className="px-5 py-3 border border-ivory/10 text-ivory/70 hover:bg-noir-200 text-xs font-bold transition-all"
               >
                 Reset Planner
               </button>
@@ -1022,49 +1021,49 @@ export default function WeddingPlanner() {
       {/* Bulk Booking Cart Modal */}
       {showBookingModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="card max-w-md w-full bg-white p-6 relative overflow-hidden shadow-2xl animate-scale-up border border-gray-100 rounded-3xl">
+          <div className="card max-w-md w-full bg-noir-100 p-6 relative overflow-hidden shadow-glow-lg animate-scale-up border border-gold/20 rounded-3xl">
             
             {bookingProgress === 1 && (
               <div className="text-center py-8 space-y-4">
                 <div className="relative w-20 h-20 mx-auto">
-                  <div className="absolute inset-0  border-4 border-rose-gold/20" />
-                  <div className="absolute inset-0  border-4 border-rose-gold border-t-transparent animate-spin" />
-                  <Heart className="w-8 h-8 text-rose-gold absolute inset-0 m-auto animate-pulse" />
+                  <div className="absolute inset-0 border-4 border-gold/20" />
+                  <div className="absolute inset-0 border-4 border-gold border-t-transparent animate-spin" />
+                  <Heart className="w-8 h-8 text-gold absolute inset-0 m-auto animate-pulse" />
                 </div>
-                <h3 className="text-lg font-bold font-display text-gray-800">Dispatching Elite Booking Orders</h3>
-                <p className="text-xs text-gray-400 max-w-xs mx-auto">Securing individual time slots, assigning artists, and coordinating home travel calendars with Oasis Salon, Bubbles, and top partner boutiques.</p>
-                <div className="w-full bg-gray-100  h-1.5 max-w-xs mx-auto overflow-hidden">
-                  <div className="bg-rose-gold h-1.5  animate-progress" />
+                <h3 className="text-lg font-bold font-display text-ivory">Dispatching Elite Booking Orders</h3>
+                <p className="text-xs text-ivory/60 max-w-xs mx-auto">Securing individual time slots, assigning artists, and coordinating home travel calendars with Oasis Salon, Bubbles, and top partner boutiques.</p>
+                <div className="w-full bg-noir-300 h-1.5 max-w-xs mx-auto overflow-hidden">
+                  <div className="bg-gold h-1.5 animate-progress" />
                 </div>
               </div>
             )}
 
             {bookingProgress === 2 && (
               <div className="text-center py-6 space-y-6">
-                <div className="w-16 h-16  bg-emerald-50 text-emerald-500 border border-emerald-100 flex items-center justify-center mx-auto shadow-md">
+                <div className="w-16 h-16 bg-emerald-950/30 text-emerald-400 border border-emerald-900/50 flex items-center justify-center mx-auto shadow-md">
                   <CheckCircle className="w-10 h-10" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold font-display text-gray-800">Congratulations</h3>
-                  <p className="text-xs text-gray-400 mt-1">Your entire wedding beauty itinerary is successfully locked and coordinated.</p>
+                  <h3 className="text-xl font-bold font-display text-ivory">Congratulations</h3>
+                  <p className="text-xs text-ivory/60 mt-1">Your entire wedding beauty itinerary is successfully locked and coordinated.</p>
                 </div>
 
-                <div className="bg-gray-50  p-4 text-left border border-gray-100 space-y-2">
+                <div className="bg-noir-200 p-4 text-left border border-ivory/10 space-y-2">
                   <div className="flex justify-between text-xs">
-                    <span className="text-gray-500 font-medium">Services Booked</span>
-                    <span className="font-bold text-gray-800">{Object.values(selectedItems).filter(Boolean).length} Appointments</span>
+                    <span className="text-ivory/60 font-medium">Services Booked</span>
+                    <span className="font-bold text-ivory">{Object.values(selectedItems).filter(Boolean).length} Appointments</span>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className="text-gray-500 font-medium">Bulk Package Cost</span>
-                    <span className="font-bold text-rose-gold">₹{totalCost.toLocaleString()}</span>
+                    <span className="text-ivory/60 font-medium">Bulk Package Cost</span>
+                    <span className="font-bold text-gold">₹{totalCost.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className="text-gray-500 font-medium">Fulfillment Type</span>
-                    <span className="font-bold text-gray-800 flex items-center gap-1">{formData.homeService ? <><Truck className="w-3 h-3" /> Home / On-Venue</> : <><Briefcase className="w-3 h-3" /> In-Salon</>}</span>
+                    <span className="text-ivory/60 font-medium">Fulfillment Type</span>
+                    <span className="font-bold text-ivory flex items-center gap-1">{formData.homeService ? <><Truck className="w-3 h-3 text-gold" /> Home / On-Venue</> : <><Briefcase className="w-3 h-3 text-gold" /> In-Salon</>}</span>
                   </div>
-                  <div className="pt-2 border-t border-gray-200/80 flex items-center justify-between text-[10px] text-gray-400">
+                  <div className="pt-2 border-t border-ivory/10 flex items-center justify-between text-[10px] text-ivory/40">
                     <span>Confirmation ID: GS-WED-2026</span>
-                    <span className="bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">PAID</span>
+                    <span className="bg-emerald-950/40 text-emerald-400 border border-emerald-900/30 font-bold px-2 py-0.5">PAID</span>
                   </div>
                 </div>
 
@@ -1077,7 +1076,7 @@ export default function WeddingPlanner() {
                   </button>
                   <button
                     onClick={() => window.print()}
-                    className="px-4 py-2.5 border border-gray-200 text-gray-600 hover:bg-gray-50  text-xs font-bold transition-all"
+                    className="px-4 py-2.5 border border-ivory/10 text-ivory/70 hover:bg-noir-200 text-xs font-bold transition-all"
                   >
                     Print
                   </button>
@@ -1087,9 +1086,9 @@ export default function WeddingPlanner() {
 
             <button 
               onClick={() => setShowBookingModal(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              className="absolute top-4 right-4 text-ivory/40 hover:text-ivory/70"
             >
-              <Trash2 className="w-5 h-5 text-gray-300 hover:text-gray-500" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -1098,17 +1097,17 @@ export default function WeddingPlanner() {
       {/* Bridal Mood Board Modal */}
       {showMoodBoard && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in print:bg-white print:p-0 print:relative">
-          <div className="card max-w-2xl w-full bg-white p-6 relative overflow-y-auto max-h-[90vh] shadow-2xl border border-gray-100 rounded-3xl animate-scale-up print:shadow-none print:border-none print:w-full print:max-h-full print:p-0">
+          <div className="card max-w-2xl w-full bg-noir-100 p-6 relative overflow-y-auto max-h-[90vh] shadow-glow border border-gold/20 rounded-3xl animate-scale-up print:bg-white print:text-black print:shadow-none print:border-none print:w-full print:max-h-full print:p-0">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4 mb-6 print:hidden">
+            <div className="flex items-center justify-between border-b border-ivory/10 pb-4 mb-6 print:hidden">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-rose-gold" />
-                <h3 className="text-lg font-bold font-display text-gray-800">Your AI Bridal Lookbook & Mood Board</h3>
+                <Sparkles className="w-5 h-5 text-gold" />
+                <h3 className="text-lg font-bold font-display text-ivory">Your AI Bridal Lookbook & Mood Board</h3>
               </div>
               <button 
                 onClick={() => setShowMoodBoard(false)}
-                className="text-gray-400 hover:text-gray-600 p-1"
+                className="text-ivory/40 hover:text-ivory/70 p-1"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1117,7 +1116,7 @@ export default function WeddingPlanner() {
             {/* Mood Board Canvas Layout */}
             <div id="mood-board-print-area" className="space-y-6 print:space-y-4 print:text-[#080608]">
               {/* Top Banner */}
-              <div className="bg-gradient-to-r from-plum to-rose-gold p-6  text-ivory flex items-center justify-between shadow-sm">
+              <div className="bg-gradient-to-r from-mauve to-gold p-6 text-ivory flex items-center justify-between shadow-sm">
                 <div>
                   <h4 className="text-xl font-bold font-display">GlowSpot Bridal Portfolio</h4>
                   <p className="text-xs opacity-80 mt-1">Aesthetic direction curated for Hyderabad beauty styles</p>
@@ -1133,52 +1132,52 @@ export default function WeddingPlanner() {
                 
                 {/* Left Side: Profile & Aesthetic Details */}
                 <div className="space-y-4">
-                  <div className="bg-gray-50 p-4  border border-gray-100/50">
-                    <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Aesthetic Theme</span>
-                    <h5 className="font-extrabold text-gray-800 text-sm mt-1">
+                  <div className="bg-noir-200 print:bg-gray-50 p-4 border border-ivory/10 print:border-gray-200/50">
+                    <span className="text-[10px] uppercase font-bold text-ivory/40 print:text-gray-400 tracking-wider">Aesthetic Theme</span>
+                    <h5 className="font-extrabold text-ivory print:text-gray-800 text-sm mt-1">
                       {formData.stylePreset ? stylePresets.find(p => p.id === formData.stylePreset)?.label : 'Custom Look'}
                     </h5>
-                    <p className="text-[11px] text-gray-500 mt-1 leading-relaxed">
+                    <p className="text-[11px] text-ivory/60 print:text-gray-500 mt-1 leading-relaxed">
                       {formData.stylePreset ? stylePresets.find(p => p.id === formData.stylePreset)?.desc : 'Custom curated schedule'}
                     </p>
                     <div className="flex gap-1.5 mt-3">
                       {formData.stylePreset && stylePresets.find(p => p.id === formData.stylePreset)?.colors.map((c, i) => (
-                        <div key={i} className={`w-5 h-5  ${c} border border-ivory shadow-sm`} />
+                        <div key={i} className={`w-5 h-5 ${c} border border-ivory/25 shadow-sm`} />
                       ))}
                     </div>
                   </div>
 
                   {faceAnalysis && (
-                    <div className="bg-gray-50 p-4  border border-gray-100/50 space-y-2">
-                      <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Face Shape & Skin Profile</span>
-                      <p className="text-xs text-gray-700"><strong>Face Shape:</strong> {faceAnalysis.faceShape}</p>
-                      <p className="text-xs text-gray-700"><strong>Complexion undertones:</strong> {faceAnalysis.skinTone}</p>
-                      <p className="text-[11px] text-gray-500 leading-relaxed italic">{faceAnalysis.features}</p>
+                    <div className="bg-noir-200 print:bg-gray-50 p-4 border border-ivory/10 print:border-gray-200/50 space-y-2">
+                      <span className="text-[10px] uppercase font-bold text-ivory/40 print:text-gray-400 tracking-wider">Face Shape & Skin Profile</span>
+                      <p className="text-xs text-ivory/80 print:text-gray-700"><strong>Face Shape:</strong> {faceAnalysis.faceShape}</p>
+                      <p className="text-xs text-ivory/80 print:text-gray-700"><strong>Complexion undertones:</strong> {faceAnalysis.skinTone}</p>
+                      <p className="text-[11px] text-ivory/60 print:text-gray-500 leading-relaxed italic">{faceAnalysis.features}</p>
                     </div>
                   )}
                 </div>
 
                 {/* Right Side: Key Milestones Summary */}
-                <div className="bg-gray-50 p-4  border border-gray-100/50 flex flex-col justify-between">
+                <div className="bg-noir-200 print:bg-gray-50 p-4 border border-ivory/10 print:border-gray-200/50 flex flex-col justify-between">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Timeline Highlights</span>
+                    <span className="text-[10px] uppercase font-bold text-ivory/40 print:text-gray-400 tracking-wider">Timeline Highlights</span>
                     <ul className="space-y-2.5 mt-3">
                       {timelineItems.slice(-3).map((item, i) => (
-                        <li key={i} className="flex gap-2 text-xs text-gray-700">
-                          <span className="font-bold text-rose-gold shrink-0">{item.daysLeft}:</span>
+                        <li key={i} className="flex gap-2 text-xs text-ivory/80 print:text-gray-700">
+                          <span className="font-bold text-gold print:text-rose-gold shrink-0">{item.daysLeft}:</span>
                           <span className="truncate">{item.service} at <strong>{item.salon}</strong></span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-gray-200">
+                  <div className="mt-4 pt-3 border-t border-ivory/10 print:border-gray-200">
                     <div className="flex justify-between text-xs">
-                      <span className="text-gray-500 font-semibold">Total Cost Estimate:</span>
-                      <strong className="text-rose-gold">₹{totalCost.toLocaleString()}</strong>
+                      <span className="text-ivory/60 print:text-gray-500 font-semibold">Total Cost Estimate:</span>
+                      <strong className="text-gold print:text-rose-gold">₹{totalCost.toLocaleString()}</strong>
                     </div>
                     {formData.homeService && (
-                      <span className="text-[9px] text-amber-700 bg-amber-50 px-2 py-0.5  mt-1.5 inline-block font-bold font-body">
+                      <span className="text-[9px] text-gold bg-gold/10 px-2 py-0.5 mt-1.5 inline-block font-bold font-body border border-gold/20 print:bg-amber-50 print:text-amber-700 print:border-amber-100">
                         ✓ Travel/Venue Delivery Service Configured
                       </span>
                     )}
@@ -1188,13 +1187,13 @@ export default function WeddingPlanner() {
               </div>
 
               {/* Handcrafted Styling Instructions */}
-              <div className="bg-rose-blush/5 p-4  border border-rose-gold/10 text-xs text-gray-600 leading-relaxed">
+              <div className="bg-gold/5 border border-gold/10 text-xs text-ivory/70 print:bg-rose-blush/5 print:border-rose-gold/10 print:text-gray-600 leading-relaxed">
                 <strong>Bridal Preparation Checklist:</strong> Apply cold pressed oils, drink 3L of water daily leading to the wedding day, and share this lookbook sheet with your boutique coordinator so they can sync Kanjeevaram sari pleating or Khada dupatta setups directly.
               </div>
             </div>
 
             {/* Modal Actions */}
-            <div className="flex items-center gap-3 mt-6 pt-4 border-t border-gray-100 print:hidden">
+            <div className="flex items-center gap-3 mt-6 pt-4 border-t border-ivory/10 print:hidden">
               <button
                 onClick={() => window.print()}
                 className="btn-primary flex-1 py-2.5 text-xs font-bold flex items-center justify-center gap-2"
@@ -1209,7 +1208,7 @@ export default function WeddingPlanner() {
                   const text = `Hi! Check out my GlowSpot Bridal beauty schedule: *${presetName}* aesthetic, scheduled on ${formData.weddingDate} with top Hyderabad salons. Total estimated package: ₹${totalCost.toLocaleString()}. Generate yours at http://localhost:3000/planner`;
                   window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
                 }}
-                className="px-4 py-2.5 border border-emerald-500 bg-emerald-50 text-emerald-700 hover:bg-emerald-100  text-xs font-bold transition-all flex items-center gap-1.5"
+                className="px-4 py-2.5 border border-emerald-500/30 bg-emerald-950/20 text-emerald-400 hover:bg-emerald-900/20 text-xs font-bold transition-all flex items-center gap-1.5"
               >
                 Share Lookbook on WhatsApp
               </button>
@@ -1217,7 +1216,6 @@ export default function WeddingPlanner() {
           </div>
         </div>
       )}
-
 
     </div>
   );
