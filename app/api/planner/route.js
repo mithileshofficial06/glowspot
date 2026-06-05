@@ -118,7 +118,44 @@ All items MUST fit within the budget of ₹${budget?.toLocaleString()}. Return O
           return Response.json(parsed);
         }
       } catch (parseError) {
-        console.error('JSON parse error in route:', parseError, content);
+        console.error('JSON parse error, retrying NIM call:', parseError);
+
+        // RETRY: Re-call NIM with a stricter repair prompt
+        try {
+          const retryResponse = await fetch(
+            'https://integrate.api.nvidia.com/v1/chat/completions',
+            {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${process.env.NIM_API_KEY_TEXT}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                model: 'meta/llama-3.3-70b-instruct',
+                messages: [
+                  { role: 'system', content: 'You are a JSON repair tool. The user will give you malformed JSON. Fix it and return ONLY valid JSON with no markdown, no explanation, no backticks.' },
+                  { role: 'user', content: `Fix this JSON:\n${content}` },
+                ],
+                max_tokens: 2000,
+                temperature: 0.2,
+              }),
+            }
+          );
+
+          if (retryResponse.ok) {
+            const retryData = await retryResponse.json();
+            if (retryData.choices?.[0]) {
+              const retryContent = retryData.choices[0].message.content;
+              const retryMatch = retryContent.match(/\{[\s\S]*\}/);
+              if (retryMatch) {
+                const retryParsed = JSON.parse(retryMatch[0]);
+                return Response.json(retryParsed);
+              }
+            }
+          }
+        } catch (retryErr) {
+          console.error('JSON retry also failed:', retryErr);
+        }
       }
     }
 

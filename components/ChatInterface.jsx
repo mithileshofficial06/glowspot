@@ -2,67 +2,22 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Sparkles, Bot, User, Loader2, MessageSquare, Flame, Lightbulb, HelpCircle, Volume2, VolumeX, Mic, MicOff, Star, Calendar, Check, CheckCircle } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import SalonCard from './SalonCard';
+import { useProfileStore } from '@/store/useProfileStore';
+import { useToast } from './ToastProvider';
 
-// Zero-dependency canvas confetti explosion for successful bookings
-function ConfettiCanvas() {
-  const canvasRef = useRef(null);
-  
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    
-    // Scale canvas to parent bounds
-    canvas.width = canvas.parentElement.clientWidth || 400;
-    canvas.height = canvas.parentElement.clientHeight || 300;
-    
-    let particles = [];
-    const colors = ['#D4A96A', '#E3C48F', '#9B6B8A', '#B48AA6', '#F2EDE8', '#B08A4E'];
-    
-    for (let i = 0; i < 80; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height - canvas.height,
-        r: Math.random() * 5 + 3,
-        d: Math.random() * canvas.height,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        tilt: Math.random() * 10 - 5,
-        tiltAngleIncremental: Math.random() * 0.08 + 0.02,
-        tiltAngle: 0
-      });
-    }
-    
-    let animationId;
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      particles.forEach((p, idx) => {
-        p.tiltAngle += p.tiltAngleIncremental;
-        p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
-        p.x += Math.sin(p.tiltAngle);
-        p.tilt = Math.sin(p.tiltAngle - idx / 3) * 15;
-        
-        ctx.beginPath();
-        ctx.lineWidth = p.r;
-        ctx.strokeStyle = p.color;
-        ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
-        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
-        ctx.stroke();
-      });
-      
-      particles = particles.filter(p => p.y < canvas.height);
-      if (particles.length > 0) {
-        animationId = requestAnimationFrame(draw);
-      }
-    };
-    
-    draw();
-    return () => cancelAnimationFrame(animationId);
-  }, []);
-  
-  return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-10 w-full h-full" />;
-}
+// Dynamic import: BookingConfirmation with ssr: false
+const BookingConfirmation = dynamic(() => import('./BookingConfirmation'), {
+  ssr: false,
+  loading: () => (
+    <div className="py-6 flex flex-col items-center gap-3">
+      <div className="w-16 h-16 skeleton-shimmer rounded-full" />
+      <div className="h-4 w-40 skeleton-shimmer" />
+    </div>
+  ),
+});
+
 import salons from '@/data/salons.json';
 
 const suggestions = [
@@ -71,6 +26,22 @@ const suggestions = [
   { text: "Home service for facial and grooming" },
   { text: "Trendy haircut at premium Madhapur salon" },
 ];
+
+// Skeleton loader component for AI thinking state
+function SkeletonThinking() {
+  return (
+    <div className="flex gap-3 justify-start animate-fade-in">
+      <div className="w-7 h-7 border border-gold/20 flex items-center justify-center shrink-0">
+        <Bot className="w-3.5 h-3.5 text-gold" />
+      </div>
+      <div className="chat-bubble-ai space-y-2 min-w-[180px]">
+        <div className="h-3 w-[85%] skeleton-shimmer" />
+        <div className="h-3 w-[65%] skeleton-shimmer" />
+        <div className="h-3 w-[45%] skeleton-shimmer" />
+      </div>
+    </div>
+  );
+}
 
 export default function ChatInterface() {
   const [messages, setMessages] = useState([
@@ -81,8 +52,14 @@ export default function ChatInterface() {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [streaming, setStreaming] = useState(false);
   const chatContainerRef = useRef(null);
   const inputRef = useRef(null);
+
+  // Zustand profile store
+  const profile = useProfileStore();
+  // Toast
+  const { toast } = useToast();
 
   // Weather & AQI States
   const [weatherData, setWeatherData] = useState(null);
@@ -279,6 +256,12 @@ export default function ChatInterface() {
           ...newState
         }
       };
+      // Fire toast on confirmation
+      if (newState.confirmed) {
+        setTimeout(() => {
+          toast.success(`Appointment confirmed at ${updated[msgIdx].bookingSalon?.name}!`);
+        }, 800);
+      }
       return updated;
     });
   };
@@ -335,6 +318,20 @@ export default function ChatInterface() {
         ? `[Live Hyderabad Weather Info: Temp ${weatherData.temp}°C, Humidity ${weatherData.humidity}%, AQI ${weatherData.aqi} (${getAQIDesc(weatherData.aqi).label}), Condition: ${getWeatherDesc(weatherData.weatherCode)}]`
         : '';
 
+      // Build profile context from Zustand store
+      let profileContext = '';
+      if (profile.faceShape || profile.skinTone) {
+        profileContext = `\n\n[User Profile from Face Preview]
+- Face Shape: ${profile.faceShape || 'Unknown'}
+- Skin Tone: ${profile.skinTone || 'Unknown'}
+- Gender: ${profile.gender || 'Unknown'}
+${profile.features ? `- Features: ${profile.features}` : ''}
+${profile.hairstyleRecommendations ? `- Recommended Hairstyles: ${profile.hairstyleRecommendations.map(r => r.style).join(', ')}` : ''}
+${profile.weddingDate ? `- Wedding Date: ${profile.weddingDate}` : ''}
+${profile.preferredArea ? `- Preferred Area: ${profile.preferredArea}` : ''}
+Use this profile to personalize recommendations.`;
+      }
+
       const apiMessages = [
         {
           role: 'system',
@@ -355,7 +352,7 @@ Guidelines:
 - Always end your response with one engaging follow-up question (e.g., "Would you like to see home service options too?", "Want me to check Sunday availability for these?", "Should I include men's grooming salons as well?").
 - Use emojis sparingly for warmth.
 
-${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest relevant treatments or care. E.g. if AQI is high, suggest charcoal facial; if humidity is high, suggest styling for curls/frizz.` : ''}`
+${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest relevant treatments or care. E.g. if AQI is high, suggest charcoal facial; if humidity is high, suggest styling for curls/frizz.` : ''}${profileContext}`
         },
         ...newMessages.map(m => ({ role: m.role, content: m.content }))
       ];
@@ -366,31 +363,99 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
         body: JSON.stringify({ messages: apiMessages }),
       });
 
-      const data = await res.json();
+      // SSE Streaming
+      if (res.headers.get('Content-Type')?.includes('text/event-stream')) {
+        setLoading(false);
+        setStreaming(true);
 
-      if (data.choices && data.choices[0]) {
-        const aiContent = data.choices[0].message.content;
-        if (speakActive) speakText(aiContent);
-        
-        // Find matching salons inline only if user asked for recommendations
-        const matched = hasRecommendationIntent(text) ? findMatchingSalons(aiContent + ' ' + text) : [];
-        setMessages((prev) => [...prev, { role: 'assistant', content: aiContent, salons: matched }]);
+        // Add an empty assistant message to accumulate tokens into
+        setMessages(prev => [...prev, { role: 'assistant', content: '', salons: [] }]);
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let fullContent = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || !trimmed.startsWith('data: ')) continue;
+            const data = trimmed.slice(6);
+            if (data === '[DONE]') break;
+
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.token) {
+                fullContent += parsed.token;
+                // Update the last message with accumulated content
+                setMessages(prev => {
+                  const updated = [...prev];
+                  updated[updated.length - 1] = {
+                    ...updated[updated.length - 1],
+                    content: fullContent,
+                  };
+                  return updated;
+                });
+              }
+            } catch (e) {
+              // skip
+            }
+          }
+        }
+
+        // After stream completes, attach salon matches
+        const matched = hasRecommendationIntent(text) ? findMatchingSalons(fullContent + ' ' + text) : [];
+        if (matched.length > 0) {
+          toast.success(`Found ${matched.length} matching salon${matched.length > 1 ? 's' : ''} for you!`);
+        }
+        setMessages(prev => {
+          const updated = [...prev];
+          updated[updated.length - 1] = {
+            ...updated[updated.length - 1],
+            salons: matched,
+          };
+          return updated;
+        });
+
+        if (speakActive && fullContent) speakText(fullContent);
+        setStreaming(false);
       } else {
-        // Fallback if API fails
-        const matched = hasRecommendationIntent(text) ? findMatchingSalons(text) : [];
-        const fallback = matched.length > 0
-          ? `Perfect! Here are 3 top-rated salons in Hyderabad that fit your style: `
-          : "I'd love to help! Tell me a little more: What kind of function? Are you the bride, guest, or bridesmaid? Any specific services in mind — makeup, hair, mehndi, or a full package?";
-        
-        setMessages((prev) => [...prev, { role: 'assistant', content: fallback, salons: matched }]);
+        // Fallback for non-streaming response
+        const data = await res.json();
+
+        if (data.choices && data.choices[0]) {
+          const aiContent = data.choices[0].message.content;
+          if (speakActive) speakText(aiContent);
+          
+          const matched = hasRecommendationIntent(text) ? findMatchingSalons(aiContent + ' ' + text) : [];
+          if (matched.length > 0) {
+            toast.success(`Found ${matched.length} matching salon${matched.length > 1 ? 's' : ''} for you!`);
+          }
+          setMessages((prev) => [...prev, { role: 'assistant', content: aiContent, salons: matched }]);
+        } else {
+          const matched = hasRecommendationIntent(text) ? findMatchingSalons(text) : [];
+          const fallback = matched.length > 0
+            ? `Perfect! Here are 3 top-rated salons in Hyderabad that fit your style: `
+            : "I'd love to help! Tell me a little more: What kind of function? Are you the bride, guest, or bridesmaid? Any specific services in mind — makeup, hair, mehndi, or a full package?";
+          
+          setMessages((prev) => [...prev, { role: 'assistant', content: fallback, salons: matched }]);
+        }
+        setLoading(false);
       }
     } catch (error) {
       // Fallback on catch
       const matched = hasRecommendationIntent(text) ? findMatchingSalons(text) : [];
       const fallback = "I'm having a little trouble right now. Here are our top-rated salons in Hyderabad while I get back on track:";
       setMessages((prev) => [...prev, { role: 'assistant', content: fallback, salons: matched }]);
-    } finally {
       setLoading(false);
+      setStreaming(false);
     }
   };
 
@@ -457,7 +522,13 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                 <div
                   className={msg.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}
                 >
-                  <p className="text-sm whitespace-pre-wrap leading-relaxed font-light">{msg.content}</p>
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed font-light">
+                    {msg.content}
+                    {/* Streaming cursor */}
+                    {streaming && i === messages.length - 1 && msg.role === 'assistant' && (
+                      <span className="inline-block w-[2px] h-4 bg-gold ml-0.5 animate-pulse align-text-bottom" />
+                    )}
+                  </p>
                 </div>
                 {msg.role === 'user' && (
                   <div className="w-7 h-7 border border-ivory/15 flex items-center justify-center shrink-0">
@@ -507,17 +578,10 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                 <div className="pl-11 mt-4 animate-fade-in-up max-w-2xl w-full">
                   <div className="border border-gold/[0.08] bg-[#0e0c0e] p-5 relative overflow-hidden text-ivory">
                     {msg.bookingState.confirmed ? (
-                      <div className="text-center py-6 space-y-4 relative z-20">
-                        <ConfettiCanvas />
-                        <div className="w-14 h-14 border border-gold/30 flex items-center justify-center mx-auto">
-                          <CheckCircle className="w-8 h-8 text-gold" />
-                        </div>
-                        <div>
-                          <h4 className="text-lg font-bold font-display text-white">Appointment Confirmed!</h4>
-                          <p className="text-xs text-white/50 mt-1">Your reservation at {msg.bookingSalon.name} is successfully scheduled.</p>
-                        </div>
+                      <div className="relative z-20">
+                        <BookingConfirmation salonName={msg.bookingSalon.name} />
 
-                        <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4 text-left space-y-2">
+                        <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-4 text-left space-y-2 mt-4">
                           <div className="flex justify-between text-xs">
                             <span className="text-white/40">Salon</span>
                             <span className="font-bold text-white">{msg.bookingSalon.name}</span>
@@ -542,7 +606,7 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
                           </div>
                         </div>
                         
-                        <p className="text-[10px] text-white/30 italic">Confirmation code: GS-{msg.bookingSalon.id.substring(0,4).toUpperCase()}-{Math.floor(1000 + Math.random() * 9000)}</p>
+                        <p className="text-[10px] text-white/30 italic text-center mt-3">Confirmation code: GS-{msg.bookingSalon.id.substring(0,4).toUpperCase()}-{Math.floor(1000 + Math.random() * 9000)}</p>
                       </div>
                     ) : (
                       <div className="space-y-4">
@@ -673,18 +737,8 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
             </div>
           ))}
 
-          {/* Typing Indicator */}
-          {loading && (
-            <div className="flex items-center gap-2 pl-11 animate-fade-in text-xs text-gold/60 font-light tracking-wider">
-              <Loader2 className="w-3.5 h-3.5 text-gold animate-spin" />
-              <span>Thinking</span>
-              <div className="typing-indicator !p-0 !py-1 flex gap-1">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-            </div>
-          )}
+          {/* Skeleton Thinking Indicator */}
+          {loading && <SkeletonThinking />}
         </div>
       </div>
 
@@ -735,15 +789,15 @@ ${weatherContext ? `\n\n${weatherContext} Use this weather context to suggest re
               </button>
               <button
                 onClick={() => handleSend()}
-                disabled={!input.trim() || loading}
+                disabled={!input.trim() || loading || streaming}
                 id="chat-send-btn"
                 className={`p-2 transition-all duration-300 ${
-                  input.trim() && !loading
+                  input.trim() && !loading && !streaming
                     ? 'bg-gold text-[#080608]'
                     : 'text-ivory/15 cursor-not-allowed'
                 }`}
               >
-                {loading ? (
+                {(loading || streaming) ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <Send className="w-4 h-4" />

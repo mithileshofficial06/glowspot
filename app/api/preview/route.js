@@ -112,7 +112,43 @@ IMPORTANT RULES:
                 }
               }
             } catch (parseErr) {
-              console.error('Vision JSON parse error:', parseErr);
+              console.error('Vision JSON parse error, retrying:', parseErr);
+              // RETRY: Ask NIM to repair the malformed JSON
+              try {
+                const repairRes = await fetch(
+                  'https://integrate.api.nvidia.com/v1/chat/completions',
+                  {
+                    method: 'POST',
+                    headers: {
+                      'Authorization': `Bearer ${process.env.NIM_API_KEY_TEXT}`,
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      model: 'meta/llama-3.3-70b-instruct',
+                      messages: [
+                        { role: 'system', content: 'You are a JSON repair tool. Fix the malformed JSON below and return ONLY valid JSON. No markdown, no backticks, no explanation.' },
+                        { role: 'user', content: `Fix this JSON:\n${content}` },
+                      ],
+                      max_tokens: 1800,
+                      temperature: 0.2,
+                    }),
+                  }
+                );
+                if (repairRes.ok) {
+                  const repairData = await repairRes.json();
+                  if (repairData.choices?.[0]) {
+                    const repairMatch = repairData.choices[0].message.content.match(/\{[\s\S]*\}/);
+                    if (repairMatch) {
+                      const repaired = JSON.parse(repairMatch[0]);
+                      if (repaired.faceShape && repaired.hairstyleRecommendations) {
+                        analysisResult = repaired;
+                      }
+                    }
+                  }
+                }
+              } catch (retryErr) {
+                console.error('Vision JSON retry also failed:', retryErr);
+              }
             }
           } else {
             console.log('Vision model refused analysis, falling back to text model.');

@@ -4,6 +4,8 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { Upload, Camera, Sparkles, Loader2, ChevronRight, RotateCcw, User, Palette, Scissors, Wand2, MessageCircle, Send, X, Bot, Star } from 'lucide-react';
 import Link from 'next/link';
 import salons from '@/data/salons.json';
+import { useProfileStore } from '@/store/useProfileStore';
+import { useToast } from './ToastProvider';
 export default function FacePreview() {
   const [image, setImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -14,6 +16,11 @@ export default function FacePreview() {
   const [matchedSalons, setMatchedSalons] = useState([]);
   const fileInputRef = useRef(null);
   const canvasRef = useRef(null);
+
+  // Zustand profile store
+  const setFaceAnalysis = useProfileStore((s) => s.setFaceAnalysis);
+  // Toast
+  const { toast } = useToast();
   const imgRef = useRef(null);
   const imageContainerRef = useRef(null);
 
@@ -322,7 +329,9 @@ Rules:
 
       if (data.analysis && data.analysis.hairstyleRecommendations) {
         setAnalysis(data.analysis);
+        setFaceAnalysis(data.analysis);
         findSalonsForRecommendations(data.analysis);
+        toast.success('Face analysis complete! Your profile has been saved.');
       } else if (data.error) {
         console.error('Server returned error:', data.error);
         applySmartFallback();
@@ -365,7 +374,9 @@ Rules:
       ],
     };
     setAnalysis(fallback);
+    setFaceAnalysis(fallback);
     findSalonsForRecommendations(fallback);
+    toast.info('Using smart analysis profile for recommendations.');
   };
 
   const findSalonsForRecommendations = (analysisData) => {
@@ -513,7 +524,12 @@ Rules:
                   {loading ? (
                     <>
                       <Loader2 className="w-5 h-5 animate-spin" />
-                      Analyzing with AI...
+                      <span>Analyzing</span>
+                      <span className="inline-flex gap-0.5">
+                        <span className="w-1 h-1 bg-current rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                        <span className="w-1 h-1 bg-current rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                        <span className="w-1 h-1 bg-current rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                      </span>
                     </>
                   ) : (
                     <>

@@ -2,6 +2,10 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SilkBackground from '@/components/SilkBackground';
+import ScrollProgress from '@/components/ScrollProgress';
+import MobileBottomNav from '@/components/MobileBottomNav';
+import PageTransition from '@/components/PageTransition';
+import { ToastProvider } from '@/components/ToastProvider';
 
 export const metadata = {
   title: 'GlowSpot Hyderabad — AI-Powered Beauty Salon Marketplace',
@@ -27,10 +31,16 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-screen flex flex-col bg-[#080608]">
-        <SilkBackground />
-        <Navbar />
-        <main className="flex-1 relative z-20">{children}</main>
-        <Footer />
+        <ToastProvider>
+          <SilkBackground />
+          <ScrollProgress />
+          <Navbar />
+          <main className="flex-1 relative z-20 mobile-nav-spacing">
+            <PageTransition>{children}</PageTransition>
+          </main>
+          <Footer />
+          <MobileBottomNav />
+        </ToastProvider>
       </body>
     </html>
   );
